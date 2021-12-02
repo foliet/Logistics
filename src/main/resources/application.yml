@@ -1,0 +1,11 @@
+spring:
+# ?????
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.106:3306/logistics?allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false&characterEncoding=UTF-8
+# springboot 2.0 ???hikari ,???????????java??????
+    hikari:
+      username: root
+      password: fqh66545896.
+  thymeleaf:
+    cache: false
