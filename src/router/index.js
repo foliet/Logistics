@@ -9,14 +9,18 @@ const routes = [
     {
         // 页面逻辑
         path: '/',
-        redirect: '/home',
         component: ()=>import('@/view/index'),
+        redirect: '/home',
         children:[
             {
                 path: 'home',
                 name: 'home',
-                component: ()=>import('@/components/home1.vue'),
+                component: ()=>import('@/components/home.vue'),
             },
+            {
+                path: 'orders',
+                component:()=>import('@/view/orders')
+            }
         ]
     },
 

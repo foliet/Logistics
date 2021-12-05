@@ -9,7 +9,7 @@
             <span>我的消息</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="2" @click="this.$router.push('order')">
+        <el-menu-item index="2" @click="this.$router.push('orders')">
           <template #title>
             <el-icon><Menu /></el-icon>
             <span>我的资料</span>

@@ -27,7 +27,7 @@
 import {Setting} from "@element-plus/icons";
 
 export default {
-  name: "user",
+  title: "user",
   data() {
     return{
       tableData:Array(20).fill({

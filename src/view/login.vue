@@ -5,25 +5,25 @@
         <form @submit.prevent="register">
           <h1>注册</h1>
           <div class="txtb">
-            <input type="text" v-model="registerData.username">
-            <span data-placeholder="Username" ></span>
+            <input type="text" v-model="registerData.username" id="label1">
+            <label for="label1" data-placeholder="Username"></label>
           </div>
           <div class="txtb">
-            <input type="email" v-model="registerData.email">
-            <span data-placeholder="Email" ></span>
+            <input type="email" v-model="registerData.email" id="label2">
+            <label for="label2" data-placeholder="Email" ></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="registerData.password">
-            <span data-placeholder="Password" ></span>
+            <input type="password" v-model="registerData.password" id="label3">
+            <label for="label3" data-placeholder="Password" ></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="registerData.password1">
-            <span data-placeholder="Confirm Password" ></span>
+            <input type="password" v-model="registerData.password1" id="label4">
+            <label for="label4" data-placeholder="Confirm Password" ></label>
           </div>
           <div>
             <div class="txtb" style="width:45%;display: inline-block">
-              <input type="text"  v-model="registerData.verifyCode"/>
-              <span data-placeholder="验证码" ></span>
+              <input type="text"  v-model="registerData.verifyCode" id="label5"/>
+              <label for="label5" data-placeholder="验证码" ></label>
             </div>
             <button type="button" style="margin:0 auto" @click="checkEmail()">发送验证码</button>
           </div>
@@ -34,12 +34,12 @@
         <form @submit.prevent="login">
           <h1>登录</h1>
           <div class="txtb">
-            <input type="email" v-model="loginData.email">
-            <span data-placeholder="Email" ></span>
+            <input type="email" v-model="loginData.email" id="label6">
+            <label for="label6" data-placeholder="Email" ></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="loginData.password">
-            <span data-placeholder="Password"></span>
+            <input type="password" v-model="loginData.password" id="label7">
+            <label for="label7" data-placeholder="Password"></label>
           </div>
           <a href="#">忘记密码？</a>
           <button>登录</button>
@@ -95,7 +95,7 @@ $(function (){
 })
 
 export default {
-  name: 'login',
+  title: 'login',
   data() {
     return {
       registerData:{
@@ -109,22 +109,23 @@ export default {
         email: "",
         password: ""
       },
-      verifyCode: null
     }
   },
   methods: {
     checkEmail: function (){
-      axios.post('http://192.168.1.101:8080/check-email',{
+      if(this.registerData.email===""){
+        alert('请先输入邮箱')
+        return
+      }
+      axios.get('https://mc.rainspace.cn:4443/check-email',{
         params: {
-          email: this.email
+          email: this.registerData.email
         }
-      }).then(res=>{
-        this.verifyCode=res.data.verifyCode
       })
     },
 
     login:function (){
-      axios.post('http://192.168.1.101:8080/login',this.loginData).then(res=>{
+      axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
         if(res.data.code===0){
           Cookie.set('id',res.data.id,30)
           this.$router.push('/home')
@@ -135,14 +136,11 @@ export default {
     },
 
     register:function (){
-      if(this.verifyCode!==this.registerData.verifyCode){
-        alert('验证码错误')
-        return
-      }else if(this.registerData.password!==this.registerData.password1){
+      if(this.registerData.password!==this.registerData.password1){
         alert('两次密码不一致')
         return
       }
-      axios.post('http://192.168.1.101:8080/register',this.registerData).then(res=>{
+      axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
         if(res.data.code===0){
           Cookie.set('id',this.loginData.id,30)
           this.$router.push('/home')
@@ -248,7 +246,7 @@ a {
   height: 35px;
 }
 
-.txtb span::before {
+.txtb label::before {
   content: attr(data-placeholder);
   position: absolute;
   top: 50%;
@@ -257,7 +255,7 @@ a {
   transform: translateY(-50%);
   transition: .5s;
 }
-.txtb span::after {
+.txtb label::after {
   content: '';
   position: absolute;
   left: 0;
@@ -268,11 +266,11 @@ a {
   transition: .5s;
 }
 
-.focus + span::before {
+.focus + label::before {
   top: -5px;
 }
 
-.focus + span::after {
+.focus + label::after {
   width: 100%;
 }
 
