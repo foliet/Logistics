@@ -10,6 +10,6 @@ public class User {
 	private String password;
 	private int id;
 	private String email;
-	private int group_id;
-	private Timestamp create_at;
+	private int groupId;
+	private Timestamp createAt;
 }
