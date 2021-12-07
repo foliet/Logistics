@@ -67,8 +67,7 @@
 
 <script>
 import $ from "jquery"
-import axios from 'axios'
-import Cookie from "@/assets/cookie";
+
 $(function (){
   $("#signUp").click(function(){
     $("#login-box").addClass('right-panel-active')
@@ -111,13 +110,16 @@ export default {
       },
     }
   },
+  mounted() {
+    document.title="欢迎登录"
+  },
   methods: {
     checkEmail: function (){
       if(this.registerData.email===""){
         alert('请先输入邮箱')
         return
       }
-      axios.get('https://mc.rainspace.cn:4443/check-email',{
+      this.$axios.get('https://mc.rainspace.cn:4443/check-email',{
         params: {
           email: this.registerData.email
         }
@@ -125,9 +127,8 @@ export default {
     },
 
     login:function (){
-      axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
+      this.$axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
         if(res.data.code===0){
-          Cookie.set('id',res.data.id,30)
           this.$router.push('/home')
         }else{
           alert(res.data.msg)
@@ -140,9 +141,8 @@ export default {
         alert('两次密码不一致')
         return
       }
-      axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
+      this.$axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
         if(res.data.code===0){
-          Cookie.set('id',this.loginData.id,30)
           this.$router.push('/home')
         }else{
           alert(res.data.msg)

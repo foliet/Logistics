@@ -34,7 +34,6 @@
 
 <script>
 import { ElMessageBox } from 'element-plus'
-import axios from "axios";
 
 export default{
   data() {
@@ -71,7 +70,7 @@ export default{
     {
       if(this.orderData.address1!=0&&this.orderData.address1!=null&&this.orderData.address2!=0&&this.orderData.address2!=null&&Number(this.orderData.phone1)<20000000000&&Number(this.orderData.phone1)>=10000000000&&Number(this.orderData.phone2)<20000000000&&Number(this.orderData.phone2)>=10000000000
           &&this.orderData.title!=0&&this.orderData.title!=null &&Number(this.orderData.weight)>0&&Number(this.orderData.volume)>0&&Number(this.orderData.value>0)) {
-        axios.post('https://mc.rainspace.cn:4443/add-order',this.orderData)
+        this.$axios.post('https://mc.rainspace.cn:4443/add-order',this.orderData)
         this.dialogVisible=false;
       }
       else{

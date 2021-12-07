@@ -2,26 +2,28 @@
 <template>
   <el-container style="height: 100vh; ">
     <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
-      <el-menu router default-active="home">
-        <el-menu-item index="home" @click="this.$router.push('home')">
+      <el-menu router :default-active="this.$route.path">
+        <el-menu-item index="/home" route="/home">
           <template #title >
             <el-icon><Message /></el-icon>
-            <span>我的消息</span>
+            <span>我的消息</span><el-badge  :value="5" style="display: inline;margin-bottom: 37px;
+  margin-left: 15px;"/>
           </template>
         </el-menu-item>
-        <el-menu-item index="2" @click="this.$router.push('orders')">
+        <el-sub-menu index="2" >
           <template #title>
             <el-icon><Menu /></el-icon>
             <span>我的资料</span>
           </template>
-        </el-menu-item>
+          <el-menu-item index="/profile" route="/profile">基本信息</el-menu-item>
+          <el-menu-item index="/directory" route="/directory">联系地址</el-menu-item>
+        </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>
             <el-icon><Setting /></el-icon>我的订单
           </template>
-          <el-menu-item index="3-1">我寄出的</el-menu-item>
-          <el-menu-item index="3-2">我收到的</el-menu-item>
-          <el-menu-item index="3-3">在路上的</el-menu-item>
+          <el-menu-item index="/orders/send" route="/orders/send">我寄出的</el-menu-item>
+          <el-menu-item index="/orders/receive" route="/orders/receive">我收到的</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-aside>
@@ -35,11 +37,16 @@
 <script>
 import { Message, Menu, Setting } from '@element-plus/icons'
 
-export default ({
+export default {
+  data(){
+    return{
+      onActive:[]
+    }
+  },
   components: {
     Message,
     Setting,
     Menu,
   },
-})
+}
 </script>

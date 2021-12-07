@@ -37,6 +37,9 @@ export default {
       })
     }
   },
+  mounted() {
+    document.title="我的消息"
+  },
   components:{
     Setting
   }

@@ -6,7 +6,7 @@
         <div>货物名称：{{order.title}}</div>
       </el-card>
     </el-main>
-    <el-footer height="40px" class="nameless" @click="showDialog">
+    <el-footer :style="{display: type==='send'?'':'none'}" height="40px" class="nameless" @click="showDialog">
       <div class="align">
         <el-icon size="23"><circle-plus/></el-icon>
         新增
@@ -17,23 +17,34 @@
 <script>
 import {CirclePlus} from "@element-plus/icons";
 import dialog from '../components/dialog'
-import axios from "axios";
 export default {
+  props:['type'],
   components:{
     'od-dialog': dialog,
     CirclePlus
   },
   data(){
     return{
-      orders:[],
+      orders: [],
+    }
+  },
+  watch:{
+    type(){
+      this.getOrders()
     }
   },
   created() {
-    axios.get('https://mc.rainspace.cn:4443/get-orders').then(res=>{
-      this.orders=res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素
-    })
+    this.getOrders()
+  },
+  mounted() {
+    document.title="我的订单"
   },
   methods:{
+    getOrders(){
+      this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type='+this.type).then(res=>{
+        this.orders=res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素
+      })
+    },
     showDialog() {
       this.$refs.a.dialogVisible = true;
     },
