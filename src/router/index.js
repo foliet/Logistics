@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
-
+import user from './user'
+import admin from './admin'
 const routes = [
     {
         path: '/login',
@@ -7,29 +8,17 @@ const routes = [
         component: ()=>import('@/view/login')
     },
     {
+      path: '/admin',
+      component: ()=>import('@/view/admin/index'),
+      redirect: '/admin/home',
+      children: admin,
+    },
+    {
         // 页面逻辑
         path: '/',
         component: ()=>import('@/view/index'),
         redirect: '/home',
-        children:[
-            {
-                path: 'home',
-                component: ()=>import('@/view/home'),
-            },
-            {
-                path: 'orders/:type',
-                component:()=>import('@/view/orders'),
-                props: true
-            },
-            {
-                path: 'profile',
-                component: ()=>import('@/view/profile')
-            },
-            {
-                path: 'directory',
-                component: ()=>import('@/view/directory')
-            }
-        ]
+        children: user
     },
 
 ]

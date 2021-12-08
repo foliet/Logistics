@@ -123,12 +123,16 @@ export default {
         params: {
           email: this.registerData.email
         }
+      }).then(res=>{
+        if(res.data.status!==0){
+          alert(res.data.msg)
+        }
       })
     },
 
     login:function (){
       this.$axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
-        if(res.data.code===0){
+        if(res.data.status===0){
           this.$router.push('/home')
         }else{
           alert(res.data.msg)
@@ -142,7 +146,7 @@ export default {
         return
       }
       this.$axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
-        if(res.data.code===0){
+        if(res.data.status===0){
           this.$router.push('/home')
         }else{
           alert(res.data.msg)
