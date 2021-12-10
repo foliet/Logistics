@@ -3,11 +3,11 @@
   </el-header>
 
   <el-main>
-    <el-card v-for="notice in notices" :key="notice.create_at" shadow="hover">
+    <el-card v-for="notice in notices" :key="notice.createAt" shadow="hover">
       <template #header>
         <div style="font-size: 20px;font-weight: bold;letter-spacing: 0.02em">{{notice.title}}</div>
       </template>
-      <div style="font-size: 13px;">{{notice.create_at}}</div>
+      <div style="font-size: 13px;">{{notice.createAt}}</div>
       <br/>
       <div style="font-size: 15px;font-family: Arial">{{notice.content}}</div>
     </el-card>

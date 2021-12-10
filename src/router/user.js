@@ -4,7 +4,7 @@ const routes = [
         component: ()=>import('@/view/home'),
     },
     {
-        path: 'orders/:type',
+        path: 'order/:type',
         component:()=>import('@/view/order'),
         props: true
     },
