@@ -1,11 +1,10 @@
 <template>
-  <el-container class="nameness">
-    <el-main>
-      <el-card v-for="order in orders" :key="order.create_at" @confirm="getOrders">
-        <div>货物名称：{{order.title}}</div>
-      </el-card>
-    </el-main>
-  </el-container>
+  <el-table :data="orders" style="width: 100%">
+    <el-table-column prop="id" label="Id"  />
+    <el-table-column prop="username" label="用户名" />
+    <el-table-column prop="email" label="Email"/>
+    <el-table-column prop="groupId" label="用户组" />
+  </el-table>
 </template>
 <script>
 export default {
@@ -22,12 +21,9 @@ export default {
   },
   methods:{
     getOrders(){
-      this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=all').then(res=>{
+      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-orders').then(res=>{
         this.orders=res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素
       })
-    },
-    showDialog() {
-      this.$refs.a.dialogVisible = true;
     },
   },
 }

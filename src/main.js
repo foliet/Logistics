@@ -6,6 +6,7 @@ import router from './router/index'
 import axios from 'axios'
 
 const app = createApp(App)
+app.config.unwrapInjectedRef = true
 app.use(router)
 app.use(ElementPlus)
 axios.defaults.withCredentials = true;

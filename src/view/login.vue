@@ -116,7 +116,7 @@ export default {
   methods: {
     checkEmail: function (){
       if(this.registerData.email===""){
-        alert('请先输入邮箱')
+        this.$message.error('请先输入邮箱')
         return
       }
       this.$axios.get('https://mc.rainspace.cn:4443/check-email',{
@@ -125,7 +125,7 @@ export default {
         }
       }).then(res=>{
         if(res.data.status!==0){
-          alert(res.data.msg)
+          this.$message.error(res.data.msg)
         }
       })
     },
@@ -133,23 +133,23 @@ export default {
     login:function (){
       this.$axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
         if(res.data.status===0){
-          this.$router.push('/home')
+          window.location='/home'
         }else{
-          alert(res.data.msg)
+          this.$message.error(res.data.msg)
         }
       })
     },
 
     register:function (){
       if(this.registerData.password!==this.registerData.password1){
-        alert('两次密码不一致')
+        this.$message.error('两次密码不一致')
         return
       }
       this.$axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
         if(res.data.status===0){
-          this.$router.push('/home')
+          window.location='/home'
         }else{
-          alert(res.data.msg)
+          this.$message.error(res.data.msg)
         }
       })
     }

@@ -4,16 +4,20 @@ const routes = [
         component: ()=>import('@/view/admin/home'),
     },
     {
-        path: 'chunks',
-        component:()=>import('@/view/admin/chunks'),
+        path: 'chunk',
+        component:()=>import('@/view/admin/chunk'),
     },
     {
-        path: 'orders',
-        component: ()=>import('@/view/admin/orders')
+        path: 'order',
+        component: ()=>import('@/view/admin/order')
     },
     {
         path: 'staff',
         component: ()=>import('@/view/admin/staff')
+    },
+    {
+        path: 'user',
+        component: ()=>import('@/view/admin/user')
     }
 ]
 export default routes

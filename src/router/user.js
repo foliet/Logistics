@@ -5,7 +5,7 @@ const routes = [
     },
     {
         path: 'orders/:type',
-        component:()=>import('@/view/orders'),
+        component:()=>import('@/view/order'),
         props: true
     },
     {

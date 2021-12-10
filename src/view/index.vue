@@ -6,7 +6,9 @@
   background-color: #B3C0D1;
   color: #333;
   line-height: 60px;
-}"><span>RainSpace物流</span>
+}">
+      <span>RainSpace物流</span>
+      <el-icon style="float: right;" @click="$router.push('/admin')"><HomeFilled/></el-icon>
     </el-header>
     <el-container>
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
@@ -30,8 +32,8 @@
             <template #title>
               <el-icon><Setting /></el-icon>我的订单
             </template>
-            <el-menu-item index="/orders/send" route="/orders/send">我寄出的</el-menu-item>
-            <el-menu-item index="/orders/receive" route="/orders/receive">我收到的</el-menu-item>
+            <el-menu-item index="/order/send" route="/order/send">我寄出的</el-menu-item>
+            <el-menu-item index="/order/receive" route="/order/receive">我收到的</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-import { Message, Menu, Setting } from '@element-plus/icons'
+import { Message, Menu, Setting, HomeFilled } from '@element-plus/icons'
 
 export default {
   data(){
@@ -56,6 +58,7 @@ export default {
     Message,
     Setting,
     Menu,
+    HomeFilled
   },
 }
 </script>
