@@ -4,7 +4,19 @@
       width="40%" top="5vh"
       :before-close="handleClose">
     <div class="space1">发件人地址</div>
-    <div><el-input type="text" placeholder="发件人地址" v-model="orderData.address1" clearable/></div>
+    <div><el-select
+        v-model="orderData.address1"
+        placeholder="选择发件人地址"
+       style="width:90%"
+    >
+      <el-option
+          v-for="add_ress in addresses"
+          :key="add_ress"
+          :value="add_ress"
+      >
+      </el-option>
+    </el-select>
+    <el-button @click="innerVisible=true"><el-icon><plus /></el-icon></el-button></div>
     <div class="space1">收件人地址</div>
     <div><el-input type="text" placeholder="收件人地址" v-model="orderData.address2" clearable/></div>
     <div class="space1">发件人联系方式</div>
@@ -30,14 +42,31 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="innerVisible"><div class="space1">新增地址</div>
+    <el-input type="text" placeholder="新增地址：" v-model="new_address" clearable/>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="innerVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="add_address()"
+        >Confirm</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import { ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons'
 
 export default{
+  components:{
+    Plus
+  },
   data() {
       return {
+
+        new_address:"",
+        innerVisible:"",
         dialogVisible:"",
         handleClose:"",
         orderData:
@@ -50,11 +79,13 @@ export default{
               phone1:"",
               phone2:"",
               volume:"",
-            }
+            },
+        addresses:[],
       }
   },
   created() {
     this.dialogVisible = false
+    this.innerVisible=false
     this.handleClose = (done) => {
       ElMessageBox.confirm('Are you sure to close this dialog?')
           .then(() => {
@@ -64,6 +95,7 @@ export default{
             // catch error
           })
     }
+    this.getoptions()
   },
   methods:{
     addOrder:function ()
@@ -84,6 +116,19 @@ export default{
       for(const key in this.orderData){
         this.orderData[key]=null;
       }
+    },
+    getoptions()
+    {
+      this.$axios.get('https://mc.rainspace.cn:4443/get_addresses').then(res=>{
+        this.addresses=res.data.addresses;
+      }
+      )
+    },
+    add_address()
+    {
+      if(this.new_address!=null&&this.new_address!==0)
+        this.$axios.post('https://mc.rainspace.cn:4443/add-address',this.new_address);
+      this.innerVisible=false;
     }
   }
 }
@@ -96,5 +141,6 @@ export default{
 .space2{
   width:33%;
 }
+
 
 </style>
