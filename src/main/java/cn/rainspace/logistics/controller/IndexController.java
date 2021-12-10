@@ -30,16 +30,29 @@ public class IndexController {
 
 	@GetMapping("/check-email")
 	public JSONObject checkEmail(String email){
-		return service.checkEmail(email);
+		return service.checkEmail(email,request.getSession());
 	}
 
 	@GetMapping("/get-orders")
-	public  JSONObject getOrders(String type, @SessionAttribute User user) {
+	public JSONObject getOrders(String type, @SessionAttribute User user) {
 		return service.getOrders(type,user);
 	}
 
 	@PostMapping("/add-order")
-	public  JSONObject addOrder(@RequestBody JSONObject req, @SessionAttribute User user) {
+	public JSONObject addOrder(@RequestBody JSONObject req, @SessionAttribute User user) {
 		return service.addOrder(req.toJavaObject(Order.class),user);
+	}
+
+	@GetMapping("/get-notices")
+	public JSONObject getNotices(@SessionAttribute User user) {
+		return service.getNotices(user);
+	}
+
+	@GetMapping("/get-user")
+	public JSONObject getUser(@SessionAttribute User user){
+		JSONObject res = new JSONObject();
+		res.put("status",0);
+		res.put("user",user);
+		return res;
 	}
 }

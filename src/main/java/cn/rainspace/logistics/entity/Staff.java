@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class Driver {
+public class Staff {
     int id;
     Timestamp createAt;
     String name;

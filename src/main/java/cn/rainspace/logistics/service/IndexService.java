@@ -1,9 +1,9 @@
 package cn.rainspace.logistics.service;
 
 import cn.rainspace.logistics.entity.Order;
+import cn.rainspace.logistics.repository.NoticeDao;
 import cn.rainspace.logistics.repository.OrderDao;
 import cn.rainspace.logistics.utils.email.MailSender;
-import cn.rainspace.logistics.utils.email.VerifyCode;
 import cn.rainspace.logistics.utils.email.message.VerificationMessage;
 import com.alibaba.fastjson.JSONObject;
 import cn.rainspace.logistics.entity.User;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.servlet.http.HttpSession;
+import java.util.Random;
 
 @Service
 public class IndexService {
@@ -21,19 +22,17 @@ public class IndexService {
 	private UserDao userDao;
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private NoticeDao noticeDao;
 	
 	public JSONObject doLogin(String email, String password, HttpSession session) {
 		// 最终返回的对象
 	    JSONObject res = new JSONObject();
 		User user = userDao.getByEmail(email);
-	    if (user==null) {
-			res.put("code", 1);
-	        res.put("msg", "该账号不存在，请检查后重试");
-	    }else if(!user.getPassword().equals(password)){
-			res.put("code", 2);
-	    	res.put("msg", "密码错误");
-	    }else {
-			res.put("code", 0);
+	    if (user==null||!user.getPassword().equals(password)) {
+			return Errors.WRONG_PASSWORD;
+	    } else {
+			res.put("status", 0);
 			session.setAttribute("user", userDao.getByEmail(email));
 			session.setMaxInactiveInterval(30*24*60);
 		}
@@ -43,22 +42,20 @@ public class IndexService {
 	public JSONObject doRegister(User user, String verifyCode, HttpSession session) {
 		JSONObject res = new JSONObject();
 		if(userDao.getByName(user.getUsername())!=null){
-			res.put("code",1);
-			res.put("msg","用户名已被注册");
+			return Errors.NAME_ALREADY_EXISTS;
 		}else if(userDao.getByEmail(user.getEmail())!=null){
-			res.put("code",2);
-			res.put("msg","邮箱已被注册");
-		}else if(VerifyCode.get(user.getEmail())==null){
-			res.put("code",3);
-			res.put("msg","请先发送验证码");
-		}else if(!VerifyCode.get(user.getEmail()).equals(verifyCode)){
-			res.put("code",4);
-			res.put("msg","验证码错误");
+			return Errors.EMAIL_ALREADY_EXISTS;
+		}else if(session.getAttribute("verifyCode")==null){
+			return Errors.VALIDATION_NOT_SENT;
+		}else if(!session.getAttribute("verifyCode").equals(verifyCode)){
+			return Errors.WRONG_VALIDATION;
+		}else if(System.currentTimeMillis()-(Long) session.getAttribute("verifyCodeCreateTime")>1000*60*5){
+			return Errors.EXPIRED_VALIDATION;
 		}else {
 			userDao.add(user);
 			session.setAttribute("user", userDao.getByEmail(user.getEmail()));
 			session.setMaxInactiveInterval(30*24*60);
-			res.put("code",0);
+			res.put("status",0);
 		}
 	    return res;
 	}
@@ -71,26 +68,29 @@ public class IndexService {
 		return true;
 	}
 
-	public JSONObject checkEmail(String email){
+	public JSONObject checkEmail(String email,HttpSession session){
 		JSONObject res = new JSONObject();
-		res.put("code",0);
-		String code = VerifyCode.set(email);
+		if(session.getAttribute("verifyCodeCreateTime")!=null&&System.currentTimeMillis()-(Long)session.getAttribute("verifyCodeCreateTime")<1000*60){
+			return Errors.FREQUENT_VALIDATION;
+		}
+		String verifyCode = String.valueOf(new Random().nextInt(1000,10000));
 		try {
-			sendEmail(VerificationMessage.generate(email,code));
+			sendEmail(VerificationMessage.generate(email,verifyCode));
 		} catch (SMTPAddressFailedException e){
-			res.put("code",1);
-			res.put("msg","邮箱地址格式错误");
+			return Errors.WRONG_EMAIL_FORMAT;
 		} catch (Exception e) {
 			e.printStackTrace();
-			res.put("code",2);
-			res.put("msg","未知错误");
+			return Errors.UNKNOWN_ERROR;
 		}
+		res.put("status",0);
+		session.setAttribute("verifyCode",verifyCode);
+		session.setAttribute("verifyCodeCreateTime",System.currentTimeMillis());
 		return res;
 	}
 
 	public JSONObject getOrders(String type, User user){
 		JSONObject res = new JSONObject();
-		res.put("code",0);
+		res.put("status",0);
 		if(type.equals("send")) {
 			res.put("orders", orderDao.getBySenderId(user.getId()));
 		} else {
@@ -103,6 +103,13 @@ public class IndexService {
 		JSONObject res = new JSONObject();
 		order.setSenderId(user.getId());
 		orderDao.add(order);
+		return res;
+	}
+	
+	public JSONObject getNotices(User user){
+		JSONObject res = new JSONObject();
+		res.put("status",0);
+		res.put("notices",noticeDao.getByOwnerId(user.getId()));
 		return res;
 	}
 }

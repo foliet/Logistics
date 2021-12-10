@@ -12,7 +12,7 @@ public class Order {
     int SenderContactId;
     int receiverId;
     int receiverContactId;
-    String desc;
+    String describe;
     String title;
     int value;
     int weight;

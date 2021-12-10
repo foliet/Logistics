@@ -12,3 +12,6 @@ server:
     key-store: classpath:mc.rainspace.cn.pfx
     key-store-password: c3v813669mz
   port: 4443
+  servlet:
+    session:
+      store-dir: classpath:session/
