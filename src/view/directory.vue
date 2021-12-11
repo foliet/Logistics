@@ -2,14 +2,19 @@
   <el-container class="nameness">
   <el-main>
   <el-table :data="tableData" height="250" style="width: 100%">
-    <el-table-column prop="owner_id" label="Name" width="180" />
-    <el-table-column prop="province" label="Province" width="180" />
-    <el-table-column prop="city" label="City" />
-    <el-table-column prop="distract" label="Distract" />
-    <el-table-column prop="telephone" label="Telephone" />
-    <el-table-column prop="address" label="Address" />
-    <el-table-column prop="create_at" label="created_time" />
-    <el-table-column prop="operations" label="operations"><el-button></el-button></el-table-column>
+    <el-table-column prop="owner_id" label="Name" width="180"/>
+    <el-table-column label="province/city/distract" prop="PCD" width="180"/>
+    <el-table-column prop="telephone" label="Telephone"/>
+    <el-table-column prop="address" label="Address"/>
+    <el-table-column prop="create_at" label="created_time"/>
+    <el-table-column label="operations" prop="operations">
+      <template #default="scope">
+        <el-button @click="edit(scope.$index,scope.row)">修改</el-button>
+        |
+        <el-button @click="console.log(scope.$index,scope.row)">删除</el-button>
+      </template>
+      <!--      deleted(scope.id)-->
+    </el-table-column>
   </el-table>
     <dia ref="c"></dia>
   </el-main>
@@ -25,17 +30,23 @@
 <script>
 
 import {CirclePlus} from "@element-plus/icons";
-  import dia from '../components/dia'
+import dia from '../components/dia'
 
-  export default {
-    data() {
-      return {
-        tableData: [],
-      }
+export default {
+  data() {
+    return {
+      tableData: [{
+        owner_id: 1,
+        PCD: 'sbhisx',
+        telephone: 11111111111,
+        address: 111,
+        create_at: "2021-12-10",
+      }],
+    }
     },
     created() {
-      this.$axios.get('https://mc.rainspace.cn:4443/add-directory').then(res => {
-        this.tableData = res.data.tableData;
+      this.$axios.get('https://mc.rainspace.cn:4443/add-directory').then(() => {
+        //this.tableData = res.data.tableData;
       })
     },
     components:
@@ -46,6 +57,16 @@ import {CirclePlus} from "@element-plus/icons";
     methods: {
       showDialog() {
         this.$refs.c.dialogVisible = true;
+      },
+      edit(id, row) {
+        this.$refs.c.tableData.owner_id = row.owner_id;
+        this.$refs.c.tableData.telephone = row.telephone;
+        this.$refs.c.tableData.address = row.address;
+        this.$refs.c.rowid = id;
+        this.$refs.c.dialogVisible = true;
+      },
+      deleted(id) {
+        this.$axios.post('https://mc.rainspace.cn:4443/delete-directory', id)
       }
     },
   }

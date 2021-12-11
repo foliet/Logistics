@@ -34,15 +34,14 @@
           </el-sub-menu>
         </el-menu>
       </el-aside>
-      <el-main>
+
         <router-view></router-view>
-      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import { Message, Menu, Setting, HomeFilled } from '@element-plus/icons'
+import {HomeFilled, Menu, Message, Setting} from '@element-plus/icons'
 
 export default {
   data(){
