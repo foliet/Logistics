@@ -22,13 +22,6 @@
           <el-menu-item index="staff" route="./staff">员工</el-menu-item>
           <el-menu-item index="chunk" route="./chunk">车辆</el-menu-item>
           <el-menu-item index="order" route="./order">订单</el-menu-item>
-          <el-sub-menu index="3">
-            <template #title>
-              <el-icon><Setting /></el-icon>我的订单
-            </template>
-            <el-menu-item index="/orders/send" route="./orders/send">我寄出的</el-menu-item>
-            <el-menu-item index="/orders/receive" route="./orders/receive">我收到的</el-menu-item>
-          </el-sub-menu>
         </el-menu>
       </el-aside>
 
@@ -40,7 +33,7 @@
 </template>
 
 <script>
-import { Message, Setting } from '@element-plus/icons'
+import { Message } from '@element-plus/icons'
 
 export default {
   data(){
@@ -51,7 +44,6 @@ export default {
   inject:['user'],
   components: {
     Message,
-    Setting,
   },
   created() {
     this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res=>{
@@ -60,8 +52,6 @@ export default {
           this.$router.go(-1)
           this.$message.error('不具有管理员权限！')
         }
-      } else {
-        this.$message.error(res.data.msg)
       }
     })
   }

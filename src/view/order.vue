@@ -2,8 +2,13 @@
   <el-container class="nameness">
     <el-main>
       <od-dialog ref="a"></od-dialog>
-      <el-card v-for="order in orders" :key="order.create_at" @confirm="getOrders">
+      <el-card v-for="order in orders" :key="order.createAt" @confirm="getOrders">
         <div>货物名称：{{order.title}}</div>
+        <div v-if="this.type==='send'">收件人：{{order.receiverName}}</div>
+        <div v-else>发件人：{{order.senderName}}</div>
+        <div>货物备注：{{order.remark}}</div>
+        <div>货物价值：{{order.value}}</div>
+        <div>货物id：{{order.id}}</div>
       </el-card>
     </el-main>
     <el-footer :style="{display: type==='send'?'':'none'}" height="40px" class="nameless" @click="showDialog">
@@ -58,8 +63,6 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: justify;
-  border-style:solid solid solid none;
-  border-width: 2px;
   color:black;
   height:37px;
 }
@@ -72,8 +75,5 @@ export default {
   margin: 0;
   display: flex;
   vertical-align: center;
-  border-style:none none none solid;
-  border-width: 3px;
-  color:black;
 }
 </style>

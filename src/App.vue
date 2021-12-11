@@ -15,7 +15,7 @@ export default {
       if(res.data.status>=10) {
         if(this.$route.path!=='/login'){
           this.$router.replace('/login')
-          this.$message.error('请先登录')
+          this.$message.error(res.data.msg)
         }
       }
     })
