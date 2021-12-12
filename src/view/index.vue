@@ -77,7 +77,7 @@ a{
   background-color: #3f51b5;
   color: #fff;
   line-height: 60px;
-  box-shadow:0px 0px 7px 3px #aaa;
+  box-shadow:0 0 7px 3px #aaa;
   z-index: 1;
 }
 </style>

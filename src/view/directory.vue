@@ -1,31 +1,21 @@
 <template>
   <el-container class="nameness">
   <el-main>
-    <el-table :data="
-      tableData.filter(
-        (data) =>
-          !search || data.owner_id.toLowerCase().includes(search.toLowerCase())
-          || data.PCD.toLowerCase().includes(search.toLowerCase())
-          || data.telephone.toLowerCase().includes(search.toLowerCase())
-          || data.address.toLowerCase().includes(search.toLowerCase()))" height="250"
-              style="width: 100%">
-      <el-table-column label="Name" prop="owner_id" sortable width="180"/>
-      <el-table-column label="province/city/distract" prop="PCD" sortable width="180"/>
-      <el-table-column label="Telephone" prop="telephone" sortable/>
-      <el-table-column label="Address" prop="address" sortable/>
-      <el-table-column label="created_time" prop="create_at" sortable/>
-      <el-table-column prop="operations">
-        <template #header>
-          <el-input v-model="search" placeholder="Type to search" size="mini"/>
-        </template>
-        <template #default="scope">
-          <el-button @click="edit(scope.$index,scope.row)">修改</el-button>
-          |
-          <el-button @click="console.log(scope.$index,scope.row)">删除</el-button>
-        </template>
-        <!--      deleted(scope.id)-->
-      </el-table-column>
-    </el-table>
+  <el-table :data="tableData" height="250" style="width: 100%">
+    <el-table-column prop="owner_id" label="Name" width="180"/>
+    <el-table-column label="province/city/distract" prop="PCD" width="180"/>
+    <el-table-column prop="telephone" label="Telephone"/>
+    <el-table-column prop="address" label="Address"/>
+    <el-table-column prop="create_at" label="created_time"/>
+    <el-table-column label="operations" prop="operations">
+      <template #default="scope">
+        <el-button @click="edit(scope.$index,scope.row)">修改</el-button>
+        |
+        <el-button @click="console.log(scope.$index,scope.row)">删除</el-button>
+      </template>
+      <!--      deleted(scope.id)-->
+    </el-table-column>
+  </el-table>
     <dia ref="c"></dia>
   </el-main>
   <el-footer height="40px" class="nameless" @click="showDialog">
@@ -45,23 +35,13 @@ import dia from '../components/dia'
 export default {
   data() {
     return {
-      tableData: [
-        {
-          owner_id: '1',
-          PCD: 'sbhisx',
-          telephone: '11111111111',
-          address: '111',
-          create_at: "2021-12-10",
-        },
-        {
-          owner_id: '2',
-          PCD: 'sbcdcc',
-          telephone: '12222222222',
-          address: '10101',
-          create_at: "2021-12-12",
-        }
-      ],
-      search: '',
+      tableData: [{
+        owner_id: 1,
+        PCD: 'sbhisx',
+        telephone: 11111111111,
+        address: 111,
+        create_at: "2021-12-10",
+      }],
     }
     },
     created() {
