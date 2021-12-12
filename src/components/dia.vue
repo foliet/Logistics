@@ -68,6 +68,7 @@ export default {
     this.rowid = null
   },
   methods: {
+    $message: undefined,
     addContact: function () {
       if (this.tableData.owner_id != 0 && this.tableData.owner_id != null && Number(this.tableData.telephone) < 20000000000 && Number(this.tableData.telephone) >= 10000000000
           && this.tableData.PCD != 0 && this.tableData.PCD != null && this.tableData.address != 0 && this.tableData.address != null) {
@@ -79,7 +80,7 @@ export default {
         this.dialogVisible = false;
         this.rowid = null;
       } else {
-        alert("填入信息有误！")
+        this.$message.error('输入信息有误！')
       }
     },
     reset: function () {

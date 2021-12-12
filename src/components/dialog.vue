@@ -6,15 +6,29 @@
     <div class="space1">收件人地址</div>
     <div>
       <el-select
-          v-model="orderData.address"
+          v-model="orderData.contactId"
           placeholder="选择收件人地址"
-          style="width:90%"
-      >
+          style="width:90%">
         <el-option
-            v-for="add_ress in addresses"
-            :key="add_ress"
-            :value="add_ress"
+            v-for="contact in contacts"
+            :key="contact.owner_id"
+            :label="contact.owner_id"
+            :value="contact.telephone"
         >
+          <span>联系人：{{ contact.owner_id }}</span>
+          <el-popover
+              :width="200"
+              placement="right"
+              style="height: 10%"
+              trigger="hover"
+          >
+            <div>电话：{{ contact.telephone }}</div>
+            <div>省市区：{{ contact.PCD }}</div>
+            <div>地址：{{ contact.address }}</div>
+            <template #reference>
+              <span style="float: right">...</span>
+            </template>
+          </el-popover>
         </el-option>
       </el-select>
       <el-button @click="this.$refs.d.dialogVisible=true">
@@ -23,21 +37,26 @@
         </el-icon>
       </el-button>
     </div>
-    <div class="space1">发件人联系方式</div>
-    <el-input type="text" placeholder="发件人联系方式" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
-              v-model="orderData.phone1"/>
-    <div class="space1">收件人联系方式</div>
-    <el-input type="text" placeholder="收件人联系方式" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
-              v-model="orderData.phone2"/>
     <div class="space1">货物名称</div>
     <el-input type="text" placeholder="货物名称" v-model="orderData.title" clearable/>
+    <div class="space1">货物介绍</div>
+    <el-input v-model="orderData.info" :autosize="{minRows:4,maxRows:7}" clearable placeholder="货物介绍" type="textarea"/>
     <div class="space1">
       <span style="padding: 0 30% 0 0">体积</span><span style="padding: 0 28% 0 0">重量</span><span>价值</span>
     </div>
     <div>
-      <el-input class="space2" type="tel" placeholder="体积" min="0" v-model="orderData.volume" oninput = "value=value.replace(/[^\d]/g,'')"><template #append>m³</template></el-input>
-      <el-input class="space2" type="tel" placeholder="重量" min="0" v-model="orderData.weight" oninput = "value=value.replace(/[^\d]/g,'')"><template #append>KG</template></el-input>
-      <el-input class="space2" type="tel" placeholder="价值" min="0" v-model="orderData.value" oninput = "value=value.replace(/[^\d]/g,'')"><template #append>CNY</template></el-input>
+      <el-input class="space2" type="tel" placeholder="体积" min="0" v-model="orderData.volume"
+                oninput="value=value.replace(/[^\d]/g,'')">
+        <template #append>m³</template>
+      </el-input>
+      <el-input class="space2" type="tel" placeholder="重量" min="0" v-model="orderData.weight"
+                oninput="value=value.replace(/[^\d]/g,'')">
+        <template #append>KG</template>
+      </el-input>
+      <el-input class="space2" type="tel" placeholder="价值" min="0" v-model="orderData.value"
+                oninput="value=value.replace(/[^\d]/g,'')">
+        <template #append>CNY</template>
+      </el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -62,21 +81,35 @@ export default {
   },
   data() {
     return {
-      new_address: "",
       dialogVisible: "",
-        handleClose:"",
-        orderData:
-            {
-              address: "",
-              title: "",
-              weight: "",
-              value: "",
-              phone1: "",
-              phone2: "",
-              volume: "",
-            },
-        addresses:[],
-      }
+      handleClose: "",
+      orderData:
+          {
+            contactId: "",
+            title: "",
+            weight: "",
+            value: "",
+            volume: "",
+            info: "",
+          },
+      contacts: [{
+        owner_id: 111,
+        PCD: 'anhui',
+        address: 'hefei',
+        telephone: 11111111111,
+      },
+        {
+          owner_id: 322,
+          PCD: 'shanghai',
+          address: 'jinan',
+          telephone: 11111231111,
+        }, {
+          owner_id: 110,
+          PCD: 'beijing',
+          address: 'beijing',
+          telephone: 11123435674,
+        }],
+    }
   },
   created() {
     this.dialogVisible = false
@@ -85,14 +118,13 @@ export default {
   methods:{
     addOrder:function ()
     {
-      if (this.orderData.address != 0 && this.orderData.address != null && Number(this.orderData.phone1) < 20000000000 && Number(this.orderData.phone1) >= 10000000000 && Number(this.orderData.phone2) < 20000000000 && Number(this.orderData.phone2) >= 10000000000
-          && this.orderData.title != 0 && this.orderData.title != null && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
+      if (this.orderData.contactId != null && this.orderData.title != 0 && this.orderData.title != null && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
         this.$axios.post('https://mc.rainspace.cn:4443/add-order', this.orderData).then(() => {
           this.$emit("confirm")
         })
         this.dialogVisible = false;
       } else {
-        alert("填入信息有误！")
+        this.$message.error('输入信息有误！')
       }
     },
     reset:function ()
@@ -101,11 +133,10 @@ export default {
         this.orderData[key]=null;
       }
     },
-    getoptions()
-    {
-      this.$axios.get('https://mc.rainspace.cn:4443/get_addresses').then(res=>{
-        this.addresses=res.data.addresses;
-      }
+    getoptions() {
+      this.$axios.get('https://mc.rainspace.cn:4443/get_contacts').then(res => {
+            this.contacts = res.data.contacts;
+          }
       )
     },
   }
