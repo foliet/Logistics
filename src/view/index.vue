@@ -34,8 +34,7 @@
           </el-sub-menu>
         </el-menu>
       </el-aside>
-
-        <router-view></router-view>
+      <router-view></router-view>
     </el-container>
   </el-container>
 </template>

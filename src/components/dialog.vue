@@ -40,7 +40,8 @@
     <div class="space1">货物名称</div>
     <el-input type="text" placeholder="货物名称" v-model="orderData.title" clearable/>
     <div class="space1">货物介绍</div>
-    <el-input v-model="orderData.info" :autosize="{minRows:4,maxRows:7}" clearable placeholder="货物介绍" type="textarea"/>
+    <el-input v-model="orderData.remark" :autosize="{minRows:4,maxRows:7}" clearable placeholder="货物介绍"
+              type="textarea"/>
     <div class="space1">
       <span style="padding: 0 30% 0 0">体积</span><span style="padding: 0 28% 0 0">重量</span><span>价值</span>
     </div>
@@ -90,7 +91,7 @@ export default {
             weight: "",
             value: "",
             volume: "",
-            info: "",
+            remark: "",
           },
       contacts: [{
         owner_id: 111,
