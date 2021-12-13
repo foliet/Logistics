@@ -17,11 +17,11 @@
           <el-input v-model="search" placeholder="Type to search" size="mini"/>
         </template>
         <template #default="scope">
-          <el-button @click="edit(scope.$index,scope.row)">修改</el-button>
+          <el-button @click="edit(scope.row)">修改</el-button>
           |
-          <el-button @click="console.log(scope.$index,scope.row)">删除</el-button>
+          <el-button @click="deleted(scope.row)">删除</el-button>
         </template>
-        <!--      deleted(scope.id)-->
+        <!--      -->
       </el-table-column>
     </el-table>
     <dia ref="c"></dia>

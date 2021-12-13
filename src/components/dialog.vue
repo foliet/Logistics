@@ -1,8 +1,7 @@
 <template>
   <el-dialog v-model="dialogVisible"
              title="添加订单"
-             width="40%" top="5vh"
-             :before-close="handleClose">
+             top="5vh" width="40%">
     <div class="space1">收件人地址</div>
     <div>
       <el-select
