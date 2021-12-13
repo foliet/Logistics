@@ -4,8 +4,34 @@
     <el-header id="head">
       <span class="title">RainSpace 物流</span>
       <a>
-      <el-icon id="home-icon" @click="$router.push('/admin')"><HomeFilled/></el-icon>
+      <el-icon id="home-icon" @click="showcard"><HomeFilled/></el-icon>
       </a>
+      <div id="card">
+        <el-card shadow="always" style="margin-left: 58em"
+                 :body-style="{ padding: '0' }" @click.stop="nocard">
+          <template #header >
+            <div style="font-size: 1rem;font-weight: 500;line-height: 2;">fzh123456</div>
+            <div style="font-size: 0.8rem; color: rgba(0, 0, 0, 0.54);line-height: 1.5;">
+              2753089253@qq.com
+            </div>
+            <el-tag type="success">管理员</el-tag>
+          </template>
+          <el-menu router :default-active="this.$route.path">
+            <el-menu-item index="/admin" route="/admin">
+              <template #title >
+                <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
+                <span >管理面板</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item index="/login" route="/login">
+              <template #title >
+                <el-icon style="color: #FF3D00"><SwitchButton/></el-icon>&nbsp;
+                <span >退出登录</span>
+              </template>
+            </el-menu-item>
+          </el-menu>
+        </el-card>
+      </div>
     </el-header>
     <el-container>
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
@@ -34,26 +60,38 @@
           </el-sub-menu>
         </el-menu>
       </el-aside>
-      <router-view></router-view>
+        <router-view></router-view>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import {HomeFilled, Menu, Message, Setting} from '@element-plus/icons'
+import {HomeFilled, Menu, Message, Setting,User,SwitchButton} from '@element-plus/icons'
 
 export default {
-  data(){
-    return{
-      onActive:[]
+  data() {
+    return {
+      onActive: []
+    }
+  },
+  methods: {
+    showcard: function () {
+      var a = document.getElementById("card");
+      a.style.display = "inline";
+    },
+    nocard: function () {
+      var a = document.getElementById("card");
+      a.style.display = "none";
     }
   },
   components: {
     Message,
     Setting,
     Menu,
-    HomeFilled
-  },
+    HomeFilled,
+    User,
+    SwitchButton
+  }
 }
 </script>
 <style>
@@ -78,5 +116,8 @@ a{
   line-height: 60px;
   box-shadow:0 0 7px 3px #aaa;
   z-index: 1;
+}
+#card{
+  display: none;
 }
 </style>
