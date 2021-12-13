@@ -5,16 +5,16 @@
     <div class="space1">收件人地址</div>
     <div>
       <el-select
-          v-model="orderData.contactId"
+          v-model="orderData.receiverContactId"
           placeholder="选择收件人地址"
           style="width:90%">
         <el-option
             v-for="contact in contacts"
-            :key="contact.ownerId"
-            :label="contact.ownerName"
-            :value="contact.telephone"
+            :key="contact.receiverId"
+            :label="contact.receiverName"
+            :value="contact.id"
         >
-          <span>联系人：{{ contact.ownerName }}</span>
+          <span>联系人：{{ contact.receiverName }}</span>
           <el-popover
               :width="200"
               placement="right"
@@ -85,7 +85,8 @@ export default {
       handleClose: "",
       orderData:
           {
-            contactId: "",
+            senderContactId: 1,
+            receiverContactId: null,
             title: "",
             weight: "",
             value: "",
@@ -102,7 +103,7 @@ export default {
   methods:{
     addOrder:function ()
     {
-      if (this.orderData.contactId != null && this.orderData.title != 0 && this.orderData.title != null && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
+      if (this.orderData.receiverContactId != null && this.orderData.title != 0 && this.orderData.title != null && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
         this.$axios.post('https://mc.rainspace.cn:4443/add-order', this.orderData).then(() => {
           this.$emit("confirm")
         })
@@ -118,7 +119,7 @@ export default {
       }
     },
     getoptions() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get_contacts').then(res => {
+      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts').then(res => {
             this.contacts = res.data.contacts;
           }
       )

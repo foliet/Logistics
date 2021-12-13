@@ -44,37 +44,7 @@ export default {
   data() {
     return {
       search: '',
-      contacts: [{
-        receiverName: '张三',
-        PCD: 'sbhisx',
-        telephone: '1211311911',
-        address: 'dewd23e2',
-        create_at: "2021-12-10",
-      }, {
-        receiverName: '李四',
-        PCD: 'fdcdc',
-        telephone: '1011213341',
-        address: '342e413',
-        create_at: "2021-12-10",
-      }, {
-        receiverName: '王五',
-        PCD: 'gbfrvbgfrbgf',
-        telephone: '1921681106',
-        address: 'decewcfewcfewf',
-        create_at: "2021-12-11",
-      }, {
-        receiverName: '倒吊人',
-        PCD: 'sbhisx',
-        telephone: 11111111111,
-        address: 111,
-        create_at: "2021-12-10",
-      }, {
-        receiverName: '不错',
-        PCD: 'sbhisx',
-        telephone: 11111111111,
-        address: 111,
-        create_at: "2021-12-10",
-      }],
+      contacts: [],
     }
   },
   created() {
