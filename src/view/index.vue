@@ -10,11 +10,11 @@
         <el-card shadow="always" style="margin-left: 58em"
                  :body-style="{ padding: '0' }" @click.stop="nocard">
           <template #header >
-            <div style="font-size: 1rem;font-weight: 500;line-height: 2;">fzh123456</div>
+            <div style="font-size: 1rem;font-weight: 500;line-height: 2;">{{ user.username }}</div>
             <div style="font-size: 0.8rem; color: rgba(0, 0, 0, 0.54);line-height: 1.5;">
-              2753089253@qq.com
+              {{ user.email }}
             </div>
-            <el-tag type="success">管理员</el-tag>
+            <el-tag type="success">{{ user.groupId==1?'管理员':'普通用户' }}</el-tag>
           </template>
           <el-menu router :default-active="this.$route.path">
             <el-menu-item index="/admin" route="/admin">
@@ -23,7 +23,7 @@
                 <span >管理面板</span>
               </template>
             </el-menu-item>
-            <el-menu-item index="/login" route="/login">
+            <el-menu-item index="/logout" route="/logout">
               <template #title >
                 <el-icon style="color: #FF3D00"><SwitchButton/></el-icon>&nbsp;
                 <span >退出登录</span>
@@ -71,7 +71,8 @@ import {HomeFilled, Menu, Message, Setting,User,SwitchButton} from '@element-plu
 export default {
   data() {
     return {
-      onActive: []
+      onActive: [],
+      user:{},
     }
   },
   methods: {
@@ -83,6 +84,15 @@ export default {
       var a = document.getElementById("card");
       a.style.display = "none";
     }
+  },
+  created() {
+    this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res=>{
+      if(res.data.status<10){
+        this.user=res.data.user
+      } else {
+        this.$message.error(res.data.msg)
+      }
+    })
   },
   components: {
     Message,
