@@ -8,6 +8,9 @@ import java.sql.Timestamp;
 public class Contact {
     int id;
     int ownerId;
+    String ownerName;
+    int receiverId;
+    String receiverName;
     String province;
     String city;
     String district;

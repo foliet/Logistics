@@ -25,4 +25,14 @@ public class AdminController {
     public JSONObject getUsers(){
         return service.getUsers();
     }
+
+    @GetMapping("get-staffs")
+    public JSONObject getStaffs(){
+        return service.getStaffs();
+    }
+
+    @GetMapping("get-chunks")
+    public JSONObject getChunks(){
+        return service.getChunks();
+    }
 }

@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 public class Order {
     Timestamp createAt;
     int id;
-    int senderId;
-    int SenderContactId;
-    int receiverId;
+    int senderContactId;
+    String senderName;
     int receiverContactId;
-    String describe;
+    String receiverName;
+    String remark;
     String title;
     int value;
     int weight;

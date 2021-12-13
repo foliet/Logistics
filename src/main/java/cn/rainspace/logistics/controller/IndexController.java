@@ -1,5 +1,6 @@
 package cn.rainspace.logistics.controller;
 
+import cn.rainspace.logistics.entity.Contact;
 import cn.rainspace.logistics.entity.Order;
 import cn.rainspace.logistics.entity.User;
 import cn.rainspace.logistics.service.IndexService;
@@ -39,13 +40,23 @@ public class IndexController {
 	}
 
 	@PostMapping("/add-order")
-	public JSONObject addOrder(@RequestBody JSONObject req, @SessionAttribute User user) {
-		return service.addOrder(req.toJavaObject(Order.class),user);
+	public JSONObject addOrder(@RequestBody JSONObject req) {
+		return service.addOrder(req.toJavaObject(Order.class));
 	}
 
 	@GetMapping("/get-notices")
 	public JSONObject getNotices(@SessionAttribute User user) {
 		return service.getNotices(user);
+	}
+
+	@PostMapping("/add-contact")
+	public JSONObject addContact(@RequestBody JSONObject req) {
+		return service.addContact(req.toJavaObject(Contact.class));
+	}
+
+	@GetMapping("/get-contacts")
+	public JSONObject getContacts(@SessionAttribute User user){
+		return service.getContacts(user);
 	}
 
 	@GetMapping("/get-user")

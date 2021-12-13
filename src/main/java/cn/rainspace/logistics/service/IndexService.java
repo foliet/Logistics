@@ -1,6 +1,8 @@
 package cn.rainspace.logistics.service;
 
+import cn.rainspace.logistics.entity.Contact;
 import cn.rainspace.logistics.entity.Order;
+import cn.rainspace.logistics.repository.ContactDao;
 import cn.rainspace.logistics.repository.NoticeDao;
 import cn.rainspace.logistics.repository.OrderDao;
 import cn.rainspace.logistics.utils.email.MailSender;
@@ -20,6 +22,8 @@ import java.util.Random;
 public class IndexService {
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ContactDao contactDao;
 	@Autowired
 	private OrderDao orderDao;
 	@Autowired
@@ -99,10 +103,10 @@ public class IndexService {
 		return res;
 	}
 
-	public JSONObject addOrder(Order order, User user){
+	public JSONObject addOrder(Order order){
 		JSONObject res = new JSONObject();
-		order.setSenderId(user.getId());
 		orderDao.add(order);
+		res.put("status",0);
 		return res;
 	}
 	
@@ -110,6 +114,20 @@ public class IndexService {
 		JSONObject res = new JSONObject();
 		res.put("status",0);
 		res.put("notices",noticeDao.getByOwnerId(user.getId()));
+		return res;
+	}
+
+	public JSONObject getContacts(User user){
+		JSONObject res = new JSONObject();
+		res.put("status",0);
+		res.put("contacts",contactDao.getByOwnerId(user.getId()));
+		return res;
+	}
+
+	public JSONObject addContact(Contact contact){
+		JSONObject res = new JSONObject();
+		contactDao.add(contact);
+		res.put("status",0);
 		return res;
 	}
 }
