@@ -1,5 +1,12 @@
 <template>
   <el-container class="nameness">
+    <el-header>
+      <div style="padding:10px 0 0 0">
+        <el-input v-model="search" placeholder="输入关键字" style="width: 93%" type="text"
+                  @keypress.enter="searching"></el-input>
+        <el-button style="width: 7%" @click="zero">重置</el-button>
+      </div>
+    </el-header>
     <el-main>
       <od-dialog ref="a"></od-dialog>
       <a v-for="order in orders" :key="order.createAt">
@@ -70,7 +77,7 @@
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
-              <el-icon style="color:#03A9F4"><UserFilled/></el-icon>&nbsp;
+              <el-icon style="color:#FF3D00"><UserFilled/></el-icon>&nbsp;
               <span class="info">发件人</span>
             </template>
             大大方方
