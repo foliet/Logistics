@@ -4,7 +4,7 @@
              top="5vh" width="40%">
     <div class="space1">name</div>
     <div>
-      <el-input v-model="tableData.owner_id" clearable placeholder="name" type="text"/>
+      <el-input v-model="tableData.receiverName" clearable placeholder="name" type="text"/>
     </div>
     <div class="space1">province/city/distract</div>
     <el-cascader
@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -41,11 +40,10 @@ export default {
       rowid: "",
       tableData:
           {
-            owner_id: "",
+            receiverName: "",
             PCD: "",
             telephone: "",
             address: "",
-            create_at: "",
 
           },
       options: [{
@@ -68,14 +66,13 @@ export default {
     this.rowid = null
   },
   methods: {
-    $message: undefined,
     addContact: function () {
       if (this.tableData.owner_id != 0 && this.tableData.owner_id != null && Number(this.tableData.telephone) < 20000000000 && Number(this.tableData.telephone) >= 10000000000
           && this.tableData.PCD != 0 && this.tableData.PCD != null && this.tableData.address != 0 && this.tableData.address != null) {
         if (this.rowid == null) {
-          axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData)
+          this.$axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData)
         } else {
-          axios.post('https://mc.rainspace.cn:4443/edit-contact', {tableData: this.tableData, id: this.rowid})
+          this.$axios.post('https://mc.rainspace.cn:4443/edit-contact', this.tableData)
         }
         this.dialogVisible = false;
         this.rowid = null;

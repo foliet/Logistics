@@ -1,9 +1,9 @@
 <template>
   <el-table :data="orders" style="width: 100%">
     <el-table-column prop="id" label="Id"  />
-    <el-table-column prop="username" label="用户名" />
-    <el-table-column prop="email" label="Email"/>
-    <el-table-column prop="groupId" label="用户组" />
+    <el-table-column prop="driverId" label="司机Id" />
+    <el-table-column prop="chunkId" label="货车Id" />
+    <el-table-column prop="status" label="状态" />
   </el-table>
 </template>
 <script>
@@ -17,7 +17,7 @@ export default {
     this.getOrders()
   },
   mounted() {
-    document.title="我的订单"
+    document.title="订单管理"
   },
   methods:{
     getOrders(){
@@ -30,27 +30,4 @@ export default {
 </script>
 
 <style scoped>
-.align{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: justify;
-  border-style:solid solid solid none;
-  border-width: 2px;
-  color:black;
-  height:37px;
-}
-
-.nameless{
-  padding:0;
-
-}
-.nameness{
-  margin: 0;
-  display: flex;
-  vertical-align: center;
-  border-style:none none none solid;
-  border-width: 3px;
-  color:black;
-}
 </style>

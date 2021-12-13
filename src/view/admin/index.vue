@@ -14,8 +14,7 @@
           <el-menu-item index="home" route="./home">
             <template #title >
               <el-icon><Message /></el-icon>
-              <span>站点统计</span><el-badge  :value="5" style="display: inline;margin-bottom: 37px;
-  margin-left: 15px;"/>
+              <span>站点统计</span>
             </template>
           </el-menu-item>
           <el-menu-item index="user" route="./user">用户</el-menu-item>

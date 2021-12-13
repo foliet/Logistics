@@ -1,19 +1,17 @@
 <template>
   <el-container class="nameness">
   <el-main>
-    <el-table :data="tableData.filter(
+    <el-table :data="contacts.filter(
         (data) =>
-          !search || data.owner_id.toLowerCase().includes(search.toLowerCase())
+          !search || data.receiverName.toLowerCase().includes(search.toLowerCase())
           || data.address.toLowerCase().includes(search.toLowerCase())
           || data.PCD.toLowerCase().includes(search.toLowerCase())
           || data.telephone.toLowerCase().includes(search.toLowerCase())
-          || data.create_at.toLowerCase().includes(search.toLowerCase())
           )" height="550" style="width: 100%">
-      <el-table-column label="Name" prop="owner_id" sortable width="180"/>
+      <el-table-column label="Name" prop="receiverName" sortable width="180"/>
       <el-table-column label="province/city/distract" prop="PCD" sortable width="180"/>
       <el-table-column label="Telephone" prop="telephone" sortable/>
       <el-table-column label="Address" prop="address" sortable/>
-      <el-table-column label="created_time" prop="create_at" sortable/>
       <el-table-column prop="operations">
         <template #header>
           <el-input v-model="search" placeholder="Type to search" size="mini"/>
@@ -46,65 +44,72 @@ export default {
   data() {
     return {
       search: '',
-      tableData: [{
-        owner_id: '2',
+      contacts: [{
+        receiverName: '张三',
         PCD: 'sbhisx',
         telephone: '1211311911',
         address: 'dewd23e2',
         create_at: "2021-12-10",
       }, {
-        owner_id: '1',
+        receiverName: '李四',
         PCD: 'fdcdc',
         telephone: '1011213341',
         address: '342e413',
         create_at: "2021-12-10",
       }, {
-        owner_id: '4',
+        receiverName: '王五',
         PCD: 'gbfrvbgfrbgf',
         telephone: '1921681106',
         address: 'decewcfewcfewf',
         create_at: "2021-12-11",
       }, {
-        owner_id: 1,
+        receiverName: '倒吊人',
         PCD: 'sbhisx',
         telephone: 11111111111,
         address: 111,
         create_at: "2021-12-10",
       }, {
-        owner_id: 1,
+        receiverName: '不错',
         PCD: 'sbhisx',
         telephone: 11111111111,
         address: 111,
         create_at: "2021-12-10",
       }],
     }
-    },
-    created() {
-      this.$axios.get('https://mc.rainspace.cn:4443/add-directory').then(() => {
-        //this.tableData = res.data.tableData;
-      })
-    },
-    components:
-        {
-          CirclePlus,
-          dia
-        },
-    methods: {
-      showDialog() {
-        this.$refs.c.dialogVisible = true;
-      },
-      edit(id, row) {
-        this.$refs.c.tableData.owner_id = row.owner_id;
-        this.$refs.c.tableData.telephone = row.telephone;
-        this.$refs.c.tableData.address = row.address;
-        this.$refs.c.rowid = id;
-        this.$refs.c.dialogVisible = true;
-      },
-      deleted(id) {
-        this.$axios.post('https://mc.rainspace.cn:4443/delete-directory', id)
+  },
+  created() {
+    this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
+      if(res.data.status<10){
+        for(const contact of res.data.contacts){
+          contact.PCD=contact.province+contact.city+contact.district
+          this.contacts.push(contact)
+        }
+      }else{
+        this.$message.error(res.data.msg)
       }
+    })
+  },
+  components:
+      {
+        CirclePlus,
+        dia
+      },
+  methods: {
+    showDialog() {
+      this.$refs.c.dialogVisible = true;
     },
-  }
+    edit(id, row) {
+      this.$refs.c.tableData.receiverName = row.receiverName;
+      this.$refs.c.tableData.telephone = row.telephone;
+      this.$refs.c.tableData.address = row.address;
+      this.$refs.c.rowid = id;
+      this.$refs.c.dialogVisible = true;
+    },
+    deleted(id) {
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
+    }
+  },
+}
 
 </script>
 

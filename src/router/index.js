@@ -21,11 +21,6 @@ const routes = [
         redirect: '/home',
         children: user
     },
-    {
-        // 页面逻辑
-        path: '/1111',
-        component: () => import('@/view/test'),
-    },
 
 ]
 

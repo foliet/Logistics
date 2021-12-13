@@ -7,7 +7,7 @@
     <el-card shadow="hover" >
         <div id="msgtitle" >{{notice.title}}</div>
       <el-divider></el-divider>
-      <div style="font-size: 13px;color: #666666;">{{notice.createAt}}</div>
+      <div style="font-size: 13px;color: #666666;">{{notice.createAt.slice(0,10)+' '+notice.createAt.slice(11,19)}}</div>
       <br/>
       <div style="font-size: 15px">{{notice.content}}</div>
     </el-card>

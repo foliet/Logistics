@@ -11,11 +11,11 @@
           style="width:90%">
         <el-option
             v-for="contact in contacts"
-            :key="contact.owner_id"
-            :label="contact.owner_id"
+            :key="contact.ownerId"
+            :label="contact.ownerName"
             :value="contact.telephone"
         >
-          <span>联系人：{{ contact.owner_id }}</span>
+          <span>联系人：{{ contact.ownerName }}</span>
           <el-popover
               :width="200"
               placement="right"
@@ -93,23 +93,7 @@ export default {
             volume: "",
             remark: "",
           },
-      contacts: [{
-        owner_id: 111,
-        PCD: 'anhui',
-        address: 'hefei',
-        telephone: 11111111111,
-      },
-        {
-          owner_id: 322,
-          PCD: 'shanghai',
-          address: 'jinan',
-          telephone: 11111231111,
-        }, {
-          owner_id: 110,
-          PCD: 'beijing',
-          address: 'beijing',
-          telephone: 11123435674,
-        }],
+      contacts: [],
     }
   },
   created() {

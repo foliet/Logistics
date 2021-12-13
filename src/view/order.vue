@@ -14,11 +14,11 @@
         <el-container>
           <el-header class="orderhead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
-            2021-12-01
+            {{order.createAt.slice(0,10)}}
           </span>
             &nbsp;
             <span style="font-size: 13px;letter-spacing: 0.05em">
-              id号：324243
+              id号：{{order.id}}
             </span>
           </el-header>
             <el-container>
