@@ -4,7 +4,7 @@
              top="5vh" width="40%">
     <div class="space1">姓名</div>
     <div>
-      <el-input v-model="tableData.ownerId" clearable placeholder="name" type="text"/>
+      <el-input v-model="tableData.username" clearable placeholder="name" type="text"/>
     </div>
     <div class="space1">邮箱</div>
     <div>
@@ -14,17 +14,18 @@
     <div>
       <el-input v-model="tableData.password" clearable placeholder="password" type="password"/>
     </div>
+    <div class="space1">类别</div>
     <el-select
-        v-model="orderData.contactId"
-        placeholder="选择收件人地址"
+        v-model="tableData.typing"
+        placeholder="类型"
         style="width:90%">
       <el-option
           v-for="typer in types"
           :key="typer"
-          :label="typer"
-          :value="typer"
+          :label="typer.value"
+          :value="typer.value"
       >
-        <span>{{ typer }}</span>
+        <span>{{ typer.value }}</span>
       </el-option>
     </el-select>
 
@@ -46,13 +47,13 @@ export default {
   data() {
     return {
       dialogVisible: "",
-      handleClose: "",
-      rowid: "",
-      tableData:
-          {
-            ownerId: '',
-
-          },
+      tableData: {
+        username: '',
+        email: '',
+        password: '',
+        typing: '',
+        userId: ''
+      },
       types: [{
         value: '用户',
         label: '用户',
@@ -64,20 +65,21 @@ export default {
   },
   created() {
     this.dialogVisible = false
-    this.rowid = null
+    this.userId = null;
   },
   methods: {
     $message: undefined,
     addUser: function () {
-      if (this.tableData.owner_id != 0 && this.tableData.owner_id != null && Number(this.tableData.telephone) < 20000000000 && Number(this.tableData.telephone) >= 10000000000
-          && this.tableData.PCD != 0 && this.tableData.PCD != null && this.tableData.address != 0 && this.tableData.address != null) {
-        if (this.rowid == null) {
-          axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData)
+      if (this.tableData.username != 0 && this.tableData.username != null
+          && this.tableData.password != 0 && this.tableData.password != null
+          && this.tableData.email != 0 && this.tableData.email != null) {
+        if (this.userId == null) {
+          axios.post('https://mc.rainspace.cn:4443/add-user', this.tableData)
         } else {
-          axios.post('https://mc.rainspace.cn:4443/edit-contact', {tableData: this.tableData, id: this.rowid})
+          axios.post('https://mc.rainspace.cn:4443/edit-user', {tableData: this.tableData, id: this.userId})
         }
+        this.userId = null;
         this.dialogVisible = false;
-        this.rowid = null;
       } else {
         this.$message.error('输入信息有误！')
       }
