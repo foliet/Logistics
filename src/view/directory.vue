@@ -24,7 +24,7 @@
         <!--      -->
       </el-table-column>
     </el-table>
-    <dia ref="c"></dia>
+    <dia ref="c" @confirm="confirm"></dia>
   </el-main>
   <el-footer height="40px" class="nameless" @click="showDialog">
     <div class="align">
@@ -48,16 +48,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
-      if(res.data.status<10){
-        for(const contact of res.data.contacts){
-          contact.PCD=contact.province+contact.city+contact.district
-          this.contacts.push(contact)
-        }
-      }else{
-        this.$message.error(res.data.msg)
-      }
-    })
+    this.getContacts()
   },
   components:
       {
@@ -65,18 +56,36 @@ export default {
         dia
       },
   methods: {
+    getContacts(){
+      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
+        if(res.data.status<10){
+          for(const contact of res.data.contacts){
+            contact.PCD=contact.province+contact.city+contact.district
+            this.contacts.push(contact)
+          }
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
     showDialog() {
       this.$refs.c.dialogVisible = true;
     },
-    edit(id, row) {
+    edit(row) {
       this.$refs.c.tableData.receiverName = row.receiverName;
       this.$refs.c.tableData.telephone = row.telephone;
       this.$refs.c.tableData.address = row.address;
-      this.$refs.c.rowid = id;
+      this.$refs.c.tableData.id = row.id;
       this.$refs.c.dialogVisible = true;
     },
-    deleted(id) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
+    confirm(){
+      this.contacts.length=0
+      this.getContacts()
+    },
+    deleted(row) {
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id:row.id})
+      this.contacts.length=0
+      this.getContacts()
     }
   },
 }

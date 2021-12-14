@@ -2,20 +2,20 @@
   <el-dialog v-model="dialogVisible"
              title="添加联系人"
              top="5vh" width="40%">
-    <div class="space1">name</div>
+    <div class="space1">收件人用户名</div>
     <div>
       <el-input v-model="tableData.receiverName" clearable placeholder="name" type="text"/>
     </div>
-    <div class="space1">province/city/distract</div>
+    <div class="space1">省/市/区</div>
     <el-cascader
         v-model="tableData.PCD"
         :options="options"
         style="width: 100%"
     ></el-cascader>
-    <div class="space1">telephone</div>
+    <div class="space1">联系电话</div>
     <el-input v-model="tableData.telephone" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
               placeholder="telephone" type="text"/>
-    <div class="space1">address</div>
+    <div class="space1">详细地址</div>
     <div>
       <el-input v-model="tableData.address" clearable placeholder="address" type="text"/>
     </div>
@@ -33,18 +33,18 @@
 <script>
 
 export default {
+  emits:['confirm'],
   data() {
     return {
       dialogVisible: "",
       handleClose: "",
-      rowid: "",
       tableData:
           {
+            id:null,
             receiverName: "",
             PCD: "",
             telephone: "",
             address: "",
-
           },
       options: [{
         value: '上海市',
@@ -55,30 +55,65 @@ export default {
           children: [{
             value: '普陀区',
             label: '普陀区',
+          },{
+            value: '长宁区',
+            label: '长宁区',
+          },{
+            value: '闵行区',
+            label: '闵行区',
           }]
         }
         ]
-      }]
+      },{
+        value: '江西省',
+        label: '江西省',
+        children: [{
+          value: '新余市',
+          label: '新余市',
+          children: [{
+            value: '渝水区',
+            label: '渝水区',
+          },{
+            value: '分宜县',
+            label: '分宜县',
+          }]
+        },{
+          value: '南昌市',
+          label: '南昌市',
+          children: [{
+            value: '东湖区',
+            label: '东湖区',
+          },{
+            value: '西湖区',
+            label: '西湖区',
+          }]
+        }]
+    }]
     }
   },
   created() {
     this.dialogVisible = false
-    this.rowid = null
   },
   methods: {
     addContact: function () {
-      if (this.tableData.owner_id != 0 && this.tableData.owner_id != null && Number(this.tableData.telephone) < 20000000000 && Number(this.tableData.telephone) >= 10000000000
-          && this.tableData.PCD != 0 && this.tableData.PCD != null && this.tableData.address != 0 && this.tableData.address != null) {
-        if (this.rowid == null) {
-          this.$axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData)
-        } else {
-          this.$axios.post('https://mc.rainspace.cn:4443/edit-contact', this.tableData)
-        }
-        this.dialogVisible = false;
-        this.rowid = null;
+      this.tableData.province = this.tableData.PCD[0]
+      this.tableData.city = this.tableData.PCD[1]
+      this.tableData.district = this.tableData.PCD[2]
+      if (this.tableData.id == null) {
+        this.$axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData).then(res=>{
+          if(res.data.status>=10){
+            this.$message.error(res.data.msg)
+          }
+        })
       } else {
-        this.$message.error('输入信息有误！')
+        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact', this.tableData).then(res=>{
+          if(res.data.status>=10){
+            this.$message.error(res.data.msg)
+          }
+        })
       }
+      this.dialogVisible = false;
+      this.$emit('confirm')
     },
     reset: function () {
       for (const key in this.tableData) {
