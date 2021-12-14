@@ -1,10 +1,16 @@
 <template>
-  <el-table :data="orders" style="width: 100%">
+  <el-container>
+    <el-container>
+      <el-main>
+  <el-table :data="orders" style="width: 100%;z-index: -1">
     <el-table-column prop="id" label="Id"  />
     <el-table-column prop="driverId" label="司机Id" />
     <el-table-column prop="chunkId" label="货车Id" />
     <el-table-column prop="status" label="状态" />
   </el-table>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
 export default {

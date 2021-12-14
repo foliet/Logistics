@@ -1,10 +1,16 @@
 <template>
-  <el-table :data="staffs" style="width: 100%">
+  <el-container>
+    <el-container>
+      <el-main>
+  <el-table :data="staffs" style="width: 100%;z-index: -1">
     <el-table-column prop="id" label="Id"  />
     <el-table-column prop="name" label="姓名" />
     <el-table-column prop="gender" label="性别" />
     <el-table-column prop="status" label="状态" />
   </el-table>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
 export default {

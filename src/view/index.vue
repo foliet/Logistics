@@ -8,9 +8,12 @@
       </a>
       <div id="card">
         <el-card shadow="always" style="margin-left: 58em"
-                 :body-style="{ padding: '0' }" @click.stop="nocard">
+                 :body-style="{ padding: '0' }" >
           <template #header >
-            <div style="font-size: 1rem;font-weight: 500;line-height: 2;">{{ user.username }}</div>
+            <a style="float: right" @click.stop="nocard">
+            <el-icon><Close /></el-icon>
+              </a>
+            <span style="font-size: 1rem;font-weight: 500;line-height: 2;">{{ user.username }}</span>
             <div style="font-size: 0.8rem; color: rgba(0, 0, 0, 0.54);line-height: 1.5;">
               {{ user.email }}
             </div>
@@ -66,7 +69,7 @@
 </template>
 
 <script>
-import {HomeFilled, Menu, Message, Setting,User,SwitchButton} from '@element-plus/icons'
+import {HomeFilled, Menu, Message, Setting,User,SwitchButton,Close} from '@element-plus/icons'
 
 export default {
   data() {
@@ -100,7 +103,8 @@ export default {
     Menu,
     HomeFilled,
     User,
-    SwitchButton
+    SwitchButton,
+    Close
   }
 }
 </script>
