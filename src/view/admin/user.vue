@@ -1,29 +1,37 @@
 <template>
-  <el-header>
-    <el-button @click="addUser">新增</el-button>
-  </el-header>
-  <el-table :data="users.filter(
-        (data) =>
-          !search || data.email.toLowerCase().includes(search.toLowerCase())
-          || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" style="width: 100%">
-    <el-table-column prop="id" label="Id"/>
-    <el-table-column prop="username" label="用户名"/>
-    <el-table-column prop="email" label="Email"/>
-    <el-table-column prop="groupId" label="用户组"/>
-    <el-table-column prop="operations">
-      <template #header>
-        <el-input v-model="search" placeholder="Type to search" size="mini"/>
-      </template>
-      <template #default="scope">
-        <el-button @click="edit(scope.row)">修改</el-button>
-        |
-        <el-button @click="deleted(scope.row)">删除</el-button>
-      </template>
-      <!-- console.log(scope.$index,scope.row)    -->
-    </el-table-column>
-  </el-table>
-  <dialog3 ref="d"></dialog3>
+  <el-container style="margin: 0 0 0 0">
+    <el-container>
+      <el-main >
+        <el-table :data="users.filter(
+            (data) =>
+    !search || data.email.toLowerCase().includes(search.toLowerCase())
+    || data.telephone.toLowerCase().includes(search.toLowerCase())
+    )"  style="width: 100%;z-index: -1">
+          <el-table-column prop="id" label="Id"/>
+          <el-table-column prop="username" label="用户名"/>
+          <el-table-column prop="email" label="Email"/>
+          <el-table-column prop="groupId" label="用户组"/>
+          <el-table-column prop="operations">
+            <template #header>
+              <el-input v-model="search" placeholder="Type to search" size="mini"/>
+            </template>
+            <template #default="scope">
+              <el-button @click="edit(scope.$index,scope.row)" style="color: #FFB500; border: 1px #FFB500 solid" round>
+                修改
+              </el-button>
+              |
+              <el-button @click="deleted(scope.id)" style="color: #FF3D00;border: 1px #FF3D00 solid" round>删除</el-button>
+            </template>
+            <!-- console.log(scope.$index,scope.row)    -->
+          </el-table-column>
+        </el-table>
+        <dialog3 ref="d"></dialog3>
+      </el-main>
+    </el-container>
+    <el-footer>
+      <el-button @click="addUser" style="width: 100%">新增</el-button>
+    </el-footer>
+  </el-container>
 </template>
 
 <script>
