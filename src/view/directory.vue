@@ -7,7 +7,7 @@
           || data.address.toLowerCase().includes(search.toLowerCase())
           || data.PCD.toLowerCase().includes(search.toLowerCase())
           || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" height="550" style="width: 100%">
+          )" height="100%" style="width: 100%">
       <el-table-column label="Name" prop="receiverName" sortable width="180"/>
       <el-table-column label="province/city/distract" prop="PCD" sortable width="180"/>
       <el-table-column label="Telephone" prop="telephone" sortable/>
