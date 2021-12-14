@@ -79,13 +79,17 @@ export default {
       this.$refs.c.dialogVisible = true;
     },
     confirm(){
-      this.contacts.length=0
-      this.getContacts()
+      setTimeout(()=>{
+        this.contacts.length=0
+        this.getContacts()
+      },1000)
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id:row.id})
-      this.contacts.length=0
-      this.getContacts()
+      setTimeout(()=>{
+        this.contacts.length=0
+        this.getContacts()
+      },1000)
     }
   },
 }

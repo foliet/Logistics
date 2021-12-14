@@ -40,7 +40,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('https://mc.rainspace.cn:4443/admin/get-user').then(res => {
+    this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
       if (res.data.status < 10) {
         this.users = res.data.users
       } else {
