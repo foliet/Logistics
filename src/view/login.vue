@@ -59,7 +59,6 @@
             <button class="ghost" id="signUp">注册</button>
           </div>
         </div>
-
       </div>
     </div>
   </div>

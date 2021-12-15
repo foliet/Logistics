@@ -9,7 +9,8 @@
     </el-header>
     <el-main>
       <od-dialog ref="a"></od-dialog>
-      <el-card  v-for="order in orders" :key="order.createAt" @confirm="getOrders" @click="dialogTableVisible = true;this.clickedOrder=order" shadow="hover" :body-style="{ cursor:'pointer',padding: '0px' }">
+      <div v-for="order in orders" :key="order.createAt">
+      <el-card @confirm="getOrders" @click="dialogTableVisible = true;this.clickedOrder=order" shadow="hover" :body-style="{ cursor:'pointer',padding: '0px' }">
         <el-container >
           <el-header class="orderhead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
@@ -55,9 +56,9 @@
             <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
           </el-footer>
         </el-container>
-        <br/>
       </el-card>
-
+      <br/>
+      </div>
       <el-dialog title="商品详情" v-model="dialogTableVisible" >
         <el-descriptions class="margin-top" :column="3" direction="vertical" border>
           <el-descriptions-item>
@@ -100,7 +101,7 @@
               <el-icon style="color: #FF4081"><Box/></el-icon>&nbsp;
               <span class="info">商品体积</span>
             </template>
-            {{ clickedOrder.volume }}cm3
+            {{ clickedOrder.volume }}cm³
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>

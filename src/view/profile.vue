@@ -13,7 +13,7 @@
           || data.address.toLowerCase().includes(search.toLowerCase())
           || data.PCD.toLowerCase().includes(search.toLowerCase())
           || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" height="70%" style="width: 100%">
+          )" height="70%" style="width: 100%;z-index:-1">
           <el-table-column label="用户名" prop="receiverName" sortable width="180"/>
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
