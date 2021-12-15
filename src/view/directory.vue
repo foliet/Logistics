@@ -9,7 +9,7 @@
           || data.telephone.toLowerCase().includes(search.toLowerCase())
           )" height="100%" style="width: 100%">
       <el-table-column label="Name" prop="receiverName" sortable width="180"/>
-      <el-table-column label="province/city/distract" prop="PCD" sortable width="180"/>
+      <el-table-column label="province/city/district" prop="PCD" sortable width="180"/>
       <el-table-column label="Telephone" prop="telephone" sortable/>
       <el-table-column label="Address" prop="address" sortable/>
       <el-table-column prop="operations">
@@ -75,21 +75,24 @@ export default {
       this.$refs.c.tableData.receiverName = row.receiverName;
       this.$refs.c.tableData.telephone = row.telephone;
       this.$refs.c.tableData.address = row.address;
+      this.$refs.c.tableData.PCD[0] = row.province;
+      this.$refs.c.tableData.PCD[1] = row.city;
+      this.$refs.c.tableData.PCD[2] = row.district;
       this.$refs.c.tableData.id = row.id;
       this.$refs.c.dialogVisible = true;
     },
-    confirm(){
-      setTimeout(()=>{
-        this.contacts.length=0
+    confirm() {
+      setTimeout(() => {
+        this.contacts.length = 0
         this.getContacts()
-      },1000)
+      }, 200)
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id:row.id})
-      setTimeout(()=>{
-        this.contacts.length=0
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id})
+      setTimeout(() => {
+        this.contacts.length = 0
         this.getContacts()
-      },1000)
+      }, 200)
     }
   },
 }

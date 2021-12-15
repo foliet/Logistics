@@ -6,7 +6,7 @@
             (data) =>
     !search || data.email.toLowerCase().includes(search.toLowerCase())
     || data.telephone.toLowerCase().includes(search.toLowerCase())
-    )"  style="width: 100%;z-index: -1">
+    )" style="width: 100%/*;z-index: -1*/">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
@@ -16,11 +16,12 @@
               <el-input v-model="search" placeholder="Type to search" size="mini"/>
             </template>
             <template #default="scope">
-              <el-button @click="edit(scope.$index,scope.row)" style="color: #FFB500; border: 1px #FFB500 solid" round>
+              <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
                 修改
               </el-button>
               |
-              <el-button @click="deleted(scope.id)" style="color: #FF3D00;border: 1px #FF3D00 solid" round>删除</el-button>
+              <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="deleted(scope.row)">删除
+              </el-button>
             </template>
             <!-- console.log(scope.$index,scope.row)    -->
           </el-table-column>

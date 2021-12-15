@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="dialogVisible"
-             title="添加联系人"
+             title="添加我的地址"
              top="5vh" width="40%">
     <div class="space1">收件人用户名</div>
     <div>
@@ -13,7 +13,8 @@
         style="width: 100%"
     ></el-cascader>
     <div class="space1">联系电话</div>
-    <el-input v-model="tableData.telephone" placeholder="telephone" type="text"/>
+    <el-input v-model="tableData.telephone" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
+              placeholder="telephone" type="text"/>
     <div class="space1">详细地址</div>
     <div>
       <el-input v-model="tableData.address" clearable placeholder="address" type="text"/>
@@ -32,7 +33,7 @@
 <script>
 
 export default {
-  emits:['confirm'],
+  emits: ['confirm'],
   data() {
     return {
       dialogVisible: "",
@@ -41,7 +42,7 @@ export default {
           {
             id: null,
             receiverName: "",
-            PCD: [],
+            PCD: "",
             telephone: "",
             address: "",
           },
@@ -54,16 +55,16 @@ export default {
           children: [{
             value: '普陀区',
             label: '普陀区',
-          },{
+          }, {
             value: '长宁区',
             label: '长宁区',
-          },{
+          }, {
             value: '闵行区',
             label: '闵行区',
           }]
         }
         ]
-      },{
+      }, {
         value: '江西省',
         label: '江西省',
         children: [{
@@ -72,22 +73,22 @@ export default {
           children: [{
             value: '渝水区',
             label: '渝水区',
-          },{
+          }, {
             value: '分宜县',
             label: '分宜县',
           }]
-        },{
+        }, {
           value: '南昌市',
           label: '南昌市',
           children: [{
             value: '东湖区',
             label: '东湖区',
-          },{
+          }, {
             value: '西湖区',
             label: '西湖区',
           }]
         }]
-    }]
+      }]
     }
   },
   created() {
@@ -99,13 +100,13 @@ export default {
       this.tableData.city = this.tableData.PCD[1]
       this.tableData.district = this.tableData.PCD[2]
       if (this.tableData.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/add-contact?type=others', this.tableData).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/add-contact?type=mine', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }
         })
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact?type=others', this.tableData).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact?type=mine', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }

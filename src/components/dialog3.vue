@@ -22,10 +22,10 @@
       <el-option
           v-for="typer in types"
           :key="typer"
-          :label="typer.value"
+          :label="typer.label"
           :value="typer.value"
       >
-        <span>{{ typer.value }}</span>
+        <span>{{ typer.label }}</span>
       </el-option>
     </el-select>
 
@@ -55,10 +55,10 @@ export default {
         userId: ''
       },
       types: [{
-        value: '用户',
+        value: 0,
         label: '用户',
       }, {
-        value: '管理员',
+        value: 1,
         label: '管理员',
       },]
     }

@@ -2,14 +2,49 @@
   <el-dialog v-model="dialogVisible"
              title="添加订单"
              top="5vh" width="40%">
-    <div class="space1">收件人地址</div>
+
     <div>
+      <div class="space1">发件人地址</div>
+      <el-select
+          v-model="orderData.senderContactId"
+          placeholder="选择收件人地址"
+          style="width:90%">
+        <el-option
+            v-for="contact in contacts"
+            :key="contact.receiverId"
+            :label="contact.receiverName"
+            :value="contact.id"
+        >
+          <span>联系人：{{ contact.receiverName }}</span>
+          <el-popover
+              :width="200"
+              placement="right"
+              style="height: 10%"
+              trigger="hover"
+          >
+            <div>电话：{{ contact.telephone }}</div>
+            <div>省市区：{{ contact.province }},{{ contact.city }},{{ contact.district }}</div>
+            <div>地址：{{ contact.address }}</div>
+            <template #reference>
+              <span style="float: right">...</span>
+            </template>
+          </el-popover>
+        </el-option>
+      </el-select>
+      <el-button @click="this.$refs.g.dialogVisible=true">
+        <el-icon>
+          <plus/>
+        </el-icon>
+      </el-button>
+    </div>
+    <div>
+      <div class="space1">收件人地址</div>
       <el-select
           v-model="orderData.receiverContactId"
           placeholder="选择收件人地址"
           style="width:90%">
         <el-option
-            v-for="contact in contacts"
+            v-for="contact in contacts1"
             :key="contact.receiverId"
             :label="contact.receiverName"
             :value="contact.id"
@@ -68,16 +103,19 @@
     </template>
   </el-dialog>
   <dia ref="d"></dia>
+  <dia2 ref="g"></dia2>
 </template>
 
 <script>
 import {Plus} from '@element-plus/icons'
 import dia from '../components/dia'
+import dia2 from '../components/dia2'
 
 export default {
   components: {
     Plus,
-    dia
+    dia,
+    dia2
   },
   data() {
     return {
@@ -85,8 +123,8 @@ export default {
       handleClose: "",
       orderData:
           {
-            senderContactId: 1,
-            receiverContactId: null,
+            senderContactId: '',
+            receiverContactId: '',
             title: "",
             weight: "",
             value: "",
@@ -94,6 +132,7 @@ export default {
             remark: "",
           },
       contacts: [],
+      contacts1: [],
     }
   },
   created() {
@@ -119,10 +158,12 @@ export default {
       }
     },
     getoptions() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts').then(res => {
-            this.contacts = res.data.contacts;
-          }
-      )
+      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
+        this.contacts = res.data.contacts;
+      })
+      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
+        this.contacts1 = res.data.contacts;
+      })
     },
   }
 }
