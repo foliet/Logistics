@@ -19,7 +19,7 @@
             <el-tag type="success">{{ user.groupId==1?'管理员':'普通用户' }}</el-tag>
           </template>
           <el-menu router :default-active="this.$route.path">
-            <el-menu-item index="/admin" route="/admin">
+            <el-menu-item index="/home" route="../home">
               <template #title >
                 <el-icon style="color: #03A9F4"><Document /></el-icon>&nbsp;
                 <span >物流面板</span>

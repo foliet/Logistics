@@ -9,8 +9,7 @@
     </el-header>
     <el-main>
       <od-dialog ref="a"></od-dialog>
-      <a v-for="order in orders" :key="order.createAt">
-      <el-card  @confirm="getOrders" @click="dialogTableVisible = true" shadow="hover" :body-style="{ padding: '0px' }">
+      <el-card  v-for="order in orders" :key="order.createAt" @confirm="getOrders" @click="dialogTableVisible = true;this.clickedOrder=order" shadow="hover" :body-style="{ cursor:'pointer',padding: '0px' }">
         <el-container >
           <el-header class="orderhead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
@@ -23,20 +22,20 @@
               点击可查看详细信息
             </span>
           </el-header>
-            <el-container>
-              <el-aside width="50%" class="orderbody">
-                <el-icon style="color: #00BF96"><Goods /></el-icon>&nbsp;
-                <span style="font-size: 14px;margin-bottom: 0.5em" >货物名称：</span>
-                <span style="font-size: 14px;margin-left: 10%" >{{order.title}}</span>
-              </el-aside>
-              <div style="width: 100%" class="orderbody">
-                <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
-                <span style="font-size: 14px;" >货物价值：</span>
-                <span style="font-size: 14px;font-weight: bolder;margin-left: 10%" >
-                  ￥{{order.value}}
+          <el-container>
+            <el-aside width="50%" class="orderbody">
+              <el-icon style="color: #00BF96"><Goods /></el-icon>&nbsp;
+              <span style="font-size: 14px;margin-bottom: 0.5em" >货物名称：</span>
+              <span style="font-size: 14px;margin-left: 10%" >{{order.title}}</span>
+            </el-aside>
+            <div style="width: 100%" class="orderbody">
+              <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
+              <span style="font-size: 14px;" >货物价值：</span>
+              <span style="font-size: 14px;font-weight: bolder;margin-left: 10%" >
+                  ￥{{order.value/100}}
                 </span>
-              </div>
-            </el-container>
+            </div>
+          </el-container>
           <el-container>
             <el-aside width="50%" class="orderbody">
               <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
@@ -51,14 +50,14 @@
                 </span>
             </div>
           </el-container>
-            <el-footer style="border: 1px gainsboro solid;padding-top: 0.5em;">
-              <el-icon style="color: #03A9F4" ><ChatLineRound/></el-icon>&nbsp;
-              <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
-            </el-footer>
-            </el-container>
-      </el-card>
+          <el-footer style="border: 1px gainsboro solid;padding-top: 0.5em;">
+            <el-icon style="color: #03A9F4" ><ChatLineRound/></el-icon>&nbsp;
+            <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
+          </el-footer>
+        </el-container>
         <br/>
-      </a>
+      </el-card>
+
       <el-dialog title="商品详情" v-model="dialogTableVisible" >
         <el-descriptions class="margin-top" :column="3" direction="vertical" border>
           <el-descriptions-item>
@@ -66,49 +65,49 @@
               <el-icon style="color: #00BF96"><Goods /></el-icon>&nbsp;
               <span class="info">商品名</span>
             </template>
-            kooriookami
+            {{clickedOrder.title}}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
               <span class="info">收件人</span>
             </template>
-            发发发
+            {{ clickedOrder.senderName }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color:#FF3D00"><UserFilled/></el-icon>&nbsp;
               <span class="info">发件人</span>
             </template>
-            大大方方
+            {{ clickedOrder.receiverName }}
           </el-descriptions-item>
             <el-descriptions-item>
               <template v-slot:label>
                 <el-icon style="color: #FF3D00"><ShoppingCart /></el-icon>&nbsp;
                 <span class="info">商品状态</span>
               </template>
-              已购买
+              {{ clickedOrder.status }}
             </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
               <span class="info">商品价格</span>
             </template>
-            3
+            ¥{{clickedOrder.value/100}}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FF4081"><Box/></el-icon>&nbsp;
               <span class="info">商品体积</span>
             </template>
-            999
+            {{ clickedOrder.volume }}cm3
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #03A9F4"><Suitcase/></el-icon>&nbsp;
               <span class="info">商品重量</span>
             </template>
-            98
+            {{clickedOrder.weight/1000}}kg
           </el-descriptions-item>
             <el-descriptions-item :span="2">
             <template v-slot:label>
@@ -122,7 +121,7 @@
               <el-icon style="color: #FF3D00" ><ChatLineRound/></el-icon>&nbsp;
               <span class="info">备注</span>
             </template>
-            13333333
+            {{ clickedOrder.remark }}
           </el-descriptions-item>
         </el-descriptions>
       </el-dialog>
@@ -171,7 +170,9 @@ export default {
   },
   data() {
     return {
+      clickedOrder:{},
       orders: [],
+      allOrders: [],
       dialogTableVisible: false,
       search: '',
     }
@@ -179,7 +180,7 @@ export default {
   watch: {
     type() {
       this.getOrders()
-      this.search = null;
+      this.search = "";
     }
   },
   created() {
@@ -191,22 +192,24 @@ export default {
   methods: {
     getOrders() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
-        this.orders = res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素;
+        this.allOrders = res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素;
+        this.searching()
       })
     },
     showDialog() {
       this.$refs.a.dialogVisible = true;
     },
     searching() {
-      this.searched = 0;
       const search = this.search;
-      if (search) {
-        this.orders = this.orders.filter(function (order_inner) {
-          console.log(order_inner)
+      if (search.length>0) {
+        this.orders = this.allOrders.filter(function (order_inner) {
           return Object.keys(order_inner).some(function (key) {
-            console.log(key)
             return String(order_inner[key]).toLowerCase().indexOf(search) > -1
           })
+        })
+      } else {
+        this.orders = this.allOrders.filter(function (){
+          return true
         })
       }
     },
