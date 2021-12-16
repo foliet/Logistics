@@ -20,6 +20,11 @@ const routes = [
         component: logout
     },
     {
+        path: '/retrieve',
+        component: ()=>import('@/view/retrieve')
+    }
+    ,
+    {
       path: '/admin',
       component: ()=>import('@/view/admin/index'),
         redirect: '/admin/home',
