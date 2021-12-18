@@ -1,12 +1,13 @@
 <template>
   <el-container style="margin: 0 0 0 0">
-    <el-container>
+    <el-container class="nameness">
       <el-main >
+        <div style="height: 100%">
         <el-table :data="users.filter(
             (data) =>
     !search || data.email.toLowerCase().includes(search.toLowerCase())
     || data.telephone.toLowerCase().includes(search.toLowerCase())
-    )" style="width: 100%/*;z-index: -1*/">
+    )" style="width: 100%;height:100%">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
@@ -26,6 +27,7 @@
             <!-- console.log(scope.$index,scope.row)    -->
           </el-table-column>
         </el-table>
+        </div>
         <dialog3 ref="d"></dialog3>
       </el-main>
     </el-container>
@@ -77,5 +79,9 @@ export default {
 </script>
 
 <style scoped>
-
+.nameness{
+  margin: 0;
+  display: flex;
+  vertical-align: center;
+}
 </style>

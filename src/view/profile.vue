@@ -1,19 +1,25 @@
 <template>
-  <el-container>
-    <el-header>
-      <div style="width:100%">用户名：{{ user.username }}</div>
-      <div style="width:100%">邮箱：{{ user.email }}</div>
+  <el-container class="nameness">
+    <el-header style="background: #F8F8F8;line-height: 60px;">
+      <span style="width:100%">
+        <span style="color: #666666">用户名：</span>
+        <span style="color: #FE8C00">{{ user.username }}</span>
+      </span>
+      <span style="width:100%;margin-left: 20%">
+        <span style="color: #666666">邮箱：</span>
+        <span>{{ user.email }}</span>
+      </span>
+      <el-button @click="comfirmpsd" style="float: right;margin-top: 0.7em" round>修改个人信息</el-button>
     </el-header>
     <el-main>
-      <div>我的地址库：</div>
-      <div>
+      <div style="height: 95%">
         <el-table :data="contacts.filter(
         (data) =>
           !search || data.receiverName.toLowerCase().includes(search.toLowerCase())
           || data.address.toLowerCase().includes(search.toLowerCase())
           || data.PCD.toLowerCase().includes(search.toLowerCase())
           || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" height="70%" style="width: 100%;z-index:-1">
+          )" height="100%" style="width: 100%;">
           <el-table-column label="用户名" prop="receiverName" sortable width="180"/>
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
@@ -30,7 +36,6 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-button @click="comfirmpsd">修改个人信息</el-button>
     </el-main>
   </el-container>
   <dia2 ref="f"></dia2>
@@ -59,9 +64,9 @@
     </el-button>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="visible2 = false">Cancel</el-button>
+        <el-button @click="visible2 = false">取消</el-button>
         <el-button type="primary" @click="changeinfo()"
-        >Confirm</el-button>
+        >确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -153,4 +158,9 @@ export default {
 </script>
 
 <style scoped>
+.nameness{
+  margin: 0;
+  display: flex;
+  vertical-align: center;
+}
 </style>

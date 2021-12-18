@@ -7,7 +7,7 @@
       <el-icon id="home-icon" @click="showcard"><HomeFilled/></el-icon>
       </a>
       <div id="card">
-        <el-card shadow="always" style="margin-left: 58em"
+        <el-card shadow="always" style="margin-left: 58em;"
                  :body-style="{ padding: '0' }" >
           <template #header >
             <a style="float: right" @click.stop="nocard">

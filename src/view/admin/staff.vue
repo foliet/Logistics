@@ -2,7 +2,7 @@
   <el-container>
     <el-container>
       <el-main>
-  <el-table :data="staffs" style="width: 100%;z-index: -1">
+  <el-table :data="staffs" style="width: 100%;height:100%">
     <el-table-column prop="id" label="Id"  />
     <el-table-column prop="name" label="姓名" />
     <el-table-column prop="gender" label="性别" />
