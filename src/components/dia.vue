@@ -4,26 +4,27 @@
              top="5vh" width="40%">
     <div class="space1">收件人用户名</div>
     <div>
-      <el-input v-model="tableData.receiverName" clearable placeholder="name" type="text"/>
+      <el-input v-model="tableData.receiverName" clearable placeholder="姓名" type="text"/>
     </div>
     <div class="space1">省/市/区</div>
     <el-cascader
         v-model="tableData.PCD"
         :options="options"
         style="width: 100%"
+        placeholder="地区"
     ></el-cascader>
     <div class="space1">联系电话</div>
-    <el-input v-model="tableData.telephone" placeholder="telephone" type="text"/>
+    <el-input v-model="tableData.telephone" placeholder="电话" type="text"/>
     <div class="space1">详细地址</div>
     <div>
-      <el-input v-model="tableData.address" clearable placeholder="address" type="text"/>
+      <el-input v-model="tableData.address" clearable placeholder="地址" type="text"/>
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button @click="reset()">Reset</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="reset()">重置</el-button>
         <el-button type="primary" @click="addContact()"
-        >Confirm</el-button>
+        >确认</el-button>
       </span>
     </template>
   </el-dialog>

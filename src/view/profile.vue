@@ -1,7 +1,6 @@
 <template>
   <el-container class="nameness">
     <el-header style="background: #F8F8F8;line-height: 60px;">
-
       <span style="width:100%">
         <span style="color: #666666">用户名：</span>
         <span style="color: #FE8C00">{{ user.username }}</span>
@@ -10,7 +9,7 @@
         <span style="color: #666666">邮箱：</span>
         <span>{{ user.email }}</span>
       </span>
-      <el-button round style="float: right;margin-top: 0.7em" @click="this.visible2=true">修改密码</el-button>
+      <el-button @click="comfirmpsd" style="float: right;margin-top: 0.7em" round>修改个人信息</el-button>
     </el-header>
     <el-main>
       <div style="height: 95%">
@@ -40,24 +39,33 @@
     </el-main>
   </el-container>
   <dia2 ref="f"></dia2>
-  <el-dialog v-model="visible2" title="修改密码">
-    <div class="space1">旧密码：</div>
-    <el-input v-model="oldpsd" :type="pwdtype"></el-input>
-    <div class="space1">新密码：</div>
-    <el-input v-model="newpsd" :type="pwdtype"></el-input>
-    <div class="space1">确认新密码：</div>
-    <el-input v-model="newpsd1" :type="pwdtype">
-    </el-input>
-
+  <el-dialog v-model="visible" title="请输入密码：">
+    <el-input v-model="psd" clearable type="password"></el-input>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="changetype()">
+        <el-button @click="visible = false">取消</el-button>
+        <el-button type="primary" @click="editinfo()"
+        >确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="visible2" title="修改个人信息">
+    <div class="space1">新用户名：</div>
+    <el-input v-model="newname" clearable type="text"></el-input>
+    <div class="space1">新邮箱：</div>
+    <el-input v-model="newemail" clearable type="email"></el-input>
+    <div class="space1">新密码：</div>
+    <el-input v-model="newpsd" :type="pwdtype" style="width: 90%">
+    </el-input>
+    <el-button style="float: right;width: 8%;text-align: center" @click="changetype()">
       <el-icon>
         <View/>
       </el-icon>
     </el-button>
+    <template #footer>
+      <span class="dialog-footer">
         <el-button @click="visible2 = false">取消</el-button>
-        <el-button type="primary" @click="editpsd"
+        <el-button type="primary" @click="changeinfo()"
         >确认</el-button>
       </span>
     </template>
@@ -71,12 +79,11 @@ import {View} from '@element-plus/icons'
 export default {
   components: {
     dia2,
-    View,
+    View
   },
   data() {
     return {
       search: '',
-      imageUrl: '',
       user: {
         password: '',
         username: '',
@@ -87,8 +94,8 @@ export default {
       visible: '',
       visible2: '',
       pwdtype: '',
-      oldpsd: '',
-      newpsd1: '',
+      newname: '',
+      newemail: '',
       newpsd: '',
     }
   },
@@ -110,22 +117,29 @@ export default {
         this.contacts = res.data.contacts
       })
     },
+    comfirmpsd() {
+      this.psd = null;
+      this.visible = true;
+    },
+    editinfo() {
+      if (this.psd == this.user.password) {
+        this.visible = false;
+        this.visible2 = true;
+      } else this.$message.error("密码错误！")
+    },
     changetype() {
       this.pwdtype = (this.pwdtype === 'password' ? 'text' : 'password');
     },
-    editpsd() {
-      if (this.newpsd !== this.newpsd1)
-        this.$message.error("两次输入密码不一致！")
+    changeinfo() {
+      if ((this.newemail == null || this.newemail === 0) && (this.newpsd == null || this.newpsd === 0) && (this.newname == null || this.newname === 0))
+        this.$message.alert("你没有做出任何修改！")
       else {
-        if (this.newpsd == null || this.newpsd == 0)
-          this.$message.error("密码不能为空！")
-        else {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-password', {
-            oldpsd: this.oldpsd,
-            newpsd: this.newpsd
-          });
-          /*this.visible2 = false;*/
-        }
+        if (this.newemail != null && this.newemail != 0) this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.newemail);
+        if (this.newpsd != null && this.newpsd != 0) this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.newpsd);
+        if (this.newname != null && this.newname != 0) this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.newname);
+        this.$message.success("修改成功！")
+        this.getinfo();
+        this.visible2 = false;
       }
     },
     edit(id, row) {
@@ -137,46 +151,16 @@ export default {
     },
     deleted(id) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact?type=mine', id)
-    },
-  },
-}
+    }
+  }
 
+}
 </script>
 
 <style scoped>
-.nameness {
+.nameness{
   margin: 0;
   display: flex;
   vertical-align: center;
-}
-
-.avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader:hover {
-  border-color: #409eff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-
-.avatar-uploader-icon svg {
-  margin-top: 74px; /* (178px - 28px) / 2 - 1px */
-}
-
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
 }
 </style>

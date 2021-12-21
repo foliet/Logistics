@@ -38,36 +38,36 @@
     <el-container>
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
         <el-menu router  :default-active="this.$route.path.substr(7)">
-          <el-menu-item index="home" route="./home">
+          <el-sub-menu index="home" route="./home">
             <template #title >
               <el-icon><Message /></el-icon>
               <span class="list">站点统计</span>
             </template>
-          </el-menu-item>
-          <el-menu-item index="user" route="./user">
-            <template #title >
-              <el-icon><User /></el-icon>
-              <span class="list">用户</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="staff" route="./staff">
-            <template #title >
-              <el-icon><UserFilled /></el-icon>
-              <span class="list">员工</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="chunk" route="./chunk">
-            <template #title >
-              <el-icon><Odometer /></el-icon>
-              <span class="list">车辆</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="order" route="./order">
-            <template #title >
-              <el-icon><Document /></el-icon>
-              <span class="list">订单</span>
-            </template>
-          </el-menu-item>
+            <el-menu-item index="user" route="./user">
+              <template #title >
+                <el-icon><User /></el-icon>
+                <span class="list">用户</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item index="staff" route="./staff">
+              <template #title >
+                <el-icon><UserFilled /></el-icon>
+                <span class="list">员工</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item index="chunk" route="./chunk">
+              <template #title >
+                <el-icon><Odometer /></el-icon>
+                <span class="list">车辆</span>
+              </template>
+            </el-menu-item>
+            <el-menu-item index="order" route="./order">
+              <template #title >
+                <el-icon><Document /></el-icon>
+                <span class="list">订单</span>
+              </template>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <router-view></router-view>

@@ -10,7 +10,7 @@
     <el-main>
       <od-dialog ref="a"></od-dialog>
       <div v-for="order in orders" :key="order.createAt">
-      <el-card @confirm="getOrders" @click="dialogTableVisible = true;this.clickedOrder=order" shadow="hover" :body-style="{ cursor:'pointer',padding: '0px' }">
+      <el-card @confirm="getOrders" shadow="hover" :body-style="{padding: '0px' }">
         <el-container >
           <el-header class="orderhead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
@@ -19,7 +19,11 @@
             <span style="font-size: 13px;letter-spacing: 0.05em">
               id号：{{order.id}}
             </span>
-            <span style="font-size: 12px;float:right;">
+            <el-icon style="float:right;margin-top: 1.2em;font-size: 15px;cursor: pointer"
+                     @click="dialogTableVisible = true;this.clickedOrder=order">
+              <View />
+            </el-icon>
+            <span style="font-size: 12px;float:right;margin-right: 0.5em">
               点击可查看详细信息
             </span>
           </el-header>
@@ -56,6 +60,9 @@
             <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
           </el-footer>
         </el-container>
+        <el-button type="warning" plain style="margin:0.5em 0 0.5em 90%" @click="takeGoods">
+          确认收货
+        </el-button>
       </el-card>
       <br/>
       </div>
@@ -150,7 +157,8 @@ import {
   ShoppingCart,
   Suitcase,
   User,
-  UserFilled
+  UserFilled,
+  View
 } from "@element-plus/icons";
 import dialog from '../components/dialog'
 
@@ -167,7 +175,8 @@ export default {
     Suitcase,
     ShoppingCart,
     ChatLineRound,
-    UserFilled
+    UserFilled,
+    View
   },
   data() {
     return {
@@ -213,6 +222,9 @@ export default {
           return true
         })
       }
+    },
+    takeGoods(){
+      this.$message.success("收货成功！")
     },
     zero() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {

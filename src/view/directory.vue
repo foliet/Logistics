@@ -108,6 +108,7 @@ export default {
   border-width: 2px;
   color:black;
   height:37px;
+  cursor: pointer;
 }
 
 .nameless{

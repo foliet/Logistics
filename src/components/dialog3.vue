@@ -4,15 +4,15 @@
              top="5vh" width="40%">
     <div class="space1">姓名</div>
     <div>
-      <el-input v-model="tableData.username" clearable placeholder="name" type="text"/>
+      <el-input v-model="tableData.username" clearable placeholder="姓名" type="text"/>
     </div>
     <div class="space1">邮箱</div>
     <div>
-      <el-input v-model="tableData.email" clearable placeholder="email" type="email"/>
+      <el-input v-model="tableData.email" clearable placeholder="邮箱" type="email"/>
     </div>
     <div class="space1">密码</div>
     <div>
-      <el-input v-model="tableData.password" clearable placeholder="password" type="password"/>
+      <el-input v-model="tableData.password" clearable placeholder="密码" type="password"/>
     </div>
     <div class="space1">类别</div>
     <el-select
@@ -31,10 +31,10 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button @click="reset()">Reset</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="reset()">重置</el-button>
         <el-button type="primary" @click="addUser()"
-        >Confirm</el-button>
+        >确认</el-button>
       </span>
     </template>
   </el-dialog>
