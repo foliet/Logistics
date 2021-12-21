@@ -21,7 +21,6 @@
           |
           <el-button @click="deleted(scope.row)">删除</el-button>
         </template>
-        <!--      -->
       </el-table-column>
     </el-table>
     <dia ref="c" @confirm="confirm"></dia>
@@ -85,14 +84,14 @@ export default {
       setTimeout(() => {
         this.contacts.length = 0
         this.getContacts()
-      }, 200)
+      }, 500)
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id})
       setTimeout(() => {
         this.contacts.length = 0
         this.getContacts()
-      }, 200)
+      }, 500)
     }
   },
 }
