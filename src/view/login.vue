@@ -41,7 +41,7 @@
             <input type="password" v-model="loginData.password" id="label7">
             <label for="label7" data-placeholder="Password"></label>
           </div>
-          <a href="#">忘记密码？</a>
+          <router-link to="/retrieve">忘记密码？</router-link>
           <button>登录</button>
         </form>
       </div>
