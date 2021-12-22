@@ -1,14 +1,24 @@
 <template>
-  <el-container class="nameness">
-  <el-main>
-    <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" style="width: 100%">
-      <el-table-column label="用户名" prop="receiverName" sortable width="180"/>
-      <el-table-column label="省市区" prop="PCD" sortable width="180"/>
-      <el-table-column label="电话" prop="telephone" sortable/>
+  <el-container>
+    <el-container class="nameness">
+      <el-header>
+        <div style="padding:10px 0 0 0">
+          <el-input v-model="search" placeholder="输入关键字" style="width: 100%" type="text"></el-input>
+        </div>
+      </el-header>
+    <el-main >
+    <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              height="100%" id="table1">
+      <el-table-column label="姓名" prop="receiverName" sortable width="190"/>
+      <el-table-column label="省份/城市/地区" prop="PCD" sortable width="300"/>
+      <el-table-column label="电话" prop="telephone" sortable width="250"/>
       <el-table-column label="地址" prop="address" sortable/>
       <el-table-column prop="operations">
         <template #header>
-          <el-input v-model="search" placeholder="Type to search" size="mini"/>
+          <el-button @click="add" class="addPeople" size="medium" round>
+            <el-icon size="17" class="addPeople1"><circle-plus/></el-icon>
+            <span class="addPeople1">添加联系人</span>
+          </el-button>
         </template>
         <template #default="scope">
           <el-button @click="edit(scope.row)">修改</el-button>
@@ -19,17 +29,14 @@
     </el-table>
     <dia ref="c" @confirm="confirm"></dia>
   </el-main>
-    <el-footer>
-      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length" background
-                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
-      </el-pagination>
-      <el-button size="mini" style="width:20%;float:right" @click="add">
-        <el-icon size="14">
-          <circle-plus/>
-        </el-icon>
-        新建联系人
-      </el-button>
-    </el-footer>
+    </el-container>
+  <el-footer>
+    <div style="text-align: center">
+    <el-pagination :current-page="currentPage" @current-change="currentChange"
+       background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
+    </el-pagination>
+    </div>
+  </el-footer>
   </el-container>
 </template>
 
@@ -41,11 +48,11 @@ import dia from '../components/dia'
 export default {
   data() {
     return {
-      pageSize: 7,
+      pageSize: 10,
       currentPage: 1,
       search: null,
       contacts: [],
-      allContacts: [],
+      allContacts:[],
     }
   },
   watch:{
@@ -118,15 +125,34 @@ export default {
 </script>
 
 <style scoped>
-.nameless{
-  padding:0;
-
-}
-.nameness{
+.nameness {
   margin: 0;
   display: flex;
   vertical-align: center;
-  border-width: 3px;
-  color:black;
+}
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
+}
+.addPeople{
+  float: right;
+  border: #FF8200 1px solid;
+  background-color: white;
+}
+.addPeople1{
+  color: #FF8200;
+}
+.addPeople:focus , .addPeople:hover{
+  background-image: linear-gradient(to right,#ff9000 0,#ff5000 100%);
+  border: #FF8200;
+}
+.addPeople:focus .addPeople1{
+  color: white;
+  font-weight: bolder;
+}
+.addPeople:hover .addPeople1{
+  color: white;
+  font-weight: bolder;
 }
 </style>

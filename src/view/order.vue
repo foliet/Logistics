@@ -59,8 +59,10 @@
             <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
           </el-footer>
         </el-container>
-        <el-button v-if="type==='receive'" type="warning" plain style="margin:0.5em 0 0.5em 90%" @click="takeGoods">
-          确认收货
+        <el-button v-if="type==='receive'" size="medium" round class="takegoods" @click="takeGoods" >
+          <span class="takegood" >
+            确认收货
+          </span>
         </el-button>
       </el-card>
       <br/>
@@ -232,7 +234,7 @@ export default {
     },
     takeGoods(){
       this.$message.success("收货成功！")
-    },
+    }
   }
 }
 </script>
@@ -263,5 +265,21 @@ export default {
   border: 1px gainsboro solid;
   padding-top: 0.5em;
   padding-bottom: 0.5em
+}
+.takegoods{
+  margin:0.5em 0 0.5em 89%;
+  border: #FF8200 1px solid;
+  background-color: white;
+}
+.takegood{
+  color: #FF8200;
+}
+.takegoods:hover{
+  margin:0.5em 0 0.5em 89%;
+  border: #FF8200 1px solid;
+  background-color: #FF8200;
+}
+.takegoods:hover .takegood{
+  color: white;
 }
 </style>
