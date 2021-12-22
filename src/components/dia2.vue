@@ -4,7 +4,7 @@
              top="5vh" width="40%">
     <div class="space1">收件人用户名</div>
     <div>
-      <el-input v-model="tableData.receiverName" clearable placeholder="名字" type="text"/>
+      <el-input v-model="tableData.receiverName" :disabled="type" clearable placeholder="名字" type="text"/>
     </div>
     <div class="space1">省/市/区</div>
     <el-cascader
@@ -37,6 +37,7 @@ export default {
   emits: ['confirm'],
   data() {
     return {
+      type: false,
       dialogVisible: "",
       handleClose: "",
       tableData:

@@ -134,16 +134,14 @@
       </el-dialog>
     </el-main>
     <el-footer>
-      <el-pagination :current-page="currentPage" @current-change="currentChange" background layout="prev, pager, next, jumper" :total="orders.length" :page-size="pageSize">
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="orders.length" background
+                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
       </el-pagination>
-      <div class="align" :style="{display: type==='send'?'':'none'}" height="40px" @click="showDialog">
-        <el-button round style="width: 100%">
-          <el-icon size="20">
-            <circle-plus/>
-          </el-icon>
-          <span style="margin-left:1em ">新增</span>
-        </el-button>
-      </div>
+      <el-button :style="{display: type==='send'?'':'none'}" class="align" size="mini" @click="showDialog">
+        <el-icon size="20">
+          <circle-plus/>
+        </el-icon>
+        <span style="margin-left:1em ">新增</span></el-button>
     </el-footer>
   </el-container>
 </template>
@@ -240,12 +238,9 @@ export default {
 </script>
 
 <style scoped>
-.align{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: justify;
-  height:37px;
+.align {
+  width: 20%;
+  float: right
 }
 
 .nameness{

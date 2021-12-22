@@ -14,13 +14,8 @@
     </el-header>
     <el-main>
       <div style="height: 95%">
-        <el-table :data="contacts.filter(
-        (data) =>
-          !search || data.receiverName.toLowerCase().includes(search.toLowerCase())
-          || data.address.toLowerCase().includes(search.toLowerCase())
-          || data.PCD.toLowerCase().includes(search.toLowerCase())
-          || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" height="100%" style="width: 100%;">
+        <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                  height="100%" style="width: 100%;">
           <el-table-column label="用户名" prop="receiverName" sortable width="180"/>
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
@@ -38,7 +33,19 @@
         </el-table>
       </div>
     </el-main>
+    <el-footer>
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length" background
+                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
+      </el-pagination>
+      <el-button size="mini" style="width:20%;float:right" @click="add">
+        <el-icon size="14">
+          <circle-plus/>
+        </el-icon>
+        新建联系地址
+      </el-button>
+    </el-footer>
   </el-container>
+
   <dia2 ref="f"></dia2>
   <el-dialog v-model="visible2" title="修改密码">
     <div class="space1">旧密码：</div>
@@ -48,7 +55,6 @@
     <div class="space1">确认新密码：</div>
     <el-input v-model="newpsd1" :type="pwdtype">
     </el-input>
-
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="changetype()">
@@ -75,7 +81,9 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: null,
+      pageSize: 7,
+      currentPage: 1,
       imageUrl: '',
       user: {
         password: '',
@@ -83,6 +91,7 @@ export default {
         email: '',
       },
       contacts: [],
+      allContacts: [],
       psd: '',
       visible: '',
       visible2: '',
@@ -101,13 +110,27 @@ export default {
   mounted() {
     document.title = "基本信息"
   },
+  watch: {
+    search() {
+      this.contacts = this.allContacts.filter(
+          (data) =>
+              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
+              || data.address.toLowerCase().includes(this.search.toLowerCase())
+              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
+      )
+    }
+  },
   methods: {
+    currentChange(index) {
+      this.currentPage = index
+    },
     getinfo() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
         this.user = res.data.user
       });
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
-        this.contacts = res.data.contacts
+        this.allContacts = res.data.contacts
       })
     },
     changetype() {
@@ -138,6 +161,11 @@ export default {
     deleted(id) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
     },
+    add() {
+      this.$refs.f.type = true;
+      this.$refs.f.tableData.receiverName = this.user.username;
+      this.$refs.f.dialogVisible = true;
+    }
   },
 }
 
@@ -148,26 +176,6 @@ export default {
   margin: 0;
   display: flex;
   vertical-align: center;
-}
-
-.avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader:hover {
-  border-color: #409eff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
 }
 
 .avatar-uploader-icon svg {
