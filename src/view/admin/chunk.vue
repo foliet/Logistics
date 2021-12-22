@@ -46,12 +46,11 @@
       </template>
     </el-dialog>
     <el-footer>
-      <el-button style="width: 100%" @click="this.dialogVisible=true">新增</el-button>
+      <el-button style="width: 100%" @click="reset();this.dialogVisible=true">新增</el-button>
     </el-footer>
   </el-container>
 </template>
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -63,6 +62,7 @@ export default {
         id: null,
         model: '',
         number: '',
+        status:null,
       },
     }
   },
@@ -85,32 +85,31 @@ export default {
       }
     },
     addChunk: function () {
-      if (this.chunk.uid == null) {
-        axios.post('https://mc.rainspace.cn:4443/add-chunk', this.chunk).then(res => {
+      if (this.chunk.id == null) {
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }
         })
 
       } else {
-        axios.post('https://mc.rainspace.cn:4443/edit-chunk', this.chunk).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }
         })
       }
-      this.uid = null;
       this.dialogVisible = false;
       this.$emit('confirm')
     },
     edit(row) {
       this.chunk.model = row.model;
       this.chunk.number = row.number;
-      this.chunk.uid = row.id;
+      this.chunk.id = row.id;
       this.dialogVisible = true;
     },
     deleted(row) {
-      axios.post('https://mc.rainspace.cn:4443/delete-chunk', {id: row.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id})
       setTimeout(() => {
         this.chunks.length = 0
         this.getChunks()

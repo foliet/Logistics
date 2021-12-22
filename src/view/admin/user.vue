@@ -60,19 +60,19 @@ export default {
   },
   methods: {
     addUser() {
+      this.$refs.d.reset()
       this.$refs.d.dialogVisible = true;
     },
     edit(row) {
       this.$refs.d.tableData.username = row.username;
-      this.$refs.d.tableData.ownerId = row.ownerId;
       this.$refs.d.tableData.email = row.email;
       this.$refs.d.tableData.password = row.password;
-      this.$refs.d.userId = row.userId;
+      this.$refs.d.tableData.id = row.id;
       this.$refs.d.tableData.groupId = row.groupId;
       this.$refs.d.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-user', row.userId)
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-user', {id: row.id})
     }
   }
 }

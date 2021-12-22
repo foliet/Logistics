@@ -118,6 +118,7 @@ export default {
     reset: function () {
       for (const key in this.tableData) {
         this.tableData[key] = null;
+        this.tableData.PCD=[]
       }
     }
   }

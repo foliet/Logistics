@@ -4,8 +4,8 @@
       <el-main>
         <el-table :data="orders" style="width: 100%;height:100%">
           <el-table-column label="Id" prop="id"/>
-          <el-table-column label="司机Id" prop="driverId"/>
-          <el-table-column label="货车Id" prop="chunkId"/>
+          <el-table-column label="寄件人名字" prop="senderName"/>
+          <el-table-column label="取件人名字" prop="receiverName"/>
           <el-table-column label="状态" prop="status"/>
           <el-table-column label="分配车辆">
             <template #default="scope">
@@ -65,8 +65,6 @@ export default {
       orders: [],
       chunks: [],
       staffs: [],
-      chunk: '',
-      staff: '',
     }
   },
   created() {
@@ -94,11 +92,11 @@ export default {
       })
     },
     matching(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/matching', {id1: row.id, id2: row.chunk, id3: row.staff})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/matching', {orderId: row.id, chunkId: row.chunk, staffId: row.staff})
 
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete', {id1: row.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id})
     }
   }
 }

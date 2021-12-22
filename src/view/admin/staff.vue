@@ -46,12 +46,11 @@
       </template>
     </el-dialog>
     <el-footer>
-      <el-button style="width: 100%" @click="this.dialogVisible=true">新增</el-button>
+      <el-button style="width: 100%" @click="reset();this.dialogVisible=true">新增</el-button>
     </el-footer>
   </el-container>
 </template>
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -59,11 +58,10 @@ export default {
       staffs: [],
       search: '',
       staff: {
-        uid: null,
+        id: null,
         gender: '',
         name: '',
-        status: ''
-
+        status: null,
       },
       dialogVisible: '',
     }
@@ -78,7 +76,7 @@ export default {
   methods: {
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
-        this.staffs = res.data.staffs//将这个用户的数据库的所有staffs都push到cards，一个staffData为一个元素
+        this.staffs = res.data.staffs
       })
     },
     reset: function () {
@@ -87,32 +85,31 @@ export default {
       }
     },
     addStaff: function () {
-      if (this.staff.uid == null) {
-        axios.post('https://mc.rainspace.cn:4443/add-staff', this.staff).then(res => {
+      if (this.staff.id == null) {
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }
         })
 
       } else {
-        axios.post('https://mc.rainspace.cn:4443/edit-staff', this.staff).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           }
         })
       }
-      this.uid = null;
       this.dialogVisible = false;
       this.$emit('confirm')
     },
     edit(row) {
       this.staff.gender = row.gender;
       this.staff.name = row.name;
-      this.staff.uid = row.id;
+      this.staff.id = row.id;
       this.dialogVisible = true;
     },
     deleted(row) {
-      axios.post('https://mc.rainspace.cn:4443/delete-staff', {id: row.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id})
       setTimeout(() => {
         this.staffs.length = 0
         this.getStaffs()

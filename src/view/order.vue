@@ -3,13 +3,12 @@
     <el-header>
       <div style="padding:10px 0 0 0">
         <el-input v-model="search" placeholder="输入关键字" style="width: 93%" type="text"
-                  @keypress.enter="searching"></el-input>
-        <el-button style="width: 7%" @click="zero">重置</el-button>
+                  @input="searching"></el-input>
       </div>
     </el-header>
     <el-main>
       <od-dialog ref="a"></od-dialog>
-      <div v-for="order in orders" :key="order.createAt">
+      <div v-for="order in currentOrders" :key="order.createAt">
       <el-card @confirm="getOrders" shadow="hover" :body-style="{padding: '0px' }">
         <el-container >
           <el-header class="orderhead">
@@ -37,7 +36,7 @@
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
               <span style="font-size: 14px;" >货物价值：</span>
               <span style="font-size: 14px;font-weight: bolder;margin-left: 10%" >
-                  ￥{{order.value/100}}
+                  ￥{{order.value}}
                 </span>
             </div>
           </el-container>
@@ -60,7 +59,7 @@
             <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
           </el-footer>
         </el-container>
-        <el-button type="warning" plain style="margin:0.5em 0 0.5em 90%" @click="takeGoods">
+        <el-button v-if="type==='receive'" type="warning" plain style="margin:0.5em 0 0.5em 90%" @click="takeGoods">
           确认收货
         </el-button>
       </el-card>
@@ -101,7 +100,7 @@
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
               <span class="info">商品价格</span>
             </template>
-            ¥{{clickedOrder.value/100}}
+            ¥{{clickedOrder.value}}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
@@ -115,7 +114,7 @@
               <el-icon style="color: #03A9F4"><Suitcase/></el-icon>&nbsp;
               <span class="info">商品重量</span>
             </template>
-            {{clickedOrder.weight/1000}}kg
+            {{clickedOrder.weight}}kg
           </el-descriptions-item>
             <el-descriptions-item :span="2">
             <template v-slot:label>
@@ -134,8 +133,10 @@
         </el-descriptions>
       </el-dialog>
     </el-main>
-    <el-footer :style="{display: type==='send'?'':'none'}" height="40px" class="nameless" @click="showDialog">
-      <div class="align">
+    <el-footer>
+      <el-pagination :current-page="currentPage" @current-change="currentChange" background layout="prev, pager, next, jumper" :total="orders.length" :page-size="pageSize">
+      </el-pagination>
+      <div class="align" :style="{display: type==='send'?'':'none'}" height="40px" @click="showDialog">
         <el-button round style="width: 100%">
           <el-icon size="20">
             <circle-plus/>
@@ -180,7 +181,10 @@ export default {
   },
   data() {
     return {
+      pageSize:2,
+      currentPage: 1,
       clickedOrder:{},
+      currentOrders:[],
       orders: [],
       allOrders: [],
       dialogTableVisible: false,
@@ -200,6 +204,10 @@ export default {
     document.title = "我的订单"
   },
   methods: {
+    currentChange(index){
+      this.currentOrders=this.orders.slice((index-1)*this.pageSize,index*this.pageSize)
+      this.currentPage=index
+    },
     getOrders() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
         this.allOrders = res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素;
@@ -222,15 +230,11 @@ export default {
           return true
         })
       }
+      this.currentChange(1)
     },
     takeGoods(){
       this.$message.success("收货成功！")
     },
-    zero() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
-        this.orders = res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素;
-      })
-    }
   }
 }
 </script>
@@ -244,10 +248,6 @@ export default {
   height:37px;
 }
 
-.nameless{
-  padding:0;
-
-}
 .nameness{
   margin: 0;
   display: flex;

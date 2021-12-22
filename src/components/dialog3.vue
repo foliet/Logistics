@@ -48,12 +48,12 @@ export default {
     return {
       dialogVisible: "",
       tableData: {
+        id:null,
         username: '',
         email: '',
         password: '',
-        groupId: '',
+        groupId: 0,
       },
-      userId: '',
       types: [{
         value: 0,
         label: '用户',
@@ -68,17 +68,15 @@ export default {
     this.userId = null;
   },
   methods: {
-    $message: undefined,
     addUser: function () {
       if (this.tableData.username != 0 && this.tableData.username != null
           && this.tableData.password != 0 && this.tableData.password != null
           && this.tableData.email != 0 && this.tableData.email != null) {
-        if (this.userId == null) {
-          axios.post('https://mc.rainspace.cn:4443/add-user', this.tableData)
+        if (this.tableData.id == null) {
+          axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData)
         } else {
-          axios.post('https://mc.rainspace.cn:4443/edit-user', {tableData: this.tableData, id: this.userId})
+          axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData)
         }
-        this.userId = null;
         this.dialogVisible = false;
       } else {
         this.$message.error('输入信息有误！')

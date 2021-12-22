@@ -120,7 +120,7 @@ export default {
         if (this.newpsd == null || this.newpsd == 0)
           this.$message.error("密码不能为空！")
         else {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-password', {
+          this.$axios.post('https://mc.rainspace.cn:4443/edit-password', {
             oldpsd: this.oldpsd,
             newpsd: this.newpsd
           });
@@ -136,7 +136,7 @@ export default {
       this.$refs.f.dialogVisible = true;
     },
     deleted(id) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact?type=mine', id)
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
     },
   },
 }

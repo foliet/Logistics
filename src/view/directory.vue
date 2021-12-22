@@ -1,13 +1,7 @@
 <template>
   <el-container class="nameness">
   <el-main>
-    <el-table :data="contacts.filter(
-        (data) =>
-          !search || data.receiverName.toLowerCase().includes(search.toLowerCase())
-          || data.address.toLowerCase().includes(search.toLowerCase())
-          || data.PCD.toLowerCase().includes(search.toLowerCase())
-          || data.telephone.toLowerCase().includes(search.toLowerCase())
-          )" height="100%" style="width: 100%">
+    <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" style="width: 100%">
       <el-table-column label="Name" prop="receiverName" sortable width="180"/>
       <el-table-column label="province/city/district" prop="PCD" sortable width="180"/>
       <el-table-column label="Telephone" prop="telephone" sortable/>
@@ -25,8 +19,10 @@
     </el-table>
     <dia ref="c" @confirm="confirm"></dia>
   </el-main>
-  <el-footer height="40px" class="nameless" @click="showDialog">
-    <div class="align">
+  <el-footer>
+    <el-pagination :current-page="currentPage" @current-change="currentChange" background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
+    </el-pagination>
+    <div class="align" height="40px" @click="add">
       <el-icon size="23"><circle-plus/></el-icon>
       添加联系人
     </div>
@@ -42,8 +38,22 @@ import dia from '../components/dia'
 export default {
   data() {
     return {
-      search: '',
+      pageSize: 10,
+      currentPage: 1,
+      search: null,
       contacts: [],
+      allContacts:[],
+    }
+  },
+  watch:{
+    search(){
+      this.contacts=this.allContacts.filter(
+          (data) =>
+              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
+              || data.address.toLowerCase().includes(this.search.toLowerCase())
+              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
+      )
     }
   },
   created() {
@@ -55,19 +65,25 @@ export default {
         dia
       },
   methods: {
+    currentChange(index){
+      this.currentPage=index
+    },
     getContacts(){
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
         if(res.data.status<10){
           for(const contact of res.data.contacts){
             contact.PCD=contact.province+contact.city+contact.district
-            this.contacts.push(contact)
+            this.allContacts.push(contact)
           }
+          this.search=null
+          this.search=''
         }else{
           this.$message.error(res.data.msg)
         }
       })
     },
-    showDialog() {
+    add() {
+      this.$refs.c.reset()
       this.$refs.c.dialogVisible = true;
     },
     edit(row) {
