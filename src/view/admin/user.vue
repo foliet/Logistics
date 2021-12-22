@@ -4,10 +4,9 @@
       <el-main >
         <div style="height: 100%">
         <el-table :data="users.filter(
-            (data) =>
-    !search || data.email.toLowerCase().includes(search.toLowerCase())
-    || data.telephone.toLowerCase().includes(search.toLowerCase())
-    )" style="width: 100%;height:100%">
+            (data) =>!search || data.email.toLowerCase().includes(search.toLowerCase())
+    || data.telephone.toLowerCase().includes(search.toLowerCase()))"
+                  style="width: 100%;height:100%">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
@@ -69,6 +68,7 @@ export default {
       this.$refs.d.tableData.email = row.email;
       this.$refs.d.tableData.password = row.password;
       this.$refs.d.userId = row.userId;
+      this.$refs.d.tableData.groupId = row.groupId;
       this.$refs.d.dialogVisible = true;
     },
     deleted(row) {

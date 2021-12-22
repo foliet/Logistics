@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="dialogVisible"
-             title="添加用户"
+             title="编辑用户"
              top="5vh" width="40%">
     <div class="space1">姓名</div>
     <div>
@@ -16,7 +16,7 @@
     </div>
     <div class="space1">类别</div>
     <el-select
-        v-model="tableData.typing"
+        v-model="tableData.groupId"
         placeholder="类型"
         style="width:90%">
       <el-option
@@ -51,9 +51,9 @@ export default {
         username: '',
         email: '',
         password: '',
-        typing: '',
-        userId: ''
+        groupId: '',
       },
+      userId: '',
       types: [{
         value: 0,
         label: '用户',

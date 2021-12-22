@@ -10,7 +10,7 @@
           <el-table-column label="分配车辆">
             <template #default="scope">
               <div>
-                <el-select v-model="scope.row.chunk" placeholder="Select chunk">
+                <el-select v-model="scope.row.chunk" :disabled="!scope.row.status" placeholder="Select chunk">
                   <el-option
                       v-for="item in chunks"
                       :key="item.status"
@@ -21,8 +21,24 @@
                     {{ item.model }}
                   </el-option>
                 </el-select>
+                <el-select v-model="scope.row.staff" :disabled="!scope.row.status" placeholder="Select staff">
+                  <el-option
+                      v-for="item in staffs"
+                      :key="item.status"
+                      :disabled="item.status"
+                      :label="item.name"
+                      :value="item.id"
+                  >
+                    {{ item.name }}
+                  </el-option>
+                </el-select>
                 <el-button @click="matching(scope.row)">确定</el-button>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template #default="scope">
+              <el-button @click="deleted(scope.row)">删除</el-button>
             </template>
           </el-table-column>
           <el-table-column>
@@ -48,12 +64,15 @@ export default {
     return {
       orders: [],
       chunks: [],
+      staffs: [],
       chunk: '',
+      staff: '',
     }
   },
   created() {
     this.getOrders()
     this.getChunks()
+    this.getStaffs()
   },
   mounted() {
     document.title = "订单管理"
@@ -69,8 +88,17 @@ export default {
         this.chunks = res.data.chunks
       })
     },
+    getStaffs() {
+      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
+        this.staffs = res.data.staffs
+      })
+    },
     matching(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/matching', {id1: row.id, id2: row.chunk.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/matching', {id1: row.id, id2: row.chunk, id3: row.staff})
+
+    },
+    deleted(row) {
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete', {id1: row.id})
     }
   }
 }
