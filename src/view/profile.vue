@@ -152,6 +152,7 @@ export default {
       }
     },
     edit(id, row) {
+      this.$refs.f.reset();
       this.$refs.f.tableData.receiverName = row.receiverName;
       this.$refs.f.tableData.telephone = row.telephone;
       this.$refs.f.tableData.address = row.address;

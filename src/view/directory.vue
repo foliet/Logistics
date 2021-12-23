@@ -48,11 +48,11 @@ import dia from '../components/dia'
 export default {
   data() {
     return {
-      pageSize: 10,
+      pageSize: 6,
       currentPage: 1,
       search: null,
       contacts: [],
-      allContacts:[],
+      allContacts: [],
     }
   },
   watch:{
@@ -97,6 +97,8 @@ export default {
       this.$refs.c.dialogVisible = true;
     },
     edit(row) {
+      this.$refs.c.dialogVisible = true;
+      this.$refs.c.reset();
       this.$refs.c.tableData.receiverName = row.receiverName;
       this.$refs.c.tableData.telephone = row.telephone;
       this.$refs.c.tableData.address = row.address;
@@ -104,7 +106,7 @@ export default {
       this.$refs.c.tableData.PCD[1] = row.city;
       this.$refs.c.tableData.PCD[2] = row.district;
       this.$refs.c.tableData.id = row.id;
-      this.$refs.c.dialogVisible = true;
+
     },
     confirm() {
       setTimeout(() => {
