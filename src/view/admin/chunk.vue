@@ -86,17 +86,15 @@ export default {
     },
     addChunk: function () {
       if (this.chunk.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(res => {
-          if (res.data.status >= 10) {
-            this.$message.error(res.data.msg)
-          }
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
+          this.chunks.length = 0
+          this.getChunks()
         })
 
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(res => {
-          if (res.data.status >= 10) {
-            this.$message.error(res.data.msg)
-          }
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
+          this.chunks.length = 0
+          this.getChunks()
         })
       }
       this.dialogVisible = false;
@@ -109,11 +107,10 @@ export default {
       this.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id})
-      setTimeout(() => {
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(()=>{
         this.chunks.length = 0
         this.getChunks()
-      }, 500)
+      })
     }
   },
 }

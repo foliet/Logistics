@@ -86,17 +86,15 @@ export default {
     },
     addStaff: function () {
       if (this.staff.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(res => {
-          if (res.data.status >= 10) {
-            this.$message.error(res.data.msg)
-          }
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
+          this.staffs.length = 0
+          this.getStaffs()
         })
 
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(res => {
-          if (res.data.status >= 10) {
-            this.$message.error(res.data.msg)
-          }
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
+          this.staffs.length = 0
+          this.getStaffs()
         })
       }
       this.dialogVisible = false;
@@ -109,11 +107,10 @@ export default {
       this.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id})
-      setTimeout(() => {
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id}).then(()=>{
         this.staffs.length = 0
         this.getStaffs()
-      }, 500)
+      })
     }
   }
 }

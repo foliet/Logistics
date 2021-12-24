@@ -72,10 +72,11 @@
 
 <script>
 import dia2 from '/src/components/dia2'
-import {View} from '@element-plus/icons'
+import {View,CirclePlus} from '@element-plus/icons'
 
 export default {
   components: {
+    CirclePlus,
     dia2,
     View,
   },
@@ -130,7 +131,12 @@ export default {
         this.user = res.data.user
       });
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
-        this.allContacts = res.data.contacts
+        for(const contact of res.data.contacts){
+          contact.PCD=contact.province+contact.city+contact.district
+          this.allContacts.push(contact)
+        }
+        this.search=null
+        this.search=''
       })
     },
     changetype() {

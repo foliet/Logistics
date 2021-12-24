@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
+  emits:['confirm'],
   data() {
     return {
       dialogVisible: "",
@@ -73,9 +73,13 @@ export default {
           && this.tableData.password != 0 && this.tableData.password != null
           && this.tableData.email != 0 && this.tableData.email != null) {
         if (this.tableData.id == null) {
-          axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData)
+          this.$axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData).then(()=>{
+            this.$emit('confirm')
+          })
         } else {
-          axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData)
+          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData).then(()=>{
+            this.$emit('confirm')
+          })
         }
         this.dialogVisible = false;
       } else {

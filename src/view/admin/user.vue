@@ -27,7 +27,7 @@
           </el-table-column>
         </el-table>
         </div>
-        <dialog3 ref="d"></dialog3>
+        <dialog3 ref="d" @confirm="getUsers"></dialog3>
       </el-main>
     </el-container>
     <el-footer>
@@ -50,15 +50,14 @@ export default {
     }
   },
   created() {
-    this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
-      if (res.data.status < 10) {
-        this.users = res.data.users
-      } else {
-        this.$message.error(res.data.msg)
-      }
-    })
+    this.getUsers()
   },
   methods: {
+    getUsers(){
+      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
+        this.users = res.data.users
+      })
+    },
     addUser() {
       this.$refs.d.reset()
       this.$refs.d.dialogVisible = true;
@@ -72,7 +71,9 @@ export default {
       this.$refs.d.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-user', {id: row.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-user', {id: row.id}).then(()=>{
+        this.getUsers()
+      })
     }
   }
 }
