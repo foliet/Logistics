@@ -9,30 +9,44 @@
           <el-table-column label="寄件人名字" prop="senderName"/>
           <el-table-column label="取件人名字" prop="receiverName"/>
           <el-table-column label="状态" prop="status"/>
-          <el-table-column label="分配车辆">
+          <el-table-column label="操作">
             <template #default="scope">
               <div>
-                <el-select v-model="scope.row.chunk" :disabled="scope.row.status!==0" placeholder="Select chunk">
-                  <el-option
-                      v-for="item in chunks"
-                      :key="item.status"
-                      :label="item.model"
-                      :value="item.id"
-                  >
-                    {{ item.model }}
-                  </el-option>
-                </el-select>
-                <el-select v-model="scope.row.staff" :disabled="scope.row.status!==0" placeholder="Select staff">
-                  <el-option
-                      v-for="item in staffs"
-                      :key="item.status"
-                      :label="item.name"
-                      :value="item.id"
-                  >
-                    {{ item.name }}
-                  </el-option>
-                </el-select>
-                <el-button @click="matching(scope.row)">确定</el-button>
+                <el-popover
+                    :width="200"
+                    placement="right"
+                    title="处理该订单："
+                    trigger="click"
+                >
+                  <el-select v-model="scope.row.chunk" :disabled="scope.row.status!==0" placeholder="Select chunk">
+                    <el-option
+                        v-for="item in chunks"
+                        :key="item.status"
+                        :label="item.model"
+                        :value="item.id"
+                    >
+                      {{ item.model }}
+                    </el-option>
+                  </el-select>
+                  <div class="space1"></div>
+                  <el-select v-model="scope.row.staff" :disabled="scope.row.status!==0" placeholder="Select staff">
+                    <el-option
+                        v-for="item in staffs"
+                        :key="item.status"
+                        :label="item.name"
+                        :value="item.id"
+                    >
+                      {{ item.name }}
+                    </el-option>
+                  </el-select>
+                  <div class="space1"></div>
+                  <el-button :disabled="scope.row.status!==0" style="float: right" @click="matching(scope.row)">确定
+                  </el-button>
+                  <template #reference>
+                    <el-button>处理订单</el-button>
+                  </template>
+                </el-popover>
+
               </div>
             </template>
           </el-table-column>
@@ -60,7 +74,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 7,
       orders: [],
       chunks: [],
       staffs: [],
@@ -105,4 +119,7 @@ export default {
 </script>
 
 <style scoped>
+.space1 {
+  padding: 10px 0;
+}
 </style>

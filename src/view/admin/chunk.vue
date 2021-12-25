@@ -3,9 +3,7 @@
     <el-container>
       <el-main>
         <div style="height: 96%">
-        <el-table :data="chunks.filter(
-            (data) =>!search || data.number.toLowerCase().includes(search.toLowerCase())
-    || data.model.toLowerCase().includes(search.toLowerCase()))" height="100%" style="width: 100%;">
+        <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%;height:100%">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="number" label="车牌号"/>
           <el-table-column prop="model" label="型号"/>
@@ -48,7 +46,15 @@
       </template>
     </el-dialog>
     <el-footer>
-      <el-button style="width: 100%" @click="reset();this.dialogVisible=true">新增</el-button>
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="chunks.length" background
+                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
+      </el-pagination>
+      <el-button size="mini" style="width:20%;float:right" @click="reset();this.dialogVisible=true">
+        <el-icon size="14">
+          <circle-plus/>
+        </el-icon>
+        新建
+      </el-button>
     </el-footer>
   </el-container>
 </template>
@@ -57,15 +63,28 @@
 export default {
   data() {
     return {
-      search: '',
+      search: null,
+      pageSize: 7,
+      currentPage: 1,
       dialogVisible: '',
       chunks: [],
+      allChunks: [],
       chunk: {
         id: null,
         model: '',
         number: '',
-        status:null,
+        status: null,
       },
+    }
+  },
+  watch: {
+    search() {
+      this.chunks.length = 0;
+      this.chunks = this.allChunks.filter(
+          (data) =>
+              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
+              || data.number.toLowerCase().includes(this.search.toLowerCase())
+      )
     }
   },
   created() {
@@ -73,12 +92,16 @@ export default {
     this.dialogVisible = false
   },
   mounted() {
-    document.title="车辆管理"
+    document.title = "车辆管理"
   },
   methods: {
+    currentChange(index) {
+      this.currentPage = index
+    },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
-        this.chunks = res.data.chunks
+        this.allChunks = res.data.chunks
+        this.search = '';
       })
     },
     reset: function () {
@@ -89,18 +112,19 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
-          this.chunks.length = 0
+          this.allChunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
-          this.chunks.length = 0
+          this.allChunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm')
+      this.$emit('confirm');
+      this.search = null;
     },
     edit(row) {
       this.chunk.model = row.model;

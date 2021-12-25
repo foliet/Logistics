@@ -41,7 +41,7 @@
         <el-icon size="14">
           <circle-plus/>
         </el-icon>
-        新建联系地址
+        新建我的地址
       </el-button>
       </div>
     </el-footer>
@@ -73,7 +73,7 @@
 
 <script>
 import dia2 from '/src/components/dia2'
-import {View,CirclePlus} from '@element-plus/icons'
+import {CirclePlus, View} from '@element-plus/icons'
 
 export default {
   components: {

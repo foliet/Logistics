@@ -3,10 +3,8 @@
     <el-container class="nameness">
       <el-main >
         <div style="height: 95%">
-        <el-table :data="users.filter(
-            (data) =>!search || data.email.toLowerCase().includes(search.toLowerCase())
-    || data.telephone.toLowerCase().includes(search.toLowerCase()))"
-                  height="100%"  style="width: 100%;">
+        <el-table :data="users.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                  height="100%" style="width: 100%;">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
@@ -31,7 +29,16 @@
       </el-main>
     </el-container>
     <el-footer>
-      <el-button @click="addUser" style="width: 100%">新增</el-button>
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="users.length" background
+                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
+      </el-pagination>
+      <el-button size="mini" style="width:20%;float:right"
+                 @click="this.$refs.d.reset();this.$refs.d.dialogVisible=true">
+        <el-icon size="14">
+          <circle-plus/>
+        </el-icon>
+        新建
+      </el-button>
     </el-footer>
   </el-container>
 </template>
@@ -45,17 +52,34 @@ export default {
   },
   data() {
     return {
+      search: null,
+      pageSize: 7,
+      currentPage: 1,
       users: [],
-      search: '',
+      allUsers: [],
+    }
+  },
+  watch: {
+    search() {
+      this.users.length = 0;
+      this.users = this.allUsers.filter(
+          (data) =>
+              !this.search || data.username.toLowerCase().includes(this.search.toLowerCase())
+              || data.email.toLowerCase().includes(this.search.toLowerCase())
+      )
     }
   },
   created() {
     this.getUsers()
   },
   methods: {
-    getUsers(){
+    currentChange(index) {
+      this.currentPage = index
+    },
+    getUsers() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
-        this.users = res.data.users
+        this.allUsers = res.data.users
+        this.search = ''
       })
     },
     addUser() {

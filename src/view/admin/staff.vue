@@ -3,19 +3,17 @@
     <el-container>
       <el-main>
         <div style="height: 95%">
-        <el-table :data="staffs.filter(
-            (data) =>!search || data.name.toLowerCase().includes(search.toLowerCase())
-    || data.gender.toLowerCase().includes(search.toLowerCase()))" height="100%" style="width: 100%">
-          <el-table-column prop="id" label="Id"/>
-          <el-table-column prop="name" label="姓名"/>
-          <el-table-column prop="gender" label="性别"/>
-          <el-table-column prop="status" label="状态"/>
-          <el-table-column prop="operations">
-            <template #header>
-              <el-input v-model="search" placeholder="Type to search" size="mini"/>
-            </template>
-            <template #default="scope">
-              <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
+          <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%;height:100%">
+            <el-table-column prop="id" label="Id"/>
+            <el-table-column prop="name" label="姓名"/>
+            <el-table-column prop="gender" label="性别"/>
+            <el-table-column prop="status" label="状态"/>
+            <el-table-column prop="operations">
+              <template #header>
+                <el-input v-model="search" placeholder="Type to search" size="mini"/>
+              </template>
+              <template #default="scope">
+                <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
                 修改
               </el-button>
               |
@@ -48,7 +46,18 @@
       </template>
     </el-dialog>
     <el-footer>
-      <el-button style="width: 100%" @click="reset();this.dialogVisible=true">新增</el-button>
+      <el-footer>
+        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="staffs.length" background
+                       layout="prev, pager, next, jumper" style="width: 40%;float: left"
+                       @current-change="currentChange">
+        </el-pagination>
+        <el-button size="mini" style="width:20%;float:right" @click="reset();this.dialogVisible=true">
+          <el-icon size="14">
+            <circle-plus/>
+          </el-icon>
+          新建
+        </el-button>
+      </el-footer>
     </el-footer>
   </el-container>
 </template>
@@ -57,8 +66,11 @@
 export default {
   data() {
     return {
+      search: null,
+      pageSize: 7,
+      currentPage: 1,
       staffs: [],
-      search: '',
+      allStaffs: [],
       staff: {
         id: null,
         gender: '',
@@ -66,6 +78,16 @@ export default {
         status: null,
       },
       dialogVisible: '',
+    }
+  },
+  watch: {
+    search() {
+      this.staffs.length = 0;
+      this.staffs = this.allStaffs.filter(
+          (data) =>
+              !this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
+              || data.gender.toLowerCase().includes(this.search.toLowerCase())
+      )
     }
   },
   created() {
@@ -76,31 +98,38 @@ export default {
     document.title = "员工管理"
   },
   methods: {
+    currentChange(index) {
+      this.currentPage = index
+    },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
-        this.staffs = res.data.staffs
+        this.allStaffs = res.data.staffs
+        this.search = null
+        this.search = ''
       })
+
     },
-    reset: function () {
+    reset() {
       for (const key in this.staff) {
         this.staff[key] = null;
       }
     },
-    addStaff: function () {
+    addStaff() {
       if (this.staff.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
-          this.staffs.length = 0
+          this.allStaffs.length = 0
           this.getStaffs()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
-          this.staffs.length = 0
+          this.allStaffs.length = 0
           this.getStaffs()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm')
+      this.$emit('confirm');
+      this.search = null;
     },
     edit(row) {
       this.staff.gender = row.gender;
