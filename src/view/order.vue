@@ -2,8 +2,13 @@
   <el-container class="nameness">
     <el-header>
       <div style="padding:10px 0 0 0">
-        <el-input v-model="search" placeholder="输入关键字" style="width: 93%" type="text"
+        <el-input v-model="search" placeholder="输入关键字" style="width: 88%" type="text"
                   @input="searching"></el-input>
+        <el-button :style="{display: type==='send'?'':'none'}" class="align" size="mini" @click="showDialog">
+          <el-icon size="20">
+            <circle-plus/>
+          </el-icon>
+          <span style="margin-left:1em ">新增</span></el-button>
       </div>
     </el-header>
     <el-main>
@@ -136,14 +141,11 @@
       </el-dialog>
     </el-main>
     <el-footer>
+      <div style="padding-left: 40%">
       <el-pagination :current-page="currentPage" :page-size="pageSize" :total="orders.length" background
                      layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
       </el-pagination>
-      <el-button :style="{display: type==='send'?'':'none'}" class="align" size="mini" @click="showDialog">
-        <el-icon size="20">
-          <circle-plus/>
-        </el-icon>
-        <span style="margin-left:1em ">新增</span></el-button>
+      </div>
     </el-footer>
   </el-container>
 </template>
@@ -241,8 +243,9 @@ export default {
 
 <style scoped>
 .align {
-  width: 20%;
-  float: right
+  width: 10%;
+  float: right;
+  height: 40px;
 }
 
 .nameness{

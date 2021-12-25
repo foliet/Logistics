@@ -16,7 +16,6 @@
       <div style="height: 95%">
         <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                   height="100%" style="width: 100%;">
-          <el-table-column label="用户名" prop="receiverName" sortable width="180"/>
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
           <el-table-column label="地址" prop="address" sortable/>
@@ -34,6 +33,7 @@
       </div>
     </el-main>
     <el-footer>
+      <div style="padding-left: 35%">
       <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length" background
                      layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
       </el-pagination>
@@ -43,6 +43,7 @@
         </el-icon>
         新建联系地址
       </el-button>
+      </div>
     </el-footer>
   </el-container>
 

@@ -2,9 +2,10 @@
   <el-container>
     <el-container>
       <el-main>
+        <div style="height: 95%">
         <el-table :data="staffs.filter(
             (data) =>!search || data.name.toLowerCase().includes(search.toLowerCase())
-    || data.gender.toLowerCase().includes(search.toLowerCase()))" style="width: 100%;height:100%">
+    || data.gender.toLowerCase().includes(search.toLowerCase()))" height="100%" style="width: 100%">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="name" label="姓名"/>
           <el-table-column prop="gender" label="性别"/>
@@ -23,6 +24,7 @@
             </template>
           </el-table-column>
         </el-table>
+        </div>
       </el-main>
     </el-container>
     <el-dialog v-model="dialogVisible"

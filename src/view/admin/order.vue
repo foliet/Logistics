@@ -2,7 +2,9 @@
   <el-container>
     <el-container>
       <el-main>
-        <el-table :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+        <div style="height: 96%">
+        <el-table :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+           height="94%" style="width: 100%;">
           <el-table-column label="Id" prop="id"/>
           <el-table-column label="寄件人名字" prop="senderName"/>
           <el-table-column label="取件人名字" prop="receiverName"/>
@@ -43,9 +45,12 @@
 
           </el-table-column>
         </el-table>
+        </div>
+        <div style="text-align: center">
         <el-pagination :current-page="currentPage" @current-change="currentChange"
                        background layout="prev, pager, next, jumper" :total="orders.length" :page-size="pageSize">
         </el-pagination>
+        </div>
       </el-main>
     </el-container>
   </el-container>

@@ -2,9 +2,10 @@
   <el-container>
     <el-container>
       <el-main>
+        <div style="height: 96%">
         <el-table :data="chunks.filter(
             (data) =>!search || data.number.toLowerCase().includes(search.toLowerCase())
-    || data.model.toLowerCase().includes(search.toLowerCase()))" style="width: 100%;height:100%">
+    || data.model.toLowerCase().includes(search.toLowerCase()))" height="100%" style="width: 100%;">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="number" label="车牌号"/>
           <el-table-column prop="model" label="型号"/>
@@ -23,6 +24,7 @@
             </template>
           </el-table-column>
         </el-table>
+        </div>
       </el-main>
     </el-container>
     <el-dialog v-model="dialogVisible"

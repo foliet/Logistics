@@ -2,11 +2,11 @@
   <el-container style="margin: 0 0 0 0">
     <el-container class="nameness">
       <el-main >
-        <div style="height: 100%">
+        <div style="height: 95%">
         <el-table :data="users.filter(
             (data) =>!search || data.email.toLowerCase().includes(search.toLowerCase())
     || data.telephone.toLowerCase().includes(search.toLowerCase()))"
-                  style="width: 100%;height:100%">
+                  height="100%"  style="width: 100%;">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
