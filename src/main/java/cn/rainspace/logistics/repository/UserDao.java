@@ -29,8 +29,8 @@ public class UserDao implements Dao<User>{
 
     @Override
 	public int update(User user) {
-        String sql = "update users set username = ?,password = ?,group_id = ?,email = ? where id = ?";
-        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(), user.getId());
+        String sql = "update users set username = ?,password = ?,group_id = ?,email = ?,unread_message=? where id = ?";
+        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(),user.getUnreadMessage(), user.getId());
     }
 	
 	public User getByName(String value) {

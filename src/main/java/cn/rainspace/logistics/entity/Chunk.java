@@ -10,6 +10,5 @@ public class Chunk {
     Timestamp createAt;
     String number;
     String model;
-    String place;
     int status;
 }

@@ -17,8 +17,8 @@ public class OrderDao implements Dao<Order> {
 
     @Override
     public int add(Order order) {
-        String sql = "insert into orders(create_at,sender_contact_id,receiver_contact_id,title,remark ,value,volume,weight,status,chunk_id,driver_id) value(?,?,?,?,?,?,?,?,?,?,?)";
-        return jdbc.update(sql,new Timestamp(System.currentTimeMillis()),order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus(),order.getChunkId(),order.getDriverId());
+        String sql = "insert into orders(create_at,sender_contact_id,receiver_contact_id,title,remark ,value,volume,weight,status) value(?,?,?,?,?,?,?,?,?)";
+        return jdbc.update(sql,new Timestamp(System.currentTimeMillis()),order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus());
     }
 
     @Override
@@ -29,8 +29,9 @@ public class OrderDao implements Dao<Order> {
 
     @Override
     public int update(Order order) {
-        String sql = "update orders set sender_contact_id=?,receiver_contact_id=?,title=?,remark=?,value=?,volume=?,weight=?,status=?,chunk_id=?,driver_id=? where id = ?";
-        return jdbc.update(sql,order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus(),order.getChunkId(),order.getDriverId(),order.getId());
+        String sql = "update orders set sender_contact_id=?,receiver_contact_id=?,title=?,remark=?,value=?,volume=?,weight=?,status=?,chunk_id=?,staff_id=? where id = ?";
+        return jdbc.update(sql,order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus()
+                ,order.getChunkId(),order.getStaffId(),order.getId());
     }
 
     @Override

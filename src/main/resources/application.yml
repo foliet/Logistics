@@ -14,4 +14,6 @@ server:
   port: 4443
   servlet:
     session:
-      store-dir: classpath:session/
+      cookie:
+        max-age: 108000
+      timeout: 108000

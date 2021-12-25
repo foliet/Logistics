@@ -14,10 +14,10 @@ public class Order {
     String receiverName;
     String remark;
     String title;
-    int value;
-    int weight;
-    int volume;
-    int status;
+    float value;
+    float weight;
+    float volume;
     int chunkId;
-    int driverId;
+    int staffId;
+    int status;
 }

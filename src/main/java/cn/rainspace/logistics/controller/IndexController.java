@@ -18,7 +18,15 @@ public class IndexController {
 	private IndexService service;
 	@Autowired
 	private HttpServletRequest request;
-	
+
+	@GetMapping("/logout")
+	public JSONObject logout(){
+		JSONObject res = new JSONObject();
+		request.getSession().invalidate();
+		res.put("status",0);
+		return res;
+	}
+
 	@PostMapping("/login")
 	public JSONObject login(@RequestBody JSONObject req) {
 		return service.doLogin(req.getString("email"), req.getString("password"),request.getSession());
@@ -50,20 +58,41 @@ public class IndexController {
 	}
 
 	@PostMapping("/add-contact")
-	public JSONObject addContact(@RequestBody JSONObject req) {
-		return service.addContact(req.toJavaObject(Contact.class));
+	public JSONObject addContact(@RequestBody JSONObject req,@SessionAttribute User user) {
+		Contact contact = req.toJavaObject(Contact.class);
+		contact.setOwnerId(user.getId());
+		return service.addContact(contact,0);
+	}
+
+	@PostMapping("/edit-contact")
+	public JSONObject editContact(@RequestBody JSONObject req,@SessionAttribute User user) {
+		Contact contact = req.toJavaObject(Contact.class);
+		contact.setOwnerId(user.getId());
+		return service.addContact(contact,1);
+	}
+
+	@PostMapping("/delete-contact")
+	public JSONObject deleteContact(@RequestBody JSONObject req) {
+		return service.deleteContact(req.getIntValue("id"));
 	}
 
 	@GetMapping("/get-contacts")
-	public JSONObject getContacts(@SessionAttribute User user){
-		return service.getContacts(user);
+	public JSONObject getContacts(@SessionAttribute User user,String type){
+		return service.getContacts(user,type);
 	}
 
 	@GetMapping("/get-user")
 	public JSONObject getUser(@SessionAttribute User user){
-		JSONObject res = new JSONObject();
-		res.put("status",0);
-		res.put("user",user);
-		return res;
+		return service.getUser(user.getId());
+	}
+
+	@PostMapping("edit-password")
+	public JSONObject editPassword(@RequestBody JSONObject req,@SessionAttribute User user){
+		return service.editPassword(req.getString("oldpsd"),req.getString("newpsd"),user);
+	}
+
+	@PostMapping("take-goods")
+	public JSONObject takeGoods(@RequestBody JSONObject req,@SessionAttribute User user){
+		return service.takeGoods(req.getIntValue("orderId"),user);
 	}
 }

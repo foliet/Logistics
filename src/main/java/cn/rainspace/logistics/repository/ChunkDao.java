@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -16,7 +17,8 @@ public class ChunkDao implements Dao<Chunk>{
     JdbcTemplate jdbc;
     @Override
     public int add(Chunk chunk) {
-        return 0;
+        String sql = "insert into chunks(number,model,create_at) value(?,?,?)";
+        return jdbc.update(sql,chunk.getNumber(),chunk.getModel(),new Timestamp(System.currentTimeMillis()));
     }
 
     @Override
@@ -27,7 +29,8 @@ public class ChunkDao implements Dao<Chunk>{
 
     @Override
     public int update(Chunk chunk) {
-        return 0;
+        String sql = "update chunks set status = ?,number = ?,model = ? where id = ?";
+        return jdbc.update(sql,chunk.getStatus(),chunk.getNumber(),chunk.getModel(),chunk.getId());
     }
 
     @Override

@@ -30,7 +30,7 @@ public class StaffDao implements Dao<Staff>{
     @Override
     public int update(Staff staff) {
         String sql = "update staffs set status = ?,name = ?,gender = ? where id = ?";
-        return jdbc.update(sql,staff.getStatus(),staff.getName(),staff.getGender(),new Timestamp(System.currentTimeMillis()));
+        return jdbc.update(sql,staff.getStatus(),staff.getName(),staff.getGender(),staff.getId());
     }
 
     @Override

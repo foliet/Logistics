@@ -1,6 +1,7 @@
 package cn.rainspace.logistics.service;
 
 import cn.rainspace.logistics.entity.Contact;
+import cn.rainspace.logistics.entity.Notice;
 import cn.rainspace.logistics.entity.Order;
 import cn.rainspace.logistics.repository.ContactDao;
 import cn.rainspace.logistics.repository.NoticeDao;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -28,6 +30,13 @@ public class IndexService {
 	private OrderDao orderDao;
 	@Autowired
 	private NoticeDao noticeDao;
+
+	public JSONObject getUser(int id){
+		JSONObject res = new JSONObject();
+		res.put("user",userDao.getById(id));
+		res.put("status",0);
+		return res;
+	}
 	
 	public JSONObject doLogin(String email, String password, HttpSession session) {
 		// 最终返回的对象
@@ -104,30 +113,82 @@ public class IndexService {
 	}
 
 	public JSONObject addOrder(Order order){
-		JSONObject res = new JSONObject();
 		orderDao.add(order);
-		res.put("status",0);
-		return res;
+		return Errors.SUCCESS;
 	}
 	
 	public JSONObject getNotices(User user){
 		JSONObject res = new JSONObject();
 		res.put("status",0);
 		res.put("notices",noticeDao.getByOwnerId(user.getId()));
+		user.setUnreadMessage(0);
+		userDao.update(user);
 		return res;
 	}
 
-	public JSONObject getContacts(User user){
+	public JSONObject getContacts(User user,String type){
 		JSONObject res = new JSONObject();
 		res.put("status",0);
-		res.put("contacts",contactDao.getByOwnerId(user.getId()));
+		List<Contact> contacts = contactDao.getByOwnerId(user.getId());
+		for(int i=0;i<contacts.size();i++){
+			Contact contact=contacts.get(i);
+			if((type.equals("others")&&contact.getReceiverId()==contact.getOwnerId())||(type.equals("mine")&&contact.getReceiverId()!=contact.getOwnerId())){
+				contacts.remove(i--);
+			}
+		}
+		res.put("contacts",contacts);
 		return res;
 	}
 
-	public JSONObject addContact(Contact contact){
+	public JSONObject addContact(Contact contact,int type){
 		JSONObject res = new JSONObject();
-		contactDao.add(contact);
+		User user = userDao.getByName(contact.getReceiverName());
+		if(user==null){
+			return Errors.USER_NOT_EXIST;
+		}
+		contact.setReceiverId(user.getId());
+		if(type>0){
+			contactDao.update(contact);
+		} else {
+			contactDao.add(contact);
+		}
 		res.put("status",0);
 		return res;
+	}
+
+	public JSONObject deleteContact(int id){
+		JSONObject res = new JSONObject();
+		contactDao.delete(id);
+		res.put("status",0);
+		return res;
+	}
+
+	public JSONObject editPassword(String oldpsd,String newpsd,User user){
+		JSONObject res = new JSONObject();
+		if(user.getPassword().equals(oldpsd)){
+			user.setPassword(newpsd);
+			userDao.update(user);
+			res.put("status",0);
+		} else {
+			return Errors.WRONG_PASSWORD;
+		}
+		return res;
+	}
+
+	public JSONObject takeGoods(int orderId,User user){
+		Order order = orderDao.getById(orderId);
+		if(user.getId()!=contactDao.getById(order.getReceiverContactId()).getReceiverId()){
+			return Errors.NOT_RECEIVER;
+		}
+		order.setStatus(3);
+		orderDao.update(order);
+		User sender = userDao.getById(contactDao.getById(order.getSenderContactId()).getReceiverId());
+		sender.setUnreadMessage(sender.getUnreadMessage()+1);
+		userDao.update(sender);
+		Notice notice = new Notice();
+		notice.setOwnerId(sender.getId());
+		notice.setTitle("订单已完成");
+		notice.setContent("您寄给"+user.getUsername()+"的物品已完成，订单号"+orderId+",感谢您的信任");
+		return Errors.SUCCESS;
 	}
 }

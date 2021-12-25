@@ -11,5 +11,6 @@ public class User {
 	private int id;
 	private String email;
 	private int groupId;
+	private int unreadMessage;
 	private Timestamp createAt;
 }

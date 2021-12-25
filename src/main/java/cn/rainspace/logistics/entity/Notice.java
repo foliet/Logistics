@@ -9,6 +9,6 @@ public class Notice {
     int id;
     String title;
     String content;
-    String ownerId;
+    int ownerId;
     Timestamp createAt;
 }
