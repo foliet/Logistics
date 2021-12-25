@@ -1,7 +1,6 @@
 <template>
   <el-container class="nameness">
     <el-header style="background: #F8F8F8;line-height: 60px;">
-
       <span style="width:100%">
         <span style="color: #666666">用户名：</span>
         <span style="color: #FE8C00">{{ user.username }}</span>

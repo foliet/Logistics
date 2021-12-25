@@ -2,15 +2,21 @@
   <el-container>
     <el-container>
       <el-main>
-        <div style="height: 96%">
-        <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%;height:100%">
+        <div style="padding:10px 0 0 0">
+          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
+        </div>
+        <br />
+        <div style="height: 79%">
+        <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="number" label="车牌号"/>
           <el-table-column prop="model" label="型号"/>
           <el-table-column prop="status" label="状态"/>
           <el-table-column prop="operations">
             <template #header>
-              <el-input v-model="search" placeholder="Type to search" size="mini"/>
+              <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
+                新增</el-button>
             </template>
             <template #default="scope">
               <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
@@ -45,46 +51,36 @@
       </span>
       </template>
     </el-dialog>
-    <el-footer>
+    <el-footer >
+      <div style="padding-left: 35%">
       <el-pagination :current-page="currentPage" :page-size="pageSize" :total="chunks.length" background
                      layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
       </el-pagination>
-      <el-button size="mini" style="width:20%;float:right" @click="reset();this.dialogVisible=true">
-        <el-icon size="14">
-          <circle-plus/>
-        </el-icon>
-        新建
-      </el-button>
+      </div>
     </el-footer>
   </el-container>
 </template>
 <script>
 
+import {Search} from "@element-plus/icons";
+
 export default {
+  components: {
+    Search
+  },
   data() {
     return {
-      search: null,
-      pageSize: 7,
-      currentPage: 1,
+      search: '',
       dialogVisible: '',
       chunks: [],
-      allChunks: [],
+      currentPage:1,
+      pageSize:4,
       chunk: {
         id: null,
         model: '',
         number: '',
-        status: null,
+        status:null,
       },
-    }
-  },
-  watch: {
-    search() {
-      this.chunks.length = 0;
-      this.chunks = this.allChunks.filter(
-          (data) =>
-              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
-              || data.number.toLowerCase().includes(this.search.toLowerCase())
-      )
     }
   },
   created() {
@@ -92,7 +88,7 @@ export default {
     this.dialogVisible = false
   },
   mounted() {
-    document.title = "车辆管理"
+    document.title="车辆管理"
   },
   methods: {
     currentChange(index) {
@@ -100,9 +96,11 @@ export default {
     },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
-        this.allChunks = res.data.chunks
-        this.search = '';
+        this.chunks = res.data.chunks
       })
+      this.chunks.filter(
+          (data) =>!this.search || data.number.toLowerCase().includes(this.search.toLowerCase())
+              || data.model.toLowerCase().includes(this.search.toLowerCase()))
     },
     reset: function () {
       for (const key in this.chunk) {
@@ -112,19 +110,18 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
+          this.chunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
+          this.chunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm');
-      this.search = null;
+      this.$emit('confirm')
     },
     edit(row) {
       this.chunk.model = row.model;
@@ -143,4 +140,9 @@ export default {
 </script>
 
 <style scoped>
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
+}
 </style>

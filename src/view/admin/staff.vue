@@ -2,18 +2,24 @@
   <el-container>
     <el-container>
       <el-main>
-        <div style="height: 95%">
-          <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%;height:100%">
-            <el-table-column prop="id" label="Id"/>
-            <el-table-column prop="name" label="姓名"/>
-            <el-table-column prop="gender" label="性别"/>
-            <el-table-column prop="status" label="状态"/>
-            <el-table-column prop="operations">
-              <template #header>
-                <el-input v-model="search" placeholder="Type to search" size="mini"/>
-              </template>
-              <template #default="scope">
-                <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
+        <div style="padding:10px 0 0 0">
+          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
+        </div>
+        <br />
+        <div style="height: 79%">
+        <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
+          <el-table-column prop="id" label="Id"/>
+          <el-table-column prop="name" label="姓名"/>
+          <el-table-column prop="gender" label="性别"/>
+          <el-table-column prop="status" label="状态"/>
+          <el-table-column prop="operations">
+            <template #header>
+              <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
+                新增</el-button>
+            </template>
+            <template #default="scope">
+              <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
                 修改
               </el-button>
               |
@@ -46,31 +52,29 @@
       </template>
     </el-dialog>
     <el-footer>
-      <el-footer>
-        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="staffs.length" background
-                       layout="prev, pager, next, jumper" style="width: 40%;float: left"
-                       @current-change="currentChange">
-        </el-pagination>
-        <el-button size="mini" style="width:20%;float:right" @click="reset();this.dialogVisible=true">
-          <el-icon size="14">
-            <circle-plus/>
-          </el-icon>
-          新建
-        </el-button>
-      </el-footer>
+      <div style="padding-left: 35%">
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="staffs.length" background
+                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
+      </el-pagination>
+      </div>
     </el-footer>
   </el-container>
 </template>
 <script>
+import {
+  Search
+} from "@element-plus/icons";
 
 export default {
+  components: {
+    Search
+  },
   data() {
     return {
-      search: null,
-      pageSize: 7,
-      currentPage: 1,
+      currentPage:1,
+      pageSize:4,
       staffs: [],
-      allStaffs: [],
+      search: '',
       staff: {
         id: null,
         gender: '',
@@ -78,16 +82,6 @@ export default {
         status: null,
       },
       dialogVisible: '',
-    }
-  },
-  watch: {
-    search() {
-      this.staffs.length = 0;
-      this.staffs = this.allStaffs.filter(
-          (data) =>
-              !this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
-              || data.gender.toLowerCase().includes(this.search.toLowerCase())
-      )
     }
   },
   created() {
@@ -103,33 +97,32 @@ export default {
     },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
-        this.allStaffs = res.data.staffs
-        this.search = null
-        this.search = ''
+        this.staffs = res.data.staffs
       })
-
+      this.staffs.filter(
+          (data) =>!this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
+              || data.gender.toLowerCase().includes(this.search.toLowerCase()))
     },
-    reset() {
+    reset: function () {
       for (const key in this.staff) {
         this.staff[key] = null;
       }
     },
-    addStaff() {
+    addStaff: function () {
       if (this.staff.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
-          this.allStaffs.length = 0
+          this.staffs.length = 0
           this.getStaffs()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
-          this.allStaffs.length = 0
+          this.staffs.length = 0
           this.getStaffs()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm');
-      this.search = null;
+      this.$emit('confirm')
     },
     edit(row) {
       this.staff.gender = row.gender;
@@ -148,4 +141,9 @@ export default {
 </script>
 
 <style scoped>
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
+}
 </style>

@@ -2,7 +2,7 @@
   <el-container class="nameness">
     <el-header>
       <div style="padding:10px 0 0 0">
-        <el-input v-model="search" placeholder="输入关键字" style="width: 88%" type="text"
+        <el-input v-model="search" placeholder="输入关键字搜索" style="width: 88%" type="text"
                   @input="searching"></el-input>
         <el-button :style="{display: type==='send'?'':'none'}" class="align" size="mini" @click="showDialog">
           <el-icon size="20">
@@ -128,7 +128,7 @@
               <el-icon style="color: #00BF96" ><Location/></el-icon>&nbsp;
               <span class="info">发货地址</span>
             </template>
-            13333333
+              {{clickedOrder.address}}
           </el-descriptions-item>
           <el-descriptions-item :span="3">
             <template v-slot:label>

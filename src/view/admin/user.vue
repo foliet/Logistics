@@ -2,16 +2,22 @@
   <el-container style="margin: 0 0 0 0">
     <el-container class="nameness">
       <el-main >
-        <div style="height: 95%">
+        <div style="padding:10px 0 0 0">
+          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
+        </div>
+        <br />
+        <div style="height: 79%">
         <el-table :data="users.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                  height="100%" style="width: 100%;">
+                  height="100%"  id="table1">
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
           <el-table-column prop="groupId" label="用户组"/>
           <el-table-column prop="operations">
             <template #header>
-              <el-input v-model="search" placeholder="Type to search" size="mini"/>
+              <el-button style="width: 50%;float: right;margin-right: 25%" @click="addUser">
+                新增</el-button>
             </template>
             <template #default="scope">
               <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
@@ -29,44 +35,30 @@
       </el-main>
     </el-container>
     <el-footer>
-      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="users.length" background
-                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
-      </el-pagination>
-      <el-button size="mini" style="width:20%;float:right"
-                 @click="this.$refs.d.reset();this.$refs.d.dialogVisible=true">
-        <el-icon size="14">
-          <circle-plus/>
-        </el-icon>
-        新建
-      </el-button>
+      <div style="padding-left: 35%">
+        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="users.length" background
+                       layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
+        </el-pagination>
+      </div>
     </el-footer>
   </el-container>
 </template>
 
 <script>
 import dialog3 from '/src/components/dialog3'
+import {Search} from "@element-plus/icons";
 
 export default {
   components: {
-    dialog3
+    dialog3,
+    Search
   },
   data() {
     return {
-      search: null,
-      pageSize: 7,
-      currentPage: 1,
+      currentPage:1,
+      pageSize:4,
       users: [],
-      allUsers: [],
-    }
-  },
-  watch: {
-    search() {
-      this.users.length = 0;
-      this.users = this.allUsers.filter(
-          (data) =>
-              !this.search || data.username.toLowerCase().includes(this.search.toLowerCase())
-              || data.email.toLowerCase().includes(this.search.toLowerCase())
-      )
+      search: '',
     }
   },
   created() {
@@ -76,11 +68,13 @@ export default {
     currentChange(index) {
       this.currentPage = index
     },
-    getUsers() {
+    getUsers(){
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
-        this.allUsers = res.data.users
-        this.search = ''
+        this.users = res.data.users
       })
+      this.users.filter(
+          (data) =>!this.search || data.email.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase()))
     },
     addUser() {
       this.$refs.d.reset()
@@ -108,5 +102,10 @@ export default {
   margin: 0;
   display: flex;
   vertical-align: center;
+}
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
 }
 </style>
