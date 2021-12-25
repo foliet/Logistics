@@ -56,10 +56,19 @@ export default {
   data() {
     return {
       currentPage:1,
-      pageSize:4,
+      pageSize:8,
       users: [],
-      search: '',
+      allUsers:[],
+      search: null,
     }
+  },
+  watch: {
+    search() {
+      this.filter()
+    }
+  },
+  mounted() {
+    document.title="用户管理"
   },
   created() {
     this.getUsers()
@@ -70,9 +79,8 @@ export default {
     },
     getUsers(){
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
+        const currentPage=this.currentPage
         this.allUsers.length=0
-        this.search = null
-        this.search = ''
         for(const user of res.data.users){
           if(user.groupId===0){
             user.groupName='用户'
@@ -81,10 +89,20 @@ export default {
           }
           this.allUsers.push(user)
         }
+        this.filter()
+        this.currentPage=currentPage
       })
       this.users.filter(
           (data) =>!this.search || data.email.toLowerCase().includes(this.search.toLowerCase())
               || data.telephone.toLowerCase().includes(this.search.toLowerCase()))
+    },
+    filter(){
+      this.users.length = 0;
+      this.users = this.allUsers.filter(
+          (data) =>
+              !this.search || data.username.toLowerCase().includes(this.search.toLowerCase())
+              || data.email.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     addUser() {
       this.$refs.d.reset()

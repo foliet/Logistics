@@ -4,13 +4,13 @@
     <el-header id="head">
       <span class="title">RainSpace 物流</span>
       <a>
-      <el-icon id="home-icon" @click="showcard"><HomeFilled/></el-icon>
+      <el-icon id="home-icon" @click="showCard=true"><HomeFilled/></el-icon>
       </a>
-      <div id="card">
+      <div id="card" :style="{display: showCard?'inline':'none'}">
         <el-card shadow="always" style="margin-left: 58em;"
                  :body-style="{ padding: '0' }" >
           <template #header >
-            <a style="float: right" @click.stop="nocard">
+            <a style="float: right" @click.stop="showCard=false">
             <el-icon><Close /></el-icon>
               </a>
             <span style="font-size: 1rem;font-weight: 500;line-height: 2;">{{ user.username }}</span>
@@ -42,7 +42,7 @@
           <el-menu-item index="/home" route="/home">
             <template #title >
               <el-icon><Message /></el-icon>
-              <span class="list">我的消息</span><el-badge  :value="5" style="display: inline;margin-bottom: 37px;
+              <span class="list">我的消息</span><el-badge  v-if="user.unreadMessage>0" :value="user.unreadMessage" style="display: inline;margin-bottom: 37px;
   margin-left: 15px;"/>
             </template>
           </el-menu-item>
@@ -76,16 +76,7 @@ export default {
     return {
       onActive: [],
       user:{},
-    }
-  },
-  methods: {
-    showcard: function () {
-      var a = document.getElementById("card");
-      a.style.display = "inline";
-    },
-    nocard: function () {
-      var a = document.getElementById("card");
-      a.style.display = "none";
+      showCard:false,
     }
   },
   created() {
@@ -93,6 +84,7 @@ export default {
       if(res.data.status<10){
         this.user=res.data.user
       } else {
+        this.$router.replace("/login")
         this.$message.error(res.data.msg)
       }
     })

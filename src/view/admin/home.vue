@@ -4,7 +4,9 @@
 
 <script>
 export default {
-  name: "home"
+  mounted() {
+    document.title="站点统计"
+  }
 }
 </script>
 

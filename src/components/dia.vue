@@ -103,17 +103,20 @@ export default {
         this.$axios.post('https://mc.rainspace.cn:4443/add-contact?type=others', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
+          }else{
+            this.$emit('confirm')
           }
         })
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/edit-contact?type=others', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
+          }else{
+            this.$emit('confirm')
           }
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm')
     },
     reset: function () {
       for (const key in this.tableData) {

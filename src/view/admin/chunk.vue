@@ -70,11 +70,12 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: null,
       dialogVisible: '',
       chunks: [],
+      allChunks:[],
       currentPage:1,
-      pageSize:4,
+      pageSize:7,
       chunk: {
         id: null,
         model: '',
@@ -90,14 +91,19 @@ export default {
   mounted() {
     document.title="车辆管理"
   },
+  watch: {
+    search() {
+      this.filter()
+    }
+  },
   methods: {
     currentChange(index) {
       this.currentPage = index
     },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
-        this.search = '';
-        this.chunks.length=0
+        const currentPage=this.currentPage
+        this.allChunks.length=0
         for(const chunk of res.data.chunks){
           if(chunk.status===0){
             chunk.statusName='空闲中'
@@ -106,10 +112,18 @@ export default {
           }
           this.allChunks.push(chunk)
         }
+        this.filter()
+        this.currentPage=currentPage
       })
-      this.chunks.filter(
-          (data) =>!this.search || data.number.toLowerCase().includes(this.search.toLowerCase())
-              || data.model.toLowerCase().includes(this.search.toLowerCase()))
+
+    },
+    filter(){
+      this.chunks.length = 0;
+      this.chunks = this.allChunks.filter(
+          (data) =>
+              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
+              || data.number.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     reset: function () {
       for (const key in this.chunk) {
@@ -119,13 +133,11 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
-          this.chunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
-          this.chunks.length = 0
           this.getChunks()
         })
       }
@@ -140,7 +152,6 @@ export default {
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(()=>{
-        this.chunks.length = 0
         this.getChunks()
       })
     }

@@ -13,7 +13,7 @@
     </el-header>
     <el-main>
       <od-dialog ref="a"></od-dialog>
-      <div v-for="order in currentOrders" :key="order.createAt">
+      <div v-for="order in currentOrders" :key="order.id">
       <el-card @confirm="getOrders" shadow="hover" :body-style="{padding: '0px' }">
         <el-container >
           <el-header class="orderhead">
@@ -39,18 +39,13 @@
             </el-aside>
             <div style="width: 100%" class="orderbody">
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
-              <span style="font-size: 14px;" >物品价值：</span>
+              <span style="font-size: 14px;" >订单状态：</span>
               <span style="font-size: 14px;font-weight: bolder;margin-left: 10%" >
-                  ￥{{order.value}}
+                  {{order.statusName}}
                 </span>
             </div>
           </el-container>
           <el-container>
-            <el-aside width="50%" class="orderbody">
-              <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
-              <span style="font-size: 14px;margin-bottom: 0.5em" >收件人：</span>
-              <span style="font-size: 14px; margin-left: 13%" >{{order.receiverName}}</span>
-            </el-aside>
             <div style="width: 100%" class="orderbody">
               <el-icon style="color:#FF3D00"><UserFilled/></el-icon>&nbsp;
               <span style="font-size: 14px;" >发件人：</span>
@@ -58,6 +53,11 @@
                   {{order.senderName}}
                 </span>
             </div>
+            <el-aside width="50%" class="orderbody">
+              <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
+              <span style="font-size: 14px;margin-bottom: 0.5em" >收件人：</span>
+              <span style="font-size: 14px; margin-left: 13%" >{{order.receiverName}}</span>
+            </el-aside>
           </el-container>
           <el-footer style="border: 1px gainsboro solid;padding-top: 0.5em;">
             <el-icon style="color: #03A9F4" ><ChatLineRound/></el-icon>&nbsp;
@@ -84,24 +84,18 @@
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FFB500"><User/></el-icon>&nbsp;
-              <span class="info">收件人</span>
+              <span class="info">发件人</span>
             </template>
             {{ clickedOrder.senderName }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color:#FF3D00"><UserFilled/></el-icon>&nbsp;
-              <span class="info">发件人</span>
+              <span class="info">收件人</span>
             </template>
             {{ clickedOrder.receiverName }}
           </el-descriptions-item>
-            <el-descriptions-item>
-              <template v-slot:label>
-                <el-icon style="color: #FF3D00"><ShoppingCart /></el-icon>&nbsp;
-                <span class="info">订单状态</span>
-              </template>
-              {{ clickedOrder.statusName }}
-            </el-descriptions-item>
+
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
@@ -123,12 +117,19 @@
             </template>
             {{clickedOrder.weight}}kg
           </el-descriptions-item>
-            <el-descriptions-item :span="2">
+          <el-descriptions-item>
+            <template v-slot:label>
+              <el-icon style="color: #FF3D00"><ShoppingCart /></el-icon>&nbsp;
+              <span class="info">订单状态</span>
+            </template>
+            {{ clickedOrder.statusName }}
+          </el-descriptions-item>
+          <el-descriptions-item :span="2">
             <template v-slot:label>
               <el-icon style="color: #00BF96" ><Location/></el-icon>&nbsp;
               <span class="info">发货地址</span>
             </template>
-              {{clickedOrder.address}}
+            56156984
           </el-descriptions-item>
           <el-descriptions-item :span="3">
             <template v-slot:label>
@@ -213,7 +214,12 @@ export default {
     getOrders() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
         this.allOrders.length=0
-        for(const order of res.data.orders){
+        for(const order of res.data.orders.sort(function (a,b){
+          if(a.status!==b.status){
+            return a.status-b.status
+          }
+          return b.id-a.id
+        })){
           if(order.status===0){
             order.statusName='待出仓'
           }else if(order.status===1){

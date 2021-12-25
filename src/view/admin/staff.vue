@@ -72,9 +72,10 @@ export default {
   data() {
     return {
       currentPage:1,
-      pageSize:4,
+      pageSize:7,
       staffs: [],
-      search: '',
+      allStaffs:[],
+      search: null,
       staff: {
         id: null,
         gender: '',
@@ -82,6 +83,11 @@ export default {
         status: null,
       },
       dialogVisible: '',
+    }
+  },
+  watch:{
+    search() {
+      this.filter()
     }
   },
   created() {
@@ -97,9 +103,8 @@ export default {
     },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
+        const currentPage=this.currentPage
         this.allStaffs.length=0
-        this.search = null
-        this.search = ''
         for(const staff of res.data.staffs){
           if(staff.status===0){
             staff.statusName='空闲中'
@@ -108,10 +113,17 @@ export default {
           }
           this.allStaffs.push(staff)
         }
+        this.filter()
+        this.currentPage=currentPage
       })
-      this.staffs.filter(
-          (data) =>!this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
-              || data.gender.toLowerCase().includes(this.search.toLowerCase()))
+    },
+    filter(){
+      this.staffs.length = 0;
+      this.staffs = this.allStaffs.filter(
+          (data) =>
+              !this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
+              || data.gender.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     reset: function () {
       for (const key in this.staff) {
@@ -121,13 +133,11 @@ export default {
     addStaff: function () {
       if (this.staff.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
-          this.staffs.length = 0
           this.getStaffs()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
-          this.staffs.length = 0
           this.getStaffs()
         })
       }
@@ -142,7 +152,6 @@ export default {
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id}).then(()=>{
-        this.staffs.length = 0
         this.getStaffs()
       })
     }

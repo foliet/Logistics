@@ -3,7 +3,7 @@
   </el-header>
 
   <el-main>
-    <div v-for="notice in notices" :key="notice.createAt">
+    <div v-for="notice in notices" :key="notice.id">
     <el-card shadow="hover" >
         <div id="msgtitle" >{{notice.title}}</div>
       <el-divider></el-divider>
@@ -28,7 +28,9 @@ export default {
   },
   created() {
     this.$axios.get("https://mc.rainspace.cn:4443/get-notices").then(res=>{
-      if(res.data.status<10)this.notices=res.data.notices
+      if(res.data.status<10)this.notices=res.data.notices.sort(function (a,b){
+        return b.id-a.id
+      })
     })
   },
   mounted() {

@@ -14,6 +14,7 @@
               <div>
                 <el-popover
                     :width="200"
+                    :disabled="scope.row.status!==0"
                     placement="right"
                     title="处理该订单："
                     trigger="click"
@@ -127,16 +128,24 @@ export default {
         this.getChunks()
         this.getStaffs()
         setTimeout(()=>{
-          this.$axios.post("https://mc.rainspace.cn:4443/admin/arrival",{orderId:row.id})
+          this.$axios.post("https://mc.rainspace.cn:4443/admin/arrival",{orderId:row.id}).then(()=>{
+            this.getOrders()
+            this.getChunks()
+            this.getStaffs()
+          })
         },10000)
       })
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(()=>{
-        this.getOrders()
-        this.getChunks()
-        this.getStaffs()
-      })
+      if(row.status===0||row.status===2){
+        this.$message.error("活动中的订单不可删除")
+      }else{
+        this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(()=>{
+          this.getOrders()
+          this.getChunks()
+          this.getStaffs()
+        })
+      }
     }
   }
 }

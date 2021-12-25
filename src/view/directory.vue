@@ -27,7 +27,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <dia ref="c" @confirm="confirm"></dia>
+    <dia ref="c" @confirm="getContacts"></dia>
   </el-main>
     </el-container>
   <el-footer>
@@ -48,7 +48,7 @@ import dia from '../components/dia'
 export default {
   data() {
     return {
-      pageSize: 6,
+      pageSize: 8,
       currentPage: 1,
       search: null,
       contacts: [],
@@ -57,23 +57,19 @@ export default {
   },
   watch:{
     search(){
-      this.contacts=this.allContacts.filter(
-          (data) =>
-              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
-              || data.address.toLowerCase().includes(this.search.toLowerCase())
-              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
-              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
-      )
+      this.filter()
     }
+  },
+  mounted() {
+    document.title="联系地址"
   },
   created() {
     this.getContacts()
   },
-  components:
-      {
-        CirclePlus,
-        dia
-      },
+  components: {
+    CirclePlus,
+    dia
+  },
   methods: {
     currentChange(index){
       this.currentPage=index
@@ -81,16 +77,26 @@ export default {
     getContacts(){
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
         if(res.data.status<10){
+          const currentPage=this.currentPage
+          this.allContacts.length=0
           for(const contact of res.data.contacts){
             contact.PCD=contact.province+contact.city+contact.district
             this.allContacts.push(contact)
           }
-          this.search=null
-          this.search=''
-        }else{
-          this.$message.error(res.data.msg)
+          this.filter()
+          this.currentPage=currentPage
         }
       })
+    },
+    filter(){
+      this.contacts.length=0
+      this.contacts=this.allContacts.filter(
+          (data) =>
+              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
+              || data.address.toLowerCase().includes(this.search.toLowerCase())
+              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     add() {
       this.$refs.c.reset()
@@ -108,18 +114,11 @@ export default {
       this.$refs.c.tableData.id = row.id;
 
     },
-    confirm() {
-      setTimeout(() => {
-        this.contacts.length = 0
-        this.getContacts()
-      }, 500)
-    },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id})
-      setTimeout(() => {
-        this.contacts.length = 0
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id}).then(()=>{
         this.getContacts()
-      }, 500)
+      })
+
     }
   },
 }

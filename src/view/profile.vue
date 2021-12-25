@@ -152,6 +152,12 @@ export default {
           this.$axios.post('https://mc.rainspace.cn:4443/edit-password', {
             oldpsd: this.oldpsd,
             newpsd: this.newpsd
+          }).then(res=>{
+            if(res.data.status<10){
+              this.$router.push('/logout')
+            }else{
+              this.$message.error(res.data.msg)
+            }
           });
           /*this.visible2 = false;*/
         }
@@ -169,6 +175,7 @@ export default {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
     },
     add() {
+      this.$refs.f.reset();
       this.$refs.f.type = true;
       this.$refs.f.tableData.receiverName = this.user.username;
       this.$refs.f.dialogVisible = true;
