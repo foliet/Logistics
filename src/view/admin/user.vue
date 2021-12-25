@@ -13,7 +13,7 @@
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="username" label="用户名"/>
           <el-table-column prop="email" label="Email"/>
-          <el-table-column prop="groupId" label="用户组"/>
+          <el-table-column prop="groupName" label="用户组"/>
           <el-table-column prop="operations">
             <template #header>
               <el-button style="width: 50%;float: right;margin-right: 25%" @click="addUser">
@@ -70,7 +70,17 @@ export default {
     },
     getUsers(){
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
-        this.users = res.data.users
+        this.allUsers.length=0
+        this.search = null
+        this.search = ''
+        for(const user of res.data.users){
+          if(user.groupId===0){
+            user.groupName='用户'
+          }else{
+            user.groupName='管理员'
+          }
+          this.allUsers.push(user)
+        }
       })
       this.users.filter(
           (data) =>!this.search || data.email.toLowerCase().includes(this.search.toLowerCase())

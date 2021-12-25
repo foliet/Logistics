@@ -12,7 +12,7 @@
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="number" label="车牌号"/>
           <el-table-column prop="model" label="型号"/>
-          <el-table-column prop="status" label="状态"/>
+          <el-table-column prop="statusName" label="状态"/>
           <el-table-column prop="operations">
             <template #header>
               <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
@@ -96,7 +96,16 @@ export default {
     },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
-        this.chunks = res.data.chunks
+        this.search = '';
+        this.chunks.length=0
+        for(const chunk of res.data.chunks){
+          if(chunk.status===0){
+            chunk.statusName='空闲中'
+          }else{
+            chunk.statusName='运输中'
+          }
+          this.allChunks.push(chunk)
+        }
       })
       this.chunks.filter(
           (data) =>!this.search || data.number.toLowerCase().includes(this.search.toLowerCase())

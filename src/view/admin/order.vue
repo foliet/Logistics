@@ -8,7 +8,7 @@
           <el-table-column label="Id" prop="id"/>
           <el-table-column label="寄件人名字" prop="senderName"/>
           <el-table-column label="取件人名字" prop="receiverName"/>
-          <el-table-column label="状态" prop="status"/>
+          <el-table-column label="状态" prop="statusName"/>
           <el-table-column label="操作">
             <template #default="scope">
               <div>
@@ -94,25 +94,49 @@ export default {
     },
     getOrders() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-orders').then(res => {
-        this.orders = res.data.orders
+        this.orders.length=0
+        for(const order of res.data.orders){
+          if(order.status===0){
+            order.statusName='待出仓'
+          }else if(order.status===1){
+            order.statusName='运输中'
+          }else if(order.status===2){
+            order.statusName='待收货'
+          }else{
+            order.statusName='已送达'
+          }
+          this.orders.push(order)
+        }
       })
     },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
+        this.chunks.length=0
         this.chunks = res.data.chunks.filter(chunk=>chunk.status===0)
       })
     },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
+        this.staffs.length=0
         this.staffs = res.data.staffs.filter(staff=>staff.status===0)
       })
     },
     matching(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/matching', {orderId: row.id, chunkId: row.chunk, staffId: row.staff})
-
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/match', {orderId: row.id, chunkId: row.chunk, staffId: row.staff}).then(()=>{
+        this.getOrders()
+        this.getChunks()
+        this.getStaffs()
+        setTimeout(()=>{
+          this.$axios.post("https://mc.rainspace.cn:4443/admin/arrival",{orderId:row.id})
+        },10000)
+      })
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id})
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(()=>{
+        this.getOrders()
+        this.getChunks()
+        this.getStaffs()
+      })
     }
   }
 }

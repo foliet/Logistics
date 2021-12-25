@@ -12,7 +12,7 @@
           <el-table-column prop="id" label="Id"/>
           <el-table-column prop="name" label="姓名"/>
           <el-table-column prop="gender" label="性别"/>
-          <el-table-column prop="status" label="状态"/>
+          <el-table-column prop="statusName" label="状态"/>
           <el-table-column prop="operations">
             <template #header>
               <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
@@ -97,7 +97,17 @@ export default {
     },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
-        this.staffs = res.data.staffs
+        this.allStaffs.length=0
+        this.search = null
+        this.search = ''
+        for(const staff of res.data.staffs){
+          if(staff.status===0){
+            staff.statusName='空闲中'
+          }else{
+            staff.statusName='工作中'
+          }
+          this.allStaffs.push(staff)
+        }
       })
       this.staffs.filter(
           (data) =>!this.search || data.name.toLowerCase().includes(this.search.toLowerCase())

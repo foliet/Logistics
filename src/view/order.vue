@@ -34,12 +34,12 @@
           <el-container>
             <el-aside width="50%" class="orderbody">
               <el-icon style="color: #00BF96"><Goods /></el-icon>&nbsp;
-              <span style="font-size: 14px;margin-bottom: 0.5em" >货物名称：</span>
+              <span style="font-size: 14px;margin-bottom: 0.5em" >物品名称：</span>
               <span style="font-size: 14px;margin-left: 10%" >{{order.title}}</span>
             </el-aside>
             <div style="width: 100%" class="orderbody">
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
-              <span style="font-size: 14px;" >货物价值：</span>
+              <span style="font-size: 14px;" >物品价值：</span>
               <span style="font-size: 14px;font-weight: bolder;margin-left: 10%" >
                   ￥{{order.value}}
                 </span>
@@ -64,7 +64,7 @@
             <span style="font-size: 13px;font-weight:500">备注：{{order.remark}}</span>
           </el-footer>
         </el-container>
-        <el-button v-if="type==='receive'" size="medium" round class="takegoods" @click="takeGoods" >
+        <el-button v-if="type==='receive'&&order.status===2" size="medium" round class="takegoods" @click="takeGoods(order.id)" >
           <span class="takegood" >
             确认收货
           </span>
@@ -98,28 +98,28 @@
             <el-descriptions-item>
               <template v-slot:label>
                 <el-icon style="color: #FF3D00"><ShoppingCart /></el-icon>&nbsp;
-                <span class="info">商品状态</span>
+                <span class="info">订单状态</span>
               </template>
-              {{ clickedOrder.status }}
+              {{ clickedOrder.statusName }}
             </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FF8200"><Money/></el-icon>&nbsp;
-              <span class="info">商品价格</span>
+              <span class="info">物品价值</span>
             </template>
             ¥{{clickedOrder.value}}
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #FF4081"><Box/></el-icon>&nbsp;
-              <span class="info">商品体积</span>
+              <span class="info">物品体积</span>
             </template>
             {{ clickedOrder.volume }}cm³
           </el-descriptions-item>
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #03A9F4"><Suitcase/></el-icon>&nbsp;
-              <span class="info">商品重量</span>
+              <span class="info">物品重量</span>
             </template>
             {{clickedOrder.weight}}kg
           </el-descriptions-item>
@@ -183,7 +183,7 @@ export default {
   },
   data() {
     return {
-      pageSize:2,
+      pageSize:3,
       currentPage: 1,
       clickedOrder:{},
       currentOrders:[],
@@ -212,7 +212,19 @@ export default {
     },
     getOrders() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
-        this.allOrders = res.data.orders//将这个用户的数据库的所有orders都push到cards，一个orderData为一个元素;
+        this.allOrders.length=0
+        for(const order of res.data.orders){
+          if(order.status===0){
+            order.statusName='待出仓'
+          }else if(order.status===1){
+            order.statusName='运输中'
+          }else if(order.status===2){
+            order.statusName='待收货'
+          }else{
+            order.statusName='已送达'
+          }
+          this.allOrders.push(order)
+        }
         this.searching()
       })
     },
@@ -234,8 +246,10 @@ export default {
       }
       this.currentChange(1)
     },
-    takeGoods(){
-      this.$message.success("收货成功！")
+    takeGoods(id){
+      this.$axios.post("https://mc.rainspace.cn:4443/take-goods",{orderId:id}).then(()=>{
+        this.getOrders()
+      })
     }
   }
 }
