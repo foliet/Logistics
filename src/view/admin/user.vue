@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pageSize: 8,
+      pageSize: 7,
       users: [],
       allUsers: [],
       search: null,

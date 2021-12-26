@@ -41,13 +41,11 @@ export default {
           {
             name: '新增用户数',
             type: 'line',
-            stack: 'Total',
             data: res.data.userIncrease
           },
           {
             name: '新增订单数',
             type: 'line',
-            stack: 'Total',
             data: res.data.orderIncrease
           },
         ]
