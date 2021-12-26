@@ -22,7 +22,6 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button @click="reset()">重置</el-button>
         <el-button type="primary" @click="addContact()"
         >确认</el-button>
       </span>

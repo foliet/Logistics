@@ -46,7 +46,7 @@
     </el-footer>
   </el-container>
 
-  <dia2 ref="f"></dia2>
+  <dia2 ref="f" @confirm="confirm"></dia2>
   <el-dialog v-model="visible2" title="修改密码">
     <div class="space1">旧密码：</div>
     <el-input v-model="oldpsd" :type="pwdtype"></el-input>
@@ -85,7 +85,6 @@ export default {
       search: null,
       pageSize: 7,
       currentPage: 1,
-      imageUrl: '',
       user: {
         password: '',
         username: '',
@@ -94,7 +93,6 @@ export default {
       contacts: [],
       allContacts: [],
       psd: '',
-      visible: '',
       visible2: '',
       pwdtype: '',
       oldpsd: '',
@@ -104,7 +102,6 @@ export default {
   },
   created() {
     this.getinfo()
-    this.visible = false;
     this.visible2 = false;
     this.pwdtype = 'password'
   },
@@ -131,13 +128,24 @@ export default {
         this.user = res.data.user
       });
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
-        for(const contact of res.data.contacts){
-          contact.PCD=contact.province+contact.city+contact.district
-          this.allContacts.push(contact)
+        if (res.data.status < 10) {
+          for (const contact of res.data.contacts) {
+            contact.PCD = contact.province + contact.city + contact.district
+            this.allContacts.push(contact)
+          }
+          this.search = null
+          this.search = ''
+        } else {
+          this.$message.error(res.data.msg)
         }
-        this.search=null
-        this.search=''
       })
+    },
+    confirm() {
+      setTimeout(() => {
+        this.allContacts.length = 0
+        this.getinfo()
+      }, 500)
+      this.search = null;
     },
     changetype() {
       this.pwdtype = (this.pwdtype === 'password' ? 'text' : 'password');
@@ -153,9 +161,9 @@ export default {
             oldpsd: this.oldpsd,
             newpsd: this.newpsd
           }).then(res=>{
-            if(res.data.status<10){
+            if (res.data.status < 10) {
               this.$router.push('/logout')
-            }else{
+            } else {
               this.$message.error(res.data.msg)
             }
           });
@@ -163,20 +171,32 @@ export default {
         }
       }
     },
-    edit(id, row) {
+    edit(row) {
+      this.$refs.f.dialogVisible = true;
       this.$refs.f.reset();
-      this.$refs.f.tableData.receiverName = row.receiverName;
+      this.$refs.f.tableData.receiverName = this.user.username;
       this.$refs.f.tableData.telephone = row.telephone;
       this.$refs.f.tableData.address = row.address;
-      this.$refs.f.rowid = id;
-      this.$refs.f.dialogVisible = true;
+      this.$refs.f.tableData.PCD[0] = row.province;
+      this.$refs.f.tableData.PCD[1] = row.city;
+      this.$refs.f.tableData.PCD[2] = row.district;
+      this.$refs.f.tableData.id = row.id;
+
     },
-    deleted(id) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', id)
+    deleted(row) {
+      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id}).then(() => {
+        this.allContacts.length = 0
+        this.getinfo()
+      })
+      /*setTimeout(() => {
+        this.allContacts.length = 0
+        this.getContacts()
+      }, 500)*/
+      this.search = null;
     },
     add() {
       this.$refs.f.reset();
-      this.$refs.f.type = true;
+      this.$refs.f.reset();
       this.$refs.f.tableData.receiverName = this.user.username;
       this.$refs.f.dialogVisible = true;
     }
@@ -196,9 +216,4 @@ export default {
   margin-top: 74px; /* (178px - 28px) / 2 - 1px */
 }
 
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
 </style>

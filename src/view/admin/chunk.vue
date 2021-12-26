@@ -45,7 +45,6 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button @click="reset()">Reset</el-button>
         <el-button type="primary" @click="addChunk()"
         >Confirm</el-button>
       </span>
@@ -71,17 +70,27 @@ export default {
   data() {
     return {
       search: null,
+      pageSize: 7,
+      currentPage: 1,
       dialogVisible: '',
       chunks: [],
-      allChunks:[],
-      currentPage:1,
-      pageSize:7,
+      allChunks: [],
       chunk: {
         id: null,
         model: '',
         number: '',
-        status:null,
+        status: null,
       },
+    }
+  },
+  watch: {
+    search() {
+      this.chunks.length = 0;
+      this.chunks = this.allChunks.filter(
+          (data) =>
+              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
+              || data.number.toLowerCase().includes(this.search.toLowerCase())
+      )
     }
   },
   created() {
@@ -89,12 +98,7 @@ export default {
     this.dialogVisible = false
   },
   mounted() {
-    document.title="车辆管理"
-  },
-  watch: {
-    search() {
-      this.filter()
-    }
+    document.title = "车辆管理"
   },
   methods: {
     currentChange(index) {
@@ -112,18 +116,9 @@ export default {
           }
           this.allChunks.push(chunk)
         }
-        this.filter()
-        this.currentPage=currentPage
+        this.currentPage = currentPage
+        this.search = '';
       })
-
-    },
-    filter(){
-      this.chunks.length = 0;
-      this.chunks = this.allChunks.filter(
-          (data) =>
-              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
-              || data.number.toLowerCase().includes(this.search.toLowerCase())
-      )
     },
     reset: function () {
       for (const key in this.chunk) {
@@ -133,16 +128,19 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
+          this.allChunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
+          this.allChunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm')
+      this.$emit('confirm');
+      this.search = null;
     },
     edit(row) {
       this.chunk.model = row.model;
@@ -151,18 +149,15 @@ export default {
       this.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(()=>{
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(() => {
+        this.allChunks.length = 0
         this.getChunks()
       })
+      this.search = null;
     }
   },
 }
 </script>
 
 <style scoped>
-#table1{
-  width: 100%;
-  border: #E5E5E5 2px solid;
-  border-radius: 15px;
-}
 </style>
