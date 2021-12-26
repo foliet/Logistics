@@ -96,14 +96,14 @@ export default {
       },
       dialogVisible: '',
       types: [{
-        value: 0,
+        value: '男',
         label: '男',
       }, {
-        value: 1,
+        value: '女',
         label: '女',
       },
         {
-          value: 2,
+          value: '隐藏',
           label: '隐藏',
         },]
     }
