@@ -3,7 +3,8 @@
     <el-container class="nameness">
       <el-header>
         <div style="padding:10px 0 0 0">
-          <el-input v-model="search" placeholder="输入关键字" style="width: 100%" type="text"></el-input>
+          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
         </div>
       </el-header>
     <el-main >
@@ -42,10 +43,11 @@
 
 <script>
 
-import {CirclePlus} from "@element-plus/icons";
+import {CirclePlus, Search} from "@element-plus/icons";
 import dia from '../components/dia'
 
 export default {
+
   data() {
     return {
       pageSize: 6,
@@ -75,7 +77,8 @@ export default {
   components:
       {
         CirclePlus,
-        dia
+        dia,
+        Search
       },
   methods: {
     currentChange(index) {

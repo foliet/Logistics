@@ -8,7 +8,7 @@
         </div>
         <br />
         <div style="height: 79%">
-          <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%;height:100%">
+          <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" id="table1" height="100%">
             <el-table-column label="Id" prop="id"/>
             <el-table-column label="姓名" prop="name"/>
             <el-table-column label="性别" prop="gender"/>
@@ -187,7 +187,7 @@ export default {
 </script>
 
 <style scoped>
-#table1{
+#table1 {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;

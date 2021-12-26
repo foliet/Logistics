@@ -160,4 +160,9 @@ export default {
 </script>
 
 <style scoped>
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
+}
 </style>

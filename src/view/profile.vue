@@ -14,7 +14,7 @@
     <el-main>
       <div style="height: 95%">
         <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                  height="100%" style="width: 100%;">
+                  height="100%" style="width: 100%;" id="table1">
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
           <el-table-column label="地址" prop="address" sortable/>
@@ -215,5 +215,9 @@ export default {
 .avatar-uploader-icon svg {
   margin-top: 74px; /* (178px - 28px) / 2 - 1px */
 }
-
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
+}
 </style>

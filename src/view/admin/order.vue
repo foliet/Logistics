@@ -4,7 +4,7 @@
       <el-main>
         <div style="height: 96%">
         <el-table :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-           height="94%" style="width: 100%;">
+           height="94%" style="width: 100%;" id="table1">
           <el-table-column label="Id" prop="id"/>
           <el-table-column label="寄件人名字" prop="senderName"/>
           <el-table-column label="取件人名字" prop="receiverName"/>
@@ -167,5 +167,10 @@ export default {
 <style scoped>
 .space1 {
   padding: 10px 0;
+}
+#table1{
+  width: 100%;
+  border: #E5E5E5 2px solid;
+  border-radius: 15px;
 }
 </style>
