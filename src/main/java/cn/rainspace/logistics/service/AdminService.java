@@ -3,8 +3,15 @@ package cn.rainspace.logistics.service;
 import cn.rainspace.logistics.entity.*;
 import cn.rainspace.logistics.repository.*;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AdminService {
@@ -154,4 +161,33 @@ public class AdminService {
         return Errors.SUCCESS;
     }
 
+    public JSONObject count(){
+        JSONObject res = new JSONObject();
+        LocalDate localDate = LocalDate.now();
+        List<User>users = userDao.getAll();
+        List<Order>orders = orderDao.getAll();
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<Integer>userIncrease = new ArrayList<>();
+        ArrayList<Integer>orderIncrease = new ArrayList<>();
+        for(int i=0;i<7;i++){
+            dates.add(localDate.getMonthValue()+"-"+localDate.getDayOfMonth());
+            int x=0,y=0;
+            for(User user:users){
+                if(user.getCreateAt().toLocalDateTime().toLocalDate().equals(localDate))x++;
+            }
+            for(Order order:orders){
+                if(order.getCreateAt().toLocalDateTime().toLocalDate().equals(localDate))y++;
+            }
+            userIncrease.add(x);
+            orderIncrease.add(y);
+            localDate=localDate.minusDays(1);
+        }
+        Collections.reverse(dates);
+        Collections.reverse(userIncrease);
+        Collections.reverse(orderIncrease);
+        res.put("dates",dates);
+        res.put("userIncrease",userIncrease);
+        res.put("orderIncrease",orderIncrease);
+        return res;
+    }
 }

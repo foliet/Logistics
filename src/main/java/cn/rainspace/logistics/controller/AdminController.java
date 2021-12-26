@@ -96,4 +96,9 @@ public class AdminController {
     public JSONObject deleteOrder(@RequestBody JSONObject req){
         return service.deleteOrder(req.getIntValue("orderId"));
     }
+
+    @GetMapping("count")
+    public JSONObject count(){
+        return service.count();
+    }
 }
