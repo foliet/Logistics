@@ -57,13 +57,13 @@
     </el-input>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="changetype()">
+        <el-button @click="changeType()">
       <el-icon>
         <View/>
       </el-icon>
     </el-button>
         <el-button @click="visible2 = false">取消</el-button>
-        <el-button type="primary" @click="editpsd"
+        <el-button type="primary" @click="editPassword"
         >确认</el-button>
       </span>
     </template>
@@ -101,7 +101,7 @@ export default {
     }
   },
   created() {
-    this.getinfo()
+    this.getInfo()
     this.visible2 = false;
     this.pwdtype = 'password'
   },
@@ -123,7 +123,7 @@ export default {
     currentChange(index) {
       this.currentPage = index
     },
-    getinfo() {
+    getInfo() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
         this.user = res.data.user
       });
@@ -147,10 +147,10 @@ export default {
       }, 500)
       this.search = null;
     },
-    changetype() {
+    changeType() {
       this.pwdtype = (this.pwdtype === 'password' ? 'text' : 'password');
     },
-    editpsd() {
+    editPassword() {
       if (this.newpsd !== this.newpsd1)
         this.$message.error("两次输入密码不一致！")
       else {

@@ -127,9 +127,9 @@
           <el-descriptions-item :span="2">
             <template v-slot:label>
               <el-icon style="color: #00BF96" ><Location/></el-icon>&nbsp;
-              <span class="info">发货地址</span>
+              <span class="info">收货地址</span>
             </template>
-            56156984
+            {{ clickedOrder.receiverAddress }}
           </el-descriptions-item>
           <el-descriptions-item :span="3">
             <template v-slot:label>

@@ -30,13 +30,13 @@
     <dia ref="c" @confirm="confirm"></dia>
   </el-main>
     </el-container>
-  <el-footer>
-    <div style="text-align: center">
-    <el-pagination :current-page="currentPage" @current-change="currentChange"
-       background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
-    </el-pagination>
-    </div>
-  </el-footer>
+    <el-footer>
+      <div style="text-align: center">
+      <el-pagination :current-page="currentPage" @current-change="currentChange"
+         background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
+      </el-pagination>
+      </div>
+    </el-footer>
   </el-container>
 </template>
 

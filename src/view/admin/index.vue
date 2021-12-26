@@ -3,7 +3,7 @@
     <el-header id="head">
       <span class="title">物流管理系统仪表盘</span>
       <el-popover
-          :width="500"
+          width="35%"
 
           placement="bottom"
           style="height: 100px"
