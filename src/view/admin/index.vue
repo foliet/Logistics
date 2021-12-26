@@ -149,6 +149,10 @@ export default {
     this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
       if (res.data.status < 10) {
         this.user = res.data.user
+        if(this.user.groupId!==1){
+          this.$router.replace('/login')
+          this.$message.error('不具有管理员权限')
+        }
       } else {
         this.$router.replace('/login')
         this.$message.error(res.data.msg)

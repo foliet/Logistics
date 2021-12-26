@@ -23,7 +23,7 @@
             <el-tag type="success">{{ user.groupId == 1 ? '管理员' : '普通用户' }}</el-tag>
           </template>
           <el-menu router :default-active="this.$route.path">
-            <el-menu-item index="/admin" route="/admin">
+            <el-menu-item v-if="this.user.groupId===1" index="/admin" route="/admin">
               <template #title>
                 <el-icon style="color: #FFB500">
                   <User/>
