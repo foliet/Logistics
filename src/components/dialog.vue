@@ -112,6 +112,7 @@ import dia from '../components/dia'
 import dia2 from '../components/dia2'
 
 export default {
+  emits: ['confirm'],
   components: {
     Plus,
     dia,
@@ -137,27 +138,25 @@ export default {
   },
   created() {
     this.dialogVisible = false
-    this.getoptions()
+    this.getOptions()
   },
-  methods:{
-    addOrder:function ()
-    {
-      if (this.orderData.receiverContactId != null && this.orderData.title != 0 && this.orderData.title != null && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
+  methods: {
+    addOrder: function () {
+      if (this.orderData.senderContactId != null && this.orderData.receiverContactId != null && this.orderData.title != null && this.orderData.title.length > 0 && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
         this.$axios.post('https://mc.rainspace.cn:4443/add-order', this.orderData).then(() => {
           this.$emit("confirm")
         })
         this.dialogVisible = false;
       } else {
-        this.$message.error('输入信息有误！')
+        this.$message.error('输入信息不可为空！')
       }
     },
-    reset:function ()
-    {
-      for(const key in this.orderData){
-        this.orderData[key]=null;
+    reset: function () {
+      for (const key in this.orderData) {
+        this.orderData[key] = null;
       }
     },
-    getoptions() {
+    getOptions() {
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
         this.contacts = res.data.contacts;
       })
@@ -170,11 +169,12 @@ export default {
 </script>
 
 <style>
-.space1{
-  padding:10px 0;
+.space1 {
+  padding: 10px 0;
 }
-.space2{
-  width:33%;
+
+.space2 {
+  width: 33%;
 }
 
 

@@ -3,39 +3,43 @@
     <el-container class="nameness">
       <el-header>
         <div style="padding:10px 0 0 0">
-          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-icon style="font-size: 20px;margin-right: 1em">
+            <Search/>
+          </el-icon>
           <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
         </div>
       </el-header>
-    <el-main >
-    <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-              height="100%" id="table1">
-      <el-table-column label="姓名" prop="receiverName" sortable width="190"/>
-      <el-table-column label="省份/城市/地区" prop="PCD" sortable width="300"/>
-      <el-table-column label="电话" prop="telephone" sortable width="250"/>
-      <el-table-column label="地址" prop="address" sortable/>
-      <el-table-column prop="operations">
-        <template #header>
-          <el-button @click="add" class="addPeople" size="medium" round>
-            <el-icon size="17" class="addPeople1"><circle-plus/></el-icon>
-            <span class="addPeople1">添加联系人</span>
-          </el-button>
-        </template>
-        <template #default="scope">
-          <el-button @click="edit(scope.row)">修改</el-button>
-          |
-          <el-button @click="deleted(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <dia ref="c" @confirm="confirm"></dia>
-  </el-main>
+      <el-main>
+        <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                  height="100%" id="table1">
+          <el-table-column label="姓名" prop="receiverName" sortable width="190"/>
+          <el-table-column label="省份/城市/地区" prop="PCD" sortable width="300"/>
+          <el-table-column label="电话" prop="telephone" sortable width="250"/>
+          <el-table-column label="地址" prop="address" sortable/>
+          <el-table-column prop="operations">
+            <template #header>
+              <el-button @click="add" class="addPeople" size="medium" round>
+                <el-icon size="17" class="addPeople1">
+                  <circle-plus/>
+                </el-icon>
+                <span class="addPeople1">添加联系人</span>
+              </el-button>
+            </template>
+            <template #default="scope">
+              <el-button @click="edit(scope.row)">修改</el-button>
+              |
+              <el-button @click="deleted(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <dia ref="c" @confirm="confirm"></dia>
+      </el-main>
     </el-container>
     <el-footer>
       <div style="text-align: center">
-      <el-pagination :current-page="currentPage" @current-change="currentChange"
-         background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
-      </el-pagination>
+        <el-pagination :current-page="currentPage" @current-change="currentChange"
+                       background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
+        </el-pagination>
       </div>
     </el-footer>
   </el-container>
@@ -57,7 +61,7 @@ export default {
       allContacts: [],
     }
   },
-  watch:{
+  watch: {
     search() {
       this.contacts = this.allContacts.filter(
           (data) =>
@@ -143,28 +147,34 @@ export default {
   display: flex;
   vertical-align: center;
 }
-#table1{
+
+#table1 {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;
 }
-.addPeople{
+
+.addPeople {
   float: right;
   border: #FF8200 1px solid;
   background-color: white;
 }
-.addPeople1{
+
+.addPeople1 {
   color: #FF8200;
 }
-.addPeople:focus , .addPeople:hover{
-  background-image: linear-gradient(to right,#ff9000 0,#ff5000 100%);
+
+.addPeople:focus, .addPeople:hover {
+  background-image: linear-gradient(to right, #ff9000 0, #ff5000 100%);
   border: #FF8200;
 }
-.addPeople:focus .addPeople1{
+
+.addPeople:focus .addPeople1 {
   color: white;
   font-weight: bolder;
 }
-.addPeople:hover .addPeople1{
+
+.addPeople:hover .addPeople1 {
   color: white;
   font-weight: bolder;
 }

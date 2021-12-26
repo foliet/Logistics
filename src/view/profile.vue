@@ -33,15 +33,16 @@
     </el-main>
     <el-footer>
       <div style="padding-left: 35%">
-      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length" background
-                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
-      </el-pagination>
-      <el-button size="mini" style="width:20%;float:right" @click="add">
-        <el-icon size="14">
-          <circle-plus/>
-        </el-icon>
-        新建我的地址
-      </el-button>
+        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length" background
+                       layout="prev, pager, next, jumper" style="width: 40%;float: left"
+                       @current-change="currentChange">
+        </el-pagination>
+        <el-button size="mini" style="width:20%;float:right" @click="add">
+          <el-icon size="14">
+            <circle-plus/>
+          </el-icon>
+          新建我的地址
+        </el-button>
       </div>
     </el-footer>
   </el-container>
@@ -160,7 +161,7 @@ export default {
           this.$axios.post('https://mc.rainspace.cn:4443/edit-password', {
             oldpsd: this.oldpsd,
             newpsd: this.newpsd
-          }).then(res=>{
+          }).then(res => {
             if (res.data.status < 10) {
               this.$router.push('/logout')
             } else {
@@ -215,7 +216,8 @@ export default {
 .avatar-uploader-icon svg {
   margin-top: 74px; /* (178px - 28px) / 2 - 1px */
 }
-#table1{
+
+#table1 {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;

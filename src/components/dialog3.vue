@@ -42,12 +42,12 @@
 <script>
 
 export default {
-  emits:['confirm'],
+  emits: ['confirm'],
   data() {
     return {
       dialogVisible: "",
       tableData: {
-        id:null,
+        id: null,
         username: '',
         email: '',
         password: '',
@@ -72,11 +72,11 @@ export default {
           && this.tableData.password != 0 && this.tableData.password != null
           && this.tableData.email != 0 && this.tableData.email != null) {
         if (this.tableData.id == null) {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData).then(()=>{
+          this.$axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData).then(() => {
             this.$emit('confirm')
           })
         } else {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData).then(()=>{
+          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData).then(() => {
             this.$emit('confirm')
           })
         }

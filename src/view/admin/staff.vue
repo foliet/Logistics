@@ -3,10 +3,12 @@
     <el-container>
       <el-main>
         <div style="padding:10px 0 0 0">
-          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-icon style="font-size: 20px;margin-right: 1em">
+            <Search/>
+          </el-icon>
           <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
         </div>
-        <br />
+        <br/>
         <div style="height: 79%">
           <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" id="table1" height="100%">
             <el-table-column label="Id" prop="id"/>
@@ -131,7 +133,7 @@ export default {
     },
     getStaffs() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
-        const currentPage=this.currentPage
+        const currentPage = this.currentPage
         this.allStaffs.length = 0
         for (const staff of res.data.staffs) {
           if (staff.status === 0) {

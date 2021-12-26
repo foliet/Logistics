@@ -10,20 +10,20 @@
           </div>
           <div class="txtb">
             <input type="email" v-model="registerData.email" id="label2">
-            <label for="label2" data-placeholder="Email" ></label>
+            <label for="label2" data-placeholder="Email"></label>
           </div>
           <div class="txtb">
             <input type="password" v-model="registerData.password" id="label3">
-            <label for="label3" data-placeholder="Password" ></label>
+            <label for="label3" data-placeholder="Password"></label>
           </div>
           <div class="txtb">
             <input type="password" v-model="registerData.password1" id="label4">
-            <label for="label4" data-placeholder="Confirm Password" ></label>
+            <label for="label4" data-placeholder="Confirm Password"></label>
           </div>
           <div>
             <div class="txtb" style="width:45%;display: inline-block">
-              <input type="text"  v-model="registerData.verifyCode" id="label5"/>
-              <label for="label5" data-placeholder="验证码" ></label>
+              <input type="text" v-model="registerData.verifyCode" id="label5"/>
+              <label for="label5" data-placeholder="验证码"></label>
             </div>
             <button type="button" style="margin:0 auto" @click="checkEmail()">发送验证码</button>
           </div>
@@ -35,7 +35,7 @@
           <h1>登录</h1>
           <div class="txtb">
             <input type="email" v-model="loginData.email" id="label6">
-            <label for="label6" data-placeholder="Email" ></label>
+            <label for="label6" data-placeholder="Email"></label>
           </div>
           <div class="txtb">
             <input type="password" v-model="loginData.password" id="label7">
@@ -51,7 +51,7 @@
           <div class="overlay-panel overlay-left">
             <h1>已有账号？</h1>
             <p>请使用您的账号进行登录</p>
-            <button class="ghost" id="signIn" >登录</button>
+            <button class="ghost" id="signIn">登录</button>
           </div>
           <div class="overlay-panel overlay-right">
             <h1>没有账号?</h1>
@@ -67,27 +67,27 @@
 <script>
 import $ from "jquery"
 
-$(function (){
-  $("#signUp").click(function(){
+$(function () {
+  $("#signUp").click(function () {
     $("#login-box").addClass('right-panel-active')
   })
 })
 
-$(function (){
-  $("#signIn").click(function(){
+$(function () {
+  $("#signIn").click(function () {
     $("#login-box").removeClass('right-panel-active')
   })
 })
 
-$(function (){
-  $(".txtb input").on("focus",function(){
+$(function () {
+  $(".txtb input").on("focus", function () {
     $(this).addClass("focus")
   })
 })
 
-$(function (){
-  $(".txtb input").on("blur",function(){
-    if($(this).val() == '')
+$(function () {
+  $(".txtb input").on("blur", function () {
+    if ($(this).val() == '')
       $(this).removeClass("focus")
   })
 })
@@ -96,7 +96,7 @@ export default {
   title: 'login',
   data() {
     return {
-      registerData:{
+      registerData: {
         email: "",
         username: "",
         password: "",
@@ -110,44 +110,44 @@ export default {
     }
   },
   mounted() {
-    document.title="欢迎登录"
+    document.title = "欢迎登录"
   },
   methods: {
-    checkEmail: function (){
-      if(this.registerData.email===""){
+    checkEmail: function () {
+      if (this.registerData.email === "") {
         this.$message.error('请先输入邮箱')
         return
       }
-      this.$axios.get('https://mc.rainspace.cn:4443/check-email',{
+      this.$axios.get('https://mc.rainspace.cn:4443/check-email', {
         params: {
           email: this.registerData.email
         }
-      }).then(res=>{
-        if(res.data.status!==0){
+      }).then(res => {
+        if (res.data.status !== 0) {
           this.$message.error(res.data.msg)
         }
       })
     },
 
-    login:function (){
-      this.$axios.post('https://mc.rainspace.cn:4443/login',this.loginData).then(res=>{
-        if(res.data.status===0){
-          window.location='/home'
-        }else{
+    login: function () {
+      this.$axios.post('https://mc.rainspace.cn:4443/login', this.loginData).then(res => {
+        if (res.data.status === 0) {
+          window.location = '/home'
+        } else {
           this.$message.error(res.data.msg)
         }
       })
     },
 
-    register:function (){
-      if(this.registerData.password!==this.registerData.password1){
+    register: function () {
+      if (this.registerData.password !== this.registerData.password1) {
         this.$message.error('两次密码不一致')
         return
       }
-      this.$axios.post('https://mc.rainspace.cn:4443/register',this.registerData).then(res=>{
-        if(res.data.status===0){
-          window.location='/home'
-        }else{
+      this.$axios.post('https://mc.rainspace.cn:4443/register', this.registerData).then(res => {
+        if (res.data.status === 0) {
+          window.location = '/home'
+        } else {
           this.$message.error(res.data.msg)
         }
       })
@@ -165,24 +165,28 @@ h1 {
   font-weight: bold;
   margin: 0;
 }
+
 p {
   font-size: 14px;
   line-height: 20px;
   letter-spacing: .5px;
   margin: 20px 0 30px;
 }
+
 span {
   font-size: 12px;
 }
+
 a {
   color: #333;
   font-size: 14px;
   text-decoration: none;
   margin: 15px 0;
 }
+
 .page-body {
-  font-family: 'Montserrat',sans-serif;
-  background-image: linear-gradient(120deg,#3498db,#8e44ad);;
+  font-family: 'Montserrat', sans-serif;
+  background-image: linear-gradient(120deg, #3498db, #8e44ad);;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,6 +194,7 @@ a {
   height: 100vh;
   margin: 0;
 }
+
 .container {
   background: #fff;
   border-radius: 10px;
@@ -211,6 +216,7 @@ a {
   justify-content: center;
   text-align: center;
 }
+
 .social-container {
   margin: 20px 0;
 }
@@ -258,6 +264,7 @@ a {
   transform: translateY(-50%);
   transition: .5s;
 }
+
 .txtb label::after {
   content: '';
   position: absolute;
@@ -265,7 +272,7 @@ a {
   top: 100%;
   width: 0;
   height: 2px;
-  background-image: linear-gradient(120deg,#3498db,#8e44ad);
+  background-image: linear-gradient(120deg, #3498db, #8e44ad);
   transition: .5s;
 }
 
@@ -328,21 +335,25 @@ button.ghost {
   width: 50%;
   z-index: 2;
 }
+
 .sign-in-container form a {
   position: relative;
   left: 100px;
 }
+
 .sign-up-container {
   left: 0;
   width: 50%;
   z-index: 1;
   opacity: 0;
 }
+
 .sign-up-container button {
   margin-top: 20px;
 }
+
 .overlay-container {
-  position:absolute;
+  position: absolute;
   top: 0;
   left: 50%;
   width: 50%;
@@ -351,8 +362,9 @@ button.ghost {
   transition: transform .6s ease-in-out;
   z-index: 100;
 }
+
 .overlay {
-  background-image: linear-gradient(120deg,#3498db,#8e44ad);
+  background-image: linear-gradient(120deg, #3498db, #8e44ad);
   color: #fff;
   position: relative;
   left: -100%;
@@ -361,6 +373,7 @@ button.ghost {
   transform: translateY(0);
   transition: transform .6s ease-in-out;
 }
+
 .overlay-panel {
   position: absolute;
   top: 0;
@@ -375,6 +388,7 @@ button.ghost {
   transform: translateY(0);
   transition: transform .6s ease-in-out;
 }
+
 .overlay-right {
   right: 0;
   transform: translateY(0);
@@ -392,17 +406,21 @@ button.ghost {
 .container.container.right-panel-active .overlay-container {
   transform: translateX(-100%);
 }
+
 .container.right-panel-active .sign-up-container {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
 }
+
 .container.container.right-panel-active .overlay {
   transform: translateX(50%);
 }
+
 .container.container.right-panel-active .overlay-left {
   transform: translateY(0);
 }
+
 .container.container.right-panel-active .overlay-right {
   transform: translateY(20%);
 }

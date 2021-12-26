@@ -77,34 +77,44 @@
     </el-header>
     <el-container>
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
-        <el-menu router  :default-active="this.$route.path.substr(7)">
+        <el-menu router :default-active="this.$route.path.substr(7)">
           <el-menu-item index="home" route="./home">
-            <template #title >
-              <el-icon><Message /></el-icon>
+            <template #title>
+              <el-icon>
+                <Message/>
+              </el-icon>
               <span class="list">站点统计</span>
             </template>
           </el-menu-item>
           <el-menu-item index="user" route="./user">
-            <template #title >
-              <el-icon><User /></el-icon>
+            <template #title>
+              <el-icon>
+                <User/>
+              </el-icon>
               <span class="list">用户</span>
             </template>
           </el-menu-item>
           <el-menu-item index="staff" route="./staff">
-            <template #title >
-              <el-icon><UserFilled /></el-icon>
+            <template #title>
+              <el-icon>
+                <UserFilled/>
+              </el-icon>
               <span class="list">员工</span>
             </template>
           </el-menu-item>
           <el-menu-item index="chunk" route="./chunk">
-            <template #title >
-              <el-icon><Odometer /></el-icon>
+            <template #title>
+              <el-icon>
+                <Odometer/>
+              </el-icon>
               <span class="list">车辆</span>
             </template>
           </el-menu-item>
           <el-menu-item index="order" route="./order">
-            <template #title >
-              <el-icon><Document /></el-icon>
+            <template #title>
+              <el-icon>
+                <Document/>
+              </el-icon>
               <span class="list">订单</span>
             </template>
           </el-menu-item>
@@ -158,26 +168,30 @@ export default {
 }
 </script>
 <style>
-.title{
+.title {
   font-size: 1.2em;
   font-weight: 500;
 }
-a{
+
+a {
   cursor: pointer;
 }
-#home-icon{
-  float:right;
+
+#home-icon {
+  float: right;
   font-size: 2em;
   margin-top: 0.4em;
 }
-.list{
+
+.list {
   font-size: 1rem;
 }
-#head{
+
+#head {
   background-color: #3f51b5;
   color: #fff;
   line-height: 60px;
-  box-shadow:0 0 7px 3px #aaa;
+  box-shadow: 0 0 7px 3px #aaa;
   z-index: 1;
 }
 

@@ -3,31 +3,34 @@
     <el-container>
       <el-main>
         <div style="padding:10px 0 0 0">
-          <el-icon style="font-size: 20px;margin-right: 1em"><Search /></el-icon>
+          <el-icon style="font-size: 20px;margin-right: 1em">
+            <Search/>
+          </el-icon>
           <el-input v-model="search" placeholder="输入关键字搜索" style="width: 95%" type="text"></el-input>
         </div>
-        <br />
+        <br/>
         <div style="height: 79%">
-        <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
-          <el-table-column prop="id" label="Id"/>
-          <el-table-column prop="number" label="车牌号"/>
-          <el-table-column prop="model" label="型号"/>
-          <el-table-column prop="statusName" label="状态"/>
-          <el-table-column prop="operations">
-            <template #header>
-              <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
-                新增</el-button>
-            </template>
-            <template #default="scope">
-              <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
-                修改
-              </el-button>
-              |
-              <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="deleted(scope.row)">删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
+            <el-table-column prop="id" label="Id"/>
+            <el-table-column prop="number" label="车牌号"/>
+            <el-table-column prop="model" label="型号"/>
+            <el-table-column prop="statusName" label="状态"/>
+            <el-table-column prop="operations">
+              <template #header>
+                <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
+                  新增
+                </el-button>
+              </template>
+              <template #default="scope">
+                <el-button round style="color: #FFB500; border: 1px #FFB500 solid" @click="edit(scope.row)">
+                  修改
+                </el-button>
+                |
+                <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="deleted(scope.row)">删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </el-main>
     </el-container>
@@ -50,11 +53,12 @@
       </span>
       </template>
     </el-dialog>
-    <el-footer >
+    <el-footer>
       <div style="padding-left: 35%">
-      <el-pagination :current-page="currentPage" :page-size="pageSize" :total="chunks.length" background
-                     layout="prev, pager, next, jumper" style="width: 40%;float: left" @current-change="currentChange">
-      </el-pagination>
+        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="chunks.length" background
+                       layout="prev, pager, next, jumper" style="width: 40%;float: left"
+                       @current-change="currentChange">
+        </el-pagination>
       </div>
     </el-footer>
   </el-container>
@@ -106,13 +110,13 @@ export default {
     },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
-        const currentPage=this.currentPage
-        this.allChunks.length=0
-        for(const chunk of res.data.chunks){
-          if(chunk.status===0){
-            chunk.statusName='空闲中'
-          }else{
-            chunk.statusName='运输中'
+        const currentPage = this.currentPage
+        this.allChunks.length = 0
+        for (const chunk of res.data.chunks) {
+          if (chunk.status === 0) {
+            chunk.statusName = '空闲中'
+          } else {
+            chunk.statusName = '运输中'
           }
           this.allChunks.push(chunk)
         }
@@ -160,7 +164,7 @@ export default {
 </script>
 
 <style scoped>
-#table1{
+#table1 {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;

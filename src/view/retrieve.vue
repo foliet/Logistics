@@ -4,7 +4,7 @@
       <span class="title">RainSpace 物流</span>
     </el-header>
     <el-main style="margin: 0 25em 0 25em">
-      <el-form :model="ruleForm"  ref="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" type="e-mail"></el-input>
         </el-form-item>
@@ -29,55 +29,55 @@
 <script>
 export default {
   created() {
-    document.title="找回密码"
+    document.title = "找回密码"
   },
   data() {
     return {
       ruleForm: {
         email: '',
-        password:'',
+        password: '',
         password1: '',
-        verifyCode:''
+        verifyCode: ''
       },
       rules: {
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          {required: true, message: '请输入邮箱地址', trigger: 'blur'},
+          {type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}
         ],
         password: [
-          { required: true, message: '请输入新密码', trigger: 'blur' }
+          {required: true, message: '请输入新密码', trigger: 'blur'}
         ],
         password1: [
-          { required: true, message: '请输入确认密码', trigger: 'blur' }
+          {required: true, message: '请输入确认密码', trigger: 'blur'}
         ],
         verifyCode: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
+          {required: true, message: '请输入验证码', trigger: 'blur'}
         ]
       }
     };
   },
   methods: {
-    verify: function (){
-      if(this.ruleForm.email===""){
+    verify: function () {
+      if (this.ruleForm.email === "") {
         this.$message.error('请先输入邮箱')
         return
       }
-      this.$axios.get('https://mc.rainspace.cn:4443/check-email',{
+      this.$axios.get('https://mc.rainspace.cn:4443/check-email', {
         params: {
           email: this.ruleForm.email
         }
-      }).then(res=>{
-        if(res.data.status!==0){
+      }).then(res => {
+        if (res.data.status !== 0) {
           this.$message.error(res.data.msg)
         }
       })
     },
     submitForm: function () {
-      if(this.ruleForm.password !== this.ruleForm.password1){
+      if (this.ruleForm.password !== this.ruleForm.password1) {
         this.$message.error('两次输入密码不一致!');
         return;
       }
-      this.$axios.post("https://mc.rainspace.cn:4443/retrieve",{password: this.password,verifyCode:this.verifyCode})
+      this.$axios.post("https://mc.rainspace.cn:4443/retrieve", {password: this.password, verifyCode: this.verifyCode})
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -87,14 +87,15 @@ export default {
 </script>
 
 <style scoped>
-#head{
+#head {
   background-color: #3f51b5;
   color: #fff;
   line-height: 60px;
-  box-shadow:0 0 7px 3px #aaa;
+  box-shadow: 0 0 7px 3px #aaa;
   z-index: 1;
 }
-.title{
+
+.title {
   font-size: 1.2em;
   font-weight: 500;
 }

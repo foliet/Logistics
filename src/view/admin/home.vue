@@ -1,12 +1,12 @@
 <template>
-<div id="main" style="height: 100%;width: 100%"></div>
+  <div id="main" style="height: 70%;width: 60%"></div>
 </template>
 
 <script>
 export default {
   mounted() {
-    document.title="站点统计"
-    this.$axios.get("https://mc.rainspace.cn:4443/admin/count").then(res=>{
+    document.title = "站点统计"
+    this.$axios.get("https://mc.rainspace.cn:4443/admin/count").then(res => {
       const chart = this.$echarts.init(document.getElementById("main"))
       const option = {
         title: {

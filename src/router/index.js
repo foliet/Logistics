@@ -3,7 +3,7 @@ import user from './user'
 import admin from './admin'
 
 const logout = {
-    created(){
+    created() {
         this.$axios.get("https://mc.rainspace.cn:4443/logout")
         this.$router.replace('/login')
     }
@@ -13,7 +13,7 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: ()=>import('@/view/login')
+        component: () => import('@/view/login')
     },
     {
         path: '/logout',
@@ -21,12 +21,12 @@ const routes = [
     },
     {
         path: '/retrieve',
-        component: ()=>import('@/view/retrieve')
+        component: () => import('@/view/retrieve')
     }
     ,
     {
-      path: '/admin',
-      component: ()=>import('@/view/admin/index'),
+        path: '/admin',
+        component: () => import('@/view/admin/index'),
         redirect: '/admin/home',
         children: admin,
     },
