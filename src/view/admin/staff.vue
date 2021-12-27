@@ -26,7 +26,8 @@
                   修改
                 </el-button>
                 |
-                <el-button round :disabled="scope.row.status!==0" style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible=true">删除
+                <el-button :class="choose(check(scope.row.statusName))" :disabled="check(scope.row.statusName)" round
+                           @click="scope.row.visible = true">删除
                 </el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
@@ -81,6 +82,15 @@
                        layout="prev, pager, next, jumper" style="width: 40%;float: left"
                        @current-change="currentChange">
         </el-pagination>
+        <a>选择每页展示数：</a>
+        <el-select v-model="pageSize" size="mini" style="width: 10%;">
+          <el-option
+              v-for="typer in typeses"
+              :key="typer"
+              :value="typer.value">
+            {{ typer.value }}
+          </el-option>
+        </el-select>
       </div>
     </el-footer>
   </el-container>
@@ -95,7 +105,7 @@ export default {
   data() {
     return {
       search: null,
-      pageSize: 7,
+      pageSize: 5,
       currentPage: 1,
       staffs: [],
       allStaffs: [],
@@ -116,7 +126,21 @@ export default {
         {
           value: '隐藏',
           label: '隐藏',
-        },]
+        },],
+      typeses: [{value: 1,},
+        {value: 2,},
+        {value: 3,},
+        {value: 4,},
+        {value: 5,},
+        {value: 6,},
+        {value: 7,},
+        {value: 8,},
+        {value: 9,},
+        {value: 10,},
+        {value: 11,},
+        {value: 12,},
+        {value: 13,},
+      ]
     }
   },
   watch: {
@@ -132,6 +156,13 @@ export default {
     document.title = "员工管理"
   },
   methods: {
+    check(param) {
+      return param !== '空闲中';
+    },
+    choose(param) {
+      if (param == true) return 'disable'
+      else return 'able'
+    },
     currentChange(index) {
       this.currentPage = index
     },
@@ -140,7 +171,7 @@ export default {
         const currentPage = this.currentPage
         this.allStaffs.length = 0
         for (const staff of res.data.staffs) {
-          staff.visible=false
+          staff.visible = false
           if (staff.status === 0) {
             staff.statusName = '空闲中'
           } else {
@@ -199,5 +230,15 @@ export default {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;
+}
+
+.able {
+  color: #FF3D00;
+  border: 1px #FF3D00 solid
+}
+
+.disable {
+  color: gray;
+  border: 1px gray solid
 }
 </style>

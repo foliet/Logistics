@@ -46,7 +46,16 @@
     </el-container>
     <el-footer>
       <div style="text-align: center">
-        <el-pagination :current-page="currentPage" @current-change="currentChange"
+        <a>选择每页展示数：</a>
+        <el-select v-model="pageSize" size="mini" style="width: 10%;">
+          <el-option
+              v-for="typer in typeses"
+              :key="typer"
+              :value="typer.value">
+            {{ typer.value }}
+          </el-option>
+        </el-select>
+        <el-pagination :current-page="currentPage" style="float: left" @current-change="currentChange"
                        background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
         </el-pagination>
       </div>
@@ -88,6 +97,7 @@ export default {
         Search
       },
   methods: {
+
     currentChange(index) {
       this.currentPage = index
     },

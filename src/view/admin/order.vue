@@ -68,9 +68,18 @@
           </el-drawer>
         </div>
         <div style="text-align: center">
-          <el-pagination :current-page="currentPage" @current-change="currentChange"
+          <el-pagination :current-page="currentPage" style="float: left" @current-change="currentChange"
                          background layout="prev, pager, next, jumper" :total="orders.length" :page-size="pageSize">
           </el-pagination>
+          <a>选择每页展示数：</a>
+          <el-select v-model="pageSize" size="mini" style="width: 10%;">
+            <el-option
+                v-for="typer in typeses"
+                :key="typer"
+                :value="typer.value">
+              {{ typer.value }}
+            </el-option>
+          </el-select>
         </div>
       </el-main>
     </el-container>
@@ -89,6 +98,20 @@ export default {
       selectedOrder: {},
       allOrders: [],
       showTable: false,
+      typeses: [{value: 1,},
+        {value: 2,},
+        {value: 3,},
+        {value: 4,},
+        {value: 5,},
+        {value: 6,},
+        {value: 7,},
+        {value: 8,},
+        {value: 9,},
+        {value: 10,},
+        {value: 11,},
+        {value: 12,},
+        {value: 13,},
+      ]
     }
   },
   created() {
@@ -105,6 +128,7 @@ export default {
     document.title = "订单管理"
   },
   methods: {
+
     currentChange(index) {
       this.currentPage = index
     },
@@ -191,4 +215,5 @@ export default {
   border: #E5E5E5 2px solid;
   border-radius: 15px;
 }
+
 </style>

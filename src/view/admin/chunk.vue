@@ -26,7 +26,8 @@
                   修改
                 </el-button>
                 |
-                <el-button round :disabled="scope.row.status!==0" style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible = true">删除
+                <el-button :class="choose(check(scope.row.statusName))" :disabled="check(scope.row.statusName)" round
+                           @click="scope.row.visible = true">删除
                 </el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
@@ -68,6 +69,15 @@
                        layout="prev, pager, next, jumper" style="width: 40%;float: left"
                        @current-change="currentChange">
         </el-pagination>
+        <a>选择每页展示数：</a>
+        <el-select v-model="pageSize" size="mini" style="width: 10%;">
+          <el-option
+              v-for="typer in typeses"
+              :key="typer"
+              :value="typer.value">
+            {{ typer.value }}
+          </el-option>
+        </el-select>
       </div>
     </el-footer>
   </el-container>
@@ -83,7 +93,7 @@ export default {
   data() {
     return {
       search: null,
-      pageSize: 7,
+      pageSize: 5,
       currentPage: 1,
       dialogVisible: '',
       chunks: [],
@@ -94,6 +104,20 @@ export default {
         number: '',
         status: null,
       },
+      typeses: [{value: 1,},
+        {value: 2,},
+        {value: 3,},
+        {value: 4,},
+        {value: 5,},
+        {value: 6,},
+        {value: 7,},
+        {value: 8,},
+        {value: 9,},
+        {value: 10,},
+        {value: 11,},
+        {value: 12,},
+        {value: 13,},
+      ]
     }
   },
   watch: {
@@ -112,12 +136,19 @@ export default {
     currentChange(index) {
       this.currentPage = index
     },
+    check(param) {
+      return param !== '空闲中';
+    },
+    choose(param) {
+      if (param == true) return 'disable'
+      else return 'able'
+    },
     getChunks() {
       this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
         const currentPage = this.currentPage
         this.allChunks.length = 0
         for (const chunk of res.data.chunks) {
-          chunk.visible=false
+          chunk.visible = false
           if (chunk.status === 0) {
             chunk.statusName = '空闲中'
           } else {
@@ -145,15 +176,19 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
+          this.allChunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
+          this.allChunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
+      this.$emit('confirm');
+      this.search = null;
     },
     edit(row) {
       this.chunk.status = row.status
@@ -176,5 +211,15 @@ export default {
   width: 100%;
   border: #E5E5E5 2px solid;
   border-radius: 15px;
+}
+
+.able {
+  color: #FF3D00;
+  border: 1px #FF3D00 solid
+}
+
+.disable {
+  color: gray;
+  border: 1px gray solid
 }
 </style>

@@ -7,7 +7,7 @@
       <div class="space1">发件人地址</div>
       <el-select
           v-model="orderData.senderContactId"
-          placeholder="选择收件人地址"
+          placeholder="选择我的地址"
           style="width:90%">
         <el-option
             v-for="contact in contacts"
@@ -15,7 +15,7 @@
             :label="contact.receiverName"
             :value="contact.id"
         >
-          <span>联系人：{{ contact.receiverName }}</span>
+          <span>地址：{{ contact.address }}</span>
           <el-popover
               :width="200"
               placement="right"
@@ -38,10 +38,10 @@
       </el-button>
     </div>
     <div>
-      <div class="space1">收件人地址</div>
+      <div class="space1">收件人</div>
       <el-select
           v-model="orderData.receiverContactId"
-          placeholder="选择收件人地址"
+          placeholder="选择收件人"
           style="width:90%">
         <el-option
             v-for="contact in contacts1"
@@ -80,16 +80,13 @@
       <span style="padding: 0 30% 0 0">体积</span><span style="padding: 0 28% 0 0">重量</span><span>价值</span>
     </div>
     <div>
-      <el-input class="space2" type="tel" placeholder="体积" min="0" v-model="orderData.volume"
-                oninput="value=value.replace(/[^\d]/g,'')">
+      <el-input v-model="orderData.volume" class="space2" min="0" placeholder="体积" type="text">
         <template #append>cm³</template>
       </el-input>
-      <el-input class="space2" type="tel" placeholder="重量" min="0" v-model="orderData.weight"
-                oninput="value=value.replace(/[^\d]/g,'')">
+      <el-input v-model="orderData.weight" class="space2" min="0" placeholder="重量" type="text">
         <template #append>KG</template>
       </el-input>
-      <el-input class="space2" type="tel" placeholder="价值" min="0" v-model="orderData.value"
-                oninput="value=value.replace(/[^\d]/g,'')">
+      <el-input v-model="orderData.value" class="space2" min="0" placeholder="价值" type="text">
         <template #append>CNY</template>
       </el-input>
     </div>

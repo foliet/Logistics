@@ -51,6 +51,15 @@
                        layout="prev, pager, next, jumper" style="width: 40%;float: left"
                        @current-change="currentChange">
         </el-pagination>
+        <a>选择每页展示数：</a>
+        <el-select v-model="pageSize" size="mini" style="width: 10%;">
+          <el-option
+              v-for="typer in typeses"
+              :key="typer"
+              :value="typer.value">
+            {{ typer.value }}
+          </el-option>
+        </el-select>
       </div>
     </el-footer>
   </el-container>
@@ -72,6 +81,20 @@ export default {
       users: [],
       allUsers: [],
       search: null,
+      typeses: [{value: 1,},
+        {value: 2,},
+        {value: 3,},
+        {value: 4,},
+        {value: 5,},
+        {value: 6,},
+        {value: 7,},
+        {value: 8,},
+        {value: 9,},
+        {value: 10,},
+        {value: 11,},
+        {value: 12,},
+        {value: 13,},
+      ]
     }
   },
   watch: {
