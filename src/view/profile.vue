@@ -25,7 +25,16 @@
             <template #default="scope">
               <el-button @click="edit(scope.row)">修改</el-button>
               |
-              <el-button @click="deleted(scope.row)">删除</el-button>
+              <el-button @click="scope.row.visible=true">删除</el-button>
+              <el-dialog v-model="scope.row.visible">确定要删除吗？
+                <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="scope.row.visible = false">取消</el-button>
+        <el-button type="primary" @click="deleted(scope.row)"
+        >确认</el-button>
+      </span>
+                </template>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
@@ -144,7 +153,7 @@ export default {
     confirm() {
       setTimeout(() => {
         this.allContacts.length = 0
-        this.getinfo()
+        this.getInfo()
       }, 500)
       this.search = null;
     },
@@ -187,7 +196,7 @@ export default {
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id}).then(() => {
         this.allContacts.length = 0
-        this.getinfo()
+        this.getInfo()
       })
       /*setTimeout(() => {
         this.allContacts.length = 0
@@ -196,7 +205,6 @@ export default {
       this.search = null;
     },
     add() {
-      this.$refs.f.reset();
       this.$refs.f.reset();
       this.$refs.f.tableData.receiverName = this.user.username;
       this.$refs.f.dialogVisible = true;

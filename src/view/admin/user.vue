@@ -27,8 +27,17 @@
                   修改
                 </el-button>
                 |
-                <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="deleted(scope.row)">删除
+                <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible=true">删除
                 </el-button>
+                <el-dialog v-model="scope.row.visible">确定要删除吗？
+                  <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="scope.row.visible = false">取消</el-button>
+        <el-button type="primary" @click="deleted(scope.row)"
+        >确认</el-button>
+      </span>
+                  </template>
+                </el-dialog>
               </template>
               <!-- console.log(scope.$index,scope.row)    -->
             </el-table-column>
