@@ -15,8 +15,7 @@
       </el-card>
       <br/>
     </div>
-    <el-empty description="暂无消息" :style="{display: notices.length>=0?'none':'flex'}"></el-empty>
-
+    <el-empty description="暂无消息" :style="{display: notices.length>0?'none':'flex'}"></el-empty>
   </el-main>
 </template>
 

@@ -1,27 +1,47 @@
 <template>
   <span id="main" class="picture"></span>
   <span id="number">
-    <el-card :body-style="{ padding: '0'}" shadow="hover">
+    <el-card :body-style="{ padding: '0'}" shadow="hover" style="border: #E5E5E5 2px solid;">
       <template #header>
-        <span>总计</span>
+        <span style="font-size: 18px;letter-spacing: 0.02em;font-weight: bold;">
+          总计
+        </span>
       </template>
            <el-menu >
-            <el-menu-item >
+            <el-menu-item style="margin-top: 1.5em">
               <template #title>
-                <el-icon style="color: #FFB500">
+                <el-icon style="color: #FFB500;font-size: 20px">
                   <User/>
                 </el-icon>&nbsp;
                 <span>用户总数:</span>
                 <span style="margin-left: 60%">1人</span>
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item style="margin-top: 0.7em">
               <template #title>
-                <el-icon style="color: #FF3D00">
+                <el-icon style="color: #FF3D00;font-size: 20px">
                   <Document/>
                 </el-icon>&nbsp;
-                <span>订单总数:</span>
+                <span >订单总数:</span>
                 <span style="margin-left: 60%">1个</span>
+              </template>
+            </el-menu-item>
+             <el-menu-item style="margin-top: 0.7em">
+              <template #title>
+                <el-icon style="color: #03A9F4;font-size: 20px">
+                  <UserFilled/>
+                </el-icon>&nbsp;
+                <span >今日新增用户:</span>
+                <span style="margin-left: 49%">1人</span>
+              </template>
+            </el-menu-item>
+             <el-menu-item style="margin-top: 0.7em;margin-bottom: 1.8em">
+              <template #title>
+                <el-icon style="color: #00BF96;font-size: 20px">
+                  <DocumentAdd />
+                </el-icon>&nbsp;
+                <span >今日新增订单:</span>
+                <span style="margin-left: 49%">1个</span>
               </template>
             </el-menu-item>
           </el-menu>
@@ -30,12 +50,14 @@
 </template>
 
 <script>
-import {Document,User} from "@element-plus/icons";
+import {Document,User,UserFilled,DocumentAdd} from "@element-plus/icons";
 
 export default {
   components: {
     User,
-    Document
+    Document,
+    UserFilled,
+    DocumentAdd
   },
   mounted() {
     document.title = "站点统计"
