@@ -11,52 +11,52 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public class UserDao implements Dao<User>{
-	@Autowired
-	private JdbcTemplate jdbc;
+public class UserDao implements Dao<User> {
+    @Autowired
+    private JdbcTemplate jdbc;
 
     @Override
-	public int add(User user) {
+    public int add(User user) {
         String sql = "insert into users(username,password,group_id,email,create_at) value(?,?,?,?,?)";
-        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(),new Timestamp(System.currentTimeMillis()));
+        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(), new Timestamp(System.currentTimeMillis()));
     }
 
     @Override
-	public int delete(int id) {
+    public int delete(int id) {
         String sql = "delete from users where id = ?";
         return jdbc.update(sql, id);
     }
 
     @Override
-	public int update(User user) {
+    public int update(User user) {
         String sql = "update users set username = ?,password = ?,group_id = ?,email = ?,unread_message=? where id = ?";
-        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(),user.getUnreadMessage(), user.getId());
+        return jdbc.update(sql, user.getUsername(), user.getPassword(), user.getGroupId(), user.getEmail(), user.getUnreadMessage(), user.getId());
     }
-	
-	public User getByName(String value) {
-        try{
+
+    public User getByName(String value) {
+        try {
             String sql = "select * from users where username = ?";
             return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), value);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
-	}
+    }
 
     public User getByEmail(String value) {
-        try{
+        try {
             String sql = "select * from users where email = ?";
             return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), value);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
     @Override
     public User getById(int id) {
-        try{
+        try {
             String sql = "select * from users where id = ?";
             return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), id);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }

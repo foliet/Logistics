@@ -10,8 +10,7 @@ public class MailSender {
     private String password = "Fqh66545896";
     private String smtpServer = "smtp.exmail.qq.com";
 
-    public void init()throws Exception
-    {
+    public void init() throws Exception {
         //设置属性
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
@@ -21,7 +20,7 @@ public class MailSender {
         props.put("mail.smtp.auth", "true"); //SMTP服务器需要身份验证
 
         // 创建Session对象
-        session = Session.getInstance(props,new Authenticator(){   //验账账户
+        session = Session.getInstance(props, new Authenticator() {   //验账账户
             public PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -31,7 +30,8 @@ public class MailSender {
         // 创建Transport对象
         transport = session.getTransport();
     }
-    public void sendMessage(Message msg)throws Exception{
+
+    public void sendMessage(Message msg) throws Exception {
         //创建一个邮件
         //Message msg = HtmlMessage.generate();
         //Message msg = AttachmentMessage.generate();
@@ -42,8 +42,7 @@ public class MailSender {
         System.out.println("邮件已经成功发送");
     }
 
-    public void close()throws Exception
-    {
+    public void close() throws Exception {
         transport.close();
     }
 }

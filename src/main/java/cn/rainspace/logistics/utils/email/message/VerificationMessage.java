@@ -8,17 +8,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.nio.file.Files;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 public class VerificationMessage {
-    public static MimeMessage generate(String to,String code) throws Exception
-    {
+    public static MimeMessage generate(String to, String code) throws Exception {
         String from = "foliet@rainspace.cn"; // 发件人地址
         String subject = "验证码";
         String body = Files.readString(Resources.getResourceAsFile("EmailMessages/verification.html").toPath());
-        body=body.replace("{userName}",to);
-        body=body.replace("{code}",code);
+        body = body.replace("{userName}", to);
+        body = body.replace("{code}", code);
         // 创建Session实例对象
         Session session = Session.getDefaultInstance(new Properties());
         // 创建MimeMessage实例对象

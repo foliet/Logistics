@@ -18,7 +18,7 @@ public class OrderDao implements Dao<Order> {
     @Override
     public int add(Order order) {
         String sql = "insert into orders(create_at,sender_contact_id,receiver_contact_id,title,remark ,value,volume,weight,status) value(?,?,?,?,?,?,?,?,?)";
-        return jdbc.update(sql,new Timestamp(System.currentTimeMillis()),order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus());
+        return jdbc.update(sql, new Timestamp(System.currentTimeMillis()), order.getSenderContactId(), order.getReceiverContactId(), order.getTitle(), order.getRemark(), order.getValue(), order.getVolume(), order.getWeight(), order.getStatus());
     }
 
     @Override
@@ -30,16 +30,16 @@ public class OrderDao implements Dao<Order> {
     @Override
     public int update(Order order) {
         String sql = "update orders set sender_contact_id=?,receiver_contact_id=?,title=?,remark=?,value=?,volume=?,weight=?,status=?,chunk_id=?,staff_id=? where id = ?";
-        return jdbc.update(sql,order.getSenderContactId(),order.getReceiverContactId(),order.getTitle(),order.getRemark(),order.getValue(),order.getVolume(),order.getWeight(),order.getStatus()
-                ,order.getChunkId(),order.getStaffId(),order.getId());
+        return jdbc.update(sql, order.getSenderContactId(), order.getReceiverContactId(), order.getTitle(), order.getRemark(), order.getValue(), order.getVolume(), order.getWeight(), order.getStatus()
+                , order.getChunkId(), order.getStaffId(), order.getId());
     }
 
     @Override
     public Order getById(int id) {
-        try{
+        try {
             String sql = "select * from orders where id = ?";
             return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(Order.class), id);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
@@ -50,13 +50,13 @@ public class OrderDao implements Dao<Order> {
         return jdbc.query(sql, new BeanPropertyRowMapper<>(Order.class));
     }
 
-    public List<Order> getBySenderId(int id){
+    public List<Order> getBySenderId(int id) {
         String sql = "select orders.*,ua.username sender_name,ub.username receiver_name from orders,contacts ca,contacts cb,users ua,users ub where orders.sender_contact_id = ca.id and orders.receiver_contact_id = cb.id and ca.receiver_id = ua.id and cb.receiver_id = ub.id and ua.id = ?";
-        return jdbc.query(sql, new BeanPropertyRowMapper<>(Order.class),id);
+        return jdbc.query(sql, new BeanPropertyRowMapper<>(Order.class), id);
     }
 
-    public List<Order> getByReceiverId(int id){
+    public List<Order> getByReceiverId(int id) {
         String sql = "select orders.*,ua.username sender_name,ub.username receiver_name from orders,contacts ca,contacts cb,users ua,users ub where orders.sender_contact_id = ca.id and orders.receiver_contact_id = cb.id and ca.receiver_id = ua.id and cb.receiver_id = ub.id and ub.id = ?";
-        return jdbc.query(sql, new BeanPropertyRowMapper<>(Order.class),id);
+        return jdbc.query(sql, new BeanPropertyRowMapper<>(Order.class), id);
     }
 }
