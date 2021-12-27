@@ -57,6 +57,14 @@ public class AdminService {
     }
 
     public JSONObject addUser(User user, int type){
+        User oldUser = userDao.getById(user.getId());
+        if(user.getId()!=0&&(!user.getUsername().equals(oldUser.getUsername())||!user.getEmail().equals(oldUser.getEmail()))){
+            if(userDao.getByName(user.getUsername())!=null){
+                return Errors.NAME_ALREADY_EXISTS;
+            }else if(userDao.getByEmail(user.getEmail())!=null){
+                return Errors.EMAIL_ALREADY_EXISTS;
+            }
+        }
         if(type==0) {
             userDao.add(user);
         }else{
@@ -166,6 +174,8 @@ public class AdminService {
         LocalDate localDate = LocalDate.now();
         List<User>users = userDao.getAll();
         List<Order>orders = orderDao.getAll();
+        res.put("userNumber",users.size());
+        res.put("orderNumber",orders.size());
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer>userIncrease = new ArrayList<>();
         ArrayList<Integer>orderIncrease = new ArrayList<>();
