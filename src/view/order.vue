@@ -14,7 +14,7 @@
     <el-main>
       <od-dialog ref="a" @confirm="getOrders"></od-dialog>
       <div v-for="order in currentOrders" :key="order.id">
-        <el-card shadow="hover" :body-style="{padding: '0px' }">
+        <el-card :body-style="{padding: '0px' }" shadow="hover">
           <el-container>
             <el-header class="orderHead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
@@ -32,14 +32,14 @@
             </span>
             </el-header>
             <el-container>
-              <el-aside width="50%" class="orderBody">
+              <el-aside class="orderBody" width="50%">
                 <el-icon style="color: #00BF96">
                   <Goods/>
                 </el-icon>&nbsp;
                 <span style="font-size: 14px;margin-bottom: 0.5em">物品名称：</span>
                 <span style="font-size: 14px;margin-left: 10%">{{ order.title }}</span>
               </el-aside>
-              <div style="width: 100%" class="orderBody">
+              <div class="orderBody" style="width: 100%">
                 <el-icon style="color: #FF8200">
                   <Money/>
                 </el-icon>&nbsp;
@@ -50,7 +50,7 @@
               </div>
             </el-container>
             <el-container>
-              <div style="width: 100%" class="orderBody">
+              <div class="orderBody" style="width: 100%">
                 <el-icon style="color:#FF3D00">
                   <UserFilled/>
                 </el-icon>&nbsp;
@@ -59,7 +59,7 @@
                   {{ order.senderName }}
                 </span>
               </div>
-              <el-aside width="50%" class="orderBody">
+              <el-aside class="orderBody" width="50%">
                 <el-icon style="color: #FFB500">
                   <User/>
                 </el-icon>&nbsp;
@@ -74,7 +74,7 @@
               <span style="font-size: 13px;font-weight:500">备注：{{ order.remark }}</span>
             </el-footer>
           </el-container>
-          <el-button v-if="type==='receive'&&order.status===2" size="medium" round class="takeGoods"
+          <el-button v-if="type==='receive'&&order.status===2" class="takeGoods" round size="medium"
                      @click="takeGoods(order.id)">
           <span class="takeGood">
             确认收货
@@ -83,8 +83,8 @@
         </el-card>
         <br/>
       </div>
-      <el-dialog title="商品详情" v-model="dialogTableVisible">
-        <el-descriptions class="margin-top" :column="3" direction="vertical" border>
+      <el-dialog v-model="dialogTableVisible" title="商品详情">
+        <el-descriptions :column="3" border class="margin-top" direction="vertical">
           <el-descriptions-item>
             <template v-slot:label>
               <el-icon style="color: #00BF96">
@@ -242,7 +242,7 @@ export default {
       this.currentPage = index
     },
     getOrders() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-orders?type=' + this.type).then(res => {
+      this.$axios.get('/get-orders?type=' + this.type).then(res => {
         this.allOrders.length = 0
         for (const order of res.data.orders.sort(function (a, b) {
           if (a.status !== b.status) {
@@ -283,7 +283,7 @@ export default {
       this.currentChange(1)
     },
     takeGoods(id) {
-      this.$axios.post("https://mc.rainspace.cn:4443/take-goods", {orderId: id}).then(() => {
+      this.$axios.post("/take-goods", {orderId: id}).then(() => {
         this.getOrders()
       })
     }

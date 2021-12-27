@@ -13,7 +13,7 @@
         </el-card>
         <br/>
       </div>
-      <el-empty description="暂无消息" :style="{display: notices.length>0?'none':'flex'}"></el-empty>
+      <el-empty :style="{display: notices.length>0?'none':'flex'}" description="暂无消息"></el-empty>
     </el-main>
     <el-footer>
       <div style="padding-left: 35%">
@@ -31,13 +31,13 @@ export default {
   title: "user",
   data() {
     return {
-      currentPage:1,
-      pageSize:4,
+      currentPage: 1,
+      pageSize: 4,
       notices: [],
     }
   },
   created() {
-    this.$axios.get("https://mc.rainspace.cn:4443/get-notices").then(res => {
+    this.$axios.get("/get-notices").then(res => {
       if (res.data.status < 10) this.notices = res.data.notices.sort(function (a, b) {
         return b.id - a.id
       })
@@ -46,9 +46,9 @@ export default {
   mounted() {
     document.title = "我的消息"
   },
-  methods:{
-    currentChange(index){
-      this.currentPage=index
+  methods: {
+    currentChange(index) {
+      this.currentPage = index
     }
   }
 }

@@ -13,8 +13,8 @@
     </el-header>
     <el-main>
       <div style="height: 95%">
-        <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                  height="100%" style="width: 100%;" id="table1">
+        <el-table id="table1"
+                  :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" style="width: 100%;">
           <el-table-column label="省市区" prop="PCD" sortable width="180"/>
           <el-table-column label="电话" prop="telephone" sortable/>
           <el-table-column label="地址" prop="address" sortable/>
@@ -64,7 +64,7 @@
     </el-footer>
   </el-container>
 
-  <dia type="mine" ref="f" @confirm="getInfo"></dia>
+  <dia ref="f" type="mine" @confirm="getInfo"></dia>
   <el-dialog v-model="visible2" title="修改密码">
     <div class="space1">旧密码：</div>
     <el-input v-model="oldpsd" :type="pwdtype"></el-input>
@@ -151,24 +151,24 @@ export default {
       this.currentPage = index
     },
     getInfo() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
+      this.$axios.get('/get-user').then(res => {
         this.user = res.data.user
       });
-      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
+      this.$axios.get('/get-contacts?type=mine').then(res => {
         if (res.data.status < 10) {
-          this.allContacts.length=0
+          this.allContacts.length = 0
           const currentPage = this.currentPage
           for (const contact of res.data.contacts) {
-            contact.visible=false
+            contact.visible = false
             contact.PCD = contact.province + contact.city + contact.district
             this.allContacts.push(contact)
           }
           this.filter()
-          this.currentPage=currentPage
+          this.currentPage = currentPage
         }
       })
     },
-    filter(){
+    filter() {
       this.contacts = this.allContacts.filter(
           (data) =>
               !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
@@ -187,7 +187,7 @@ export default {
         if (this.newpsd == null || this.newpsd == 0)
           this.$message.error("密码不能为空！")
         else {
-          this.$axios.post('https://mc.rainspace.cn:4443/edit-password', {
+          this.$axios.post('/edit-password', {
             oldpsd: this.oldpsd,
             newpsd: this.newpsd
           }).then(res => {
@@ -214,7 +214,7 @@ export default {
 
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id}).then(() => {
+      this.$axios.post('/delete-contact', {id: row.id}).then(() => {
         this.getInfo()
       })
     },

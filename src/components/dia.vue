@@ -4,14 +4,14 @@
              top="5vh" width="40%">
     <div class="space1">收件人用户名</div>
     <div>
-      <el-input :disabled="type==='mine'" v-model="tableData.receiverName" clearable placeholder="姓名" type="text"/>
+      <el-input v-model="tableData.receiverName" :disabled="type==='mine'" clearable placeholder="姓名" type="text"/>
     </div>
     <div class="space1">省/市/区</div>
     <el-cascader
         v-model="tableData.PCD"
         :options="options"
-        style="width: 100%"
         placeholder="地区"
+        style="width: 100%"
     ></el-cascader>
     <div class="space1">联系电话</div>
     <el-input v-model="tableData.telephone" placeholder="电话" type="text"/>
@@ -32,11 +32,11 @@
 <script>
 
 export default {
-  props:['type'],
+  props: ['type'],
   emits: ['confirm'],
   data() {
     return {
-      user:{},
+      user: {},
       dialogVisible: "",
       handleClose: "",
       tableData:
@@ -94,15 +94,15 @@ export default {
   },
   created() {
     this.dialogVisible = false
-    if(this.type==='mine'){
-      this.$axios.get("https://mc.rainspace.cn:4443/get-user").then(res=>{
-        this.tableData.receiverName=res.data.user.username
+    if (this.type === 'mine') {
+      this.$axios.get("/get-user").then(res => {
+        this.tableData.receiverName = res.data.user.username
       })
     }
   },
   methods: {
     addContact: function () {
-      if(!this.tableData.province||!this.tableData.city||!this.tableData.district||!this.tableData.address||!this.tableData.telephone){
+      if (!this.tableData.PCD[0] || !this.tableData.PCD[1] || !this.tableData.PCD[2] || !this.tableData.address || !this.tableData.telephone) {
         this.$message.error('信息不可为空！')
         return
       }
@@ -110,7 +110,7 @@ export default {
       this.tableData.city = this.tableData.PCD[1]
       this.tableData.district = this.tableData.PCD[2]
       if (this.tableData.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData).then(res => {
+        this.$axios.post('/add-contact', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           } else {
@@ -118,7 +118,7 @@ export default {
           }
         })
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact', this.tableData).then(res => {
+        this.$axios.post('/edit-contact', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           } else {

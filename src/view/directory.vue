@@ -10,16 +10,16 @@
         </div>
       </el-header>
       <el-main>
-        <el-table :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                  height="100%" id="table1">
+        <el-table id="table1"
+                  :data="contacts.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%">
           <el-table-column label="姓名" prop="receiverName" sortable width="190"/>
           <el-table-column label="省份/城市/地区" prop="PCD" sortable width="300"/>
           <el-table-column label="电话" prop="telephone" sortable width="250"/>
           <el-table-column label="地址" prop="address" sortable/>
           <el-table-column prop="operations">
             <template #header>
-              <el-button @click="add" class="addPeople" size="medium" round>
-                <el-icon size="17" class="addPeople1">
+              <el-button class="addPeople" round size="medium" @click="add">
+                <el-icon class="addPeople1" size="17">
                   <circle-plus/>
                 </el-icon>
                 <span class="addPeople1">添加联系人</span>
@@ -41,7 +41,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <dia type='others' ref="c" @confirm="confirm"></dia>
+        <dia ref="c" type='others' @confirm="confirm"></dia>
       </el-main>
     </el-container>
     <el-footer>
@@ -55,8 +55,8 @@
             {{ typer.value }}
           </el-option>
         </el-select>
-        <el-pagination :current-page="currentPage" style="float: left" @current-change="currentChange"
-                       background layout="prev, pager, next, jumper" :total="contacts.length" :page-size="pageSize">
+        <el-pagination :current-page="currentPage" :page-size="pageSize" :total="contacts.length"
+                       background layout="prev, pager, next, jumper" style="float: left" @current-change="currentChange">
         </el-pagination>
       </div>
     </el-footer>
@@ -116,12 +116,12 @@ export default {
       this.currentPage = index
     },
     getContacts() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
+      this.$axios.get('/get-contacts?type=others').then(res => {
         if (res.data.status < 10) {
           const currentPage = this.currentPage
           this.allContacts.length = 0
           for (const contact of res.data.contacts) {
-            contact.visible=false
+            contact.visible = false
             contact.PCD = contact.province + contact.city + contact.district
             this.allContacts.push(contact)
           }
@@ -132,7 +132,7 @@ export default {
         }
       })
     },
-    filter(){
+    filter() {
       this.contacts = this.allContacts.filter(
           (data) =>
               !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
@@ -165,7 +165,7 @@ export default {
       this.search = null;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id})
+      this.$axios.post('/delete-contact', {id: row.id})
       setTimeout(() => {
         this.allContacts.length = 0
         this.getContacts()

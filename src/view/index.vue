@@ -8,8 +8,8 @@
         </el-icon>
       </a>
       <div :style="{display: showCard?'inline':'none'}">
-        <el-card shadow="always" style="margin-left: 58em;"
-                 :body-style="{ padding: '0' }">
+        <el-card :body-style="{ padding: '0' }" shadow="always"
+                 style="margin-left: 58em;">
           <template #header>
             <a style="float: right" @click.stop="showCard=false">
               <el-icon>
@@ -22,7 +22,7 @@
             </div>
             <el-tag type="success">{{ user.groupId == 1 ? '管理员' : '普通用户' }}</el-tag>
           </template>
-          <el-menu router :default-active="this.$route.path">
+          <el-menu :default-active="this.$route.path" router>
             <el-menu-item v-if="this.user.groupId===1" index="/admin" route="/admin">
               <template #title>
                 <el-icon style="color: #FFB500">
@@ -44,8 +44,8 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
-        <el-menu router :default-active="this.$route.path">
+      <el-aside style="background-color: rgb(238, 241, 246)" width="15%">
+        <el-menu :default-active="this.$route.path" router>
           <el-menu-item index="/home" route="/home">
             <template #title>
               <el-icon>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import {HomeFilled, Menu, Message, Setting, User, SwitchButton, Close} from '@element-plus/icons'
+import {Close, HomeFilled, Menu, Message, Setting, SwitchButton, User} from '@element-plus/icons'
 
 export default {
   data() {
@@ -95,7 +95,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
+    this.$axios.get('/get-user').then(res => {
       if (res.data.status < 10) {
         this.user = res.data.user
       } else {

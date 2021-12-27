@@ -7,14 +7,14 @@
           总计
         </span>
       </template>
-           <el-menu >
+           <el-menu>
             <el-menu-item style="margin-top: 1.5em">
               <template #title>
                 <el-icon style="color: #FFB500;font-size: 20px">
                   <User/>
                 </el-icon>&nbsp;
                 <span>用户总数:</span>
-                <span style="margin-left: 60%">{{userNumber}}</span>
+                <span style="margin-left: 60%">{{ userNumber }}</span>
               </template>
             </el-menu-item>
             <el-menu-item style="margin-top: 0.7em">
@@ -23,7 +23,7 @@
                   <Document/>
                 </el-icon>&nbsp;
                 <span>订单总数:</span>
-                <span style="margin-left: 60%">{{orderNumber}}</span>
+                <span style="margin-left: 60%">{{ orderNumber }}</span>
               </template>
             </el-menu-item>
              <el-menu-item style="margin-top: 0.7em">
@@ -31,16 +31,16 @@
                 <el-icon style="color: #03A9F4;font-size: 20px">
                   <UserFilled/>
                 </el-icon>&nbsp;
-                <span >今日新增用户:</span>
+                <span>今日新增用户:</span>
                 <span style="margin-left: 49%">{{ userIncrease[6] }}</span>
               </template>
             </el-menu-item>
              <el-menu-item style="margin-top: 0.7em;margin-bottom: 1.8em">
               <template #title>
                 <el-icon style="color: #00BF96;font-size: 20px">
-                  <DocumentAdd />
+                  <DocumentAdd/>
                 </el-icon>&nbsp;
-                <span >今日新增订单:</span>
+                <span>今日新增订单:</span>
                 <span style="margin-left: 49%">{{ orderIncrease[6] }}</span>
               </template>
             </el-menu-item>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {Document,User,UserFilled,DocumentAdd} from "@element-plus/icons";
+import {Document, DocumentAdd, User, UserFilled} from "@element-plus/icons";
 
 export default {
   components: {
@@ -59,21 +59,21 @@ export default {
     UserFilled,
     DocumentAdd
   },
-  data(){
-    return{
-      userNumber:0,
-      orderNumber:0,
-      userIncrease:[],
-      orderIncrease:[],
+  data() {
+    return {
+      userNumber: 0,
+      orderNumber: 0,
+      userIncrease: [],
+      orderIncrease: [],
     }
   },
   mounted() {
     document.title = "站点统计"
-    this.$axios.get("https://mc.rainspace.cn:4443/admin/count").then(res => {
-      this.orderNumber=res.data.orderNumber
-      this.orderIncrease=res.data.orderIncrease
-      this.userNumber=res.data.userNumber
-      this.userIncrease=res.data.userIncrease
+    this.$axios.get("/admin/count").then(res => {
+      this.orderNumber = res.data.orderNumber
+      this.orderIncrease = res.data.orderIncrease
+      this.userNumber = res.data.userNumber
+      this.userIncrease = res.data.userIncrease
       const chart = this.$echarts.init(document.getElementById("main"))
       const option = {
         title: {
@@ -124,7 +124,7 @@ export default {
 </script>
 
 <style scoped>
-.picture{
+.picture {
   height: 70%;
   width: 60%;
   margin-top: 1%;
@@ -133,7 +133,8 @@ export default {
   border: #E5E5E5 2px solid;
   border-radius: 15px;
 }
-#number{
+
+#number {
   margin-top: 1%;
   width: 23%;
   z-index: -1;

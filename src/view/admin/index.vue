@@ -3,11 +3,11 @@
     <el-header id="head">
       <span class="title">物流管理系统仪表盘</span>
       <el-popover
-          width="35%"
-
           placement="bottom"
+
           style="height: 100px"
           trigger="click"
+          width="35%"
       >
         <template #reference>
           <el-icon id="home-icon">
@@ -43,8 +43,8 @@
       </el-popover>
     </el-header>
     <el-container>
-      <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
-        <el-menu router :default-active="this.$route.path.substr(7)">
+      <el-aside style="background-color: rgb(238, 241, 246)" width="15%">
+        <el-menu :default-active="this.$route.path.substr(7)" router>
           <el-menu-item index="home" route="./home">
             <template #title>
               <el-icon>
@@ -103,10 +103,10 @@ export default {
     }
   },
   created() {
-    this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {
+    this.$axios.get('/get-user').then(res => {
       if (res.data.status < 10) {
         this.user = res.data.user
-        if(this.user.groupId!==1){
+        if (this.user.groupId !== 1) {
           this.$router.replace('/login')
           this.$message.error('不具有管理员权限')
         }

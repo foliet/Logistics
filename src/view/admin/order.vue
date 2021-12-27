@@ -3,15 +3,16 @@
     <el-container>
       <el-main>
         <div style="height: 96%">
-          <el-table :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                    height="94%" style="width: 100%;" id="table1">
-            <el-table-column sortable label="Id" prop="id"/>
-            <el-table-column sortable label="寄件人名字" prop="senderName"/>
-            <el-table-column sortable label="取件人名字" prop="receiverName"/>
-            <el-table-column sortable label="状态" prop="statusName"/>
+          <el-table id="table1"
+                    :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="94%" style="width: 100%;">
+            <el-table-column label="Id" prop="id" sortable/>
+            <el-table-column label="寄件人名字" prop="senderName" sortable/>
+            <el-table-column label="取件人名字" prop="receiverName" sortable/>
+            <el-table-column label="状态" prop="statusName" sortable/>
             <el-table-column label="操作">
               <template #default="scope">
-                <el-button :disabled="scope.row.status!==0" @click="showTable=true;selectedOrder=scope.row">处理订单</el-button>
+                <el-button :disabled="scope.row.status!==0" @click="showTable=true;selectedOrder=scope.row">处理订单
+                </el-button>
               </template>
             </el-table-column>
             <el-table-column>
@@ -19,7 +20,8 @@
                 <el-input v-model="search" placeholder="Type to search" size="mini"/>
               </template>
               <template #default="scope">
-                <el-button :disabled="scope.row.status!==0&&scope.row.status!==3" @click="scope.row.visible = true">删除</el-button>
+                <el-button :disabled="scope.row.status!==0&&scope.row.status!==3" @click="scope.row.visible = true">删除
+                </el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
       <span class="dialog-footer">
@@ -68,8 +70,8 @@
           </el-drawer>
         </div>
         <div style="text-align: center">
-          <el-pagination :current-page="currentPage" style="float: left" @current-change="currentChange"
-                         background layout="prev, pager, next, jumper" :total="orders.length" :page-size="pageSize">
+          <el-pagination :current-page="currentPage" :page-size="pageSize" :total="orders.length"
+                         background layout="prev, pager, next, jumper" style="float: left" @current-change="currentChange">
           </el-pagination>
           <a>选择每页展示数：</a>
           <el-select v-model="pageSize" size="mini" style="width: 10%;">
@@ -133,11 +135,11 @@ export default {
       this.currentPage = index
     },
     getOrders() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-orders').then(res => {
+      this.$axios.get('/admin/get-orders').then(res => {
         const currentPage = this.currentPage
         this.allOrders.length = 0
         for (const order of res.data.orders) {
-          order.visible=false
+          order.visible = false
           if (order.status === 0) {
             order.statusName = '待出仓'
           } else if (order.status === 1) {
@@ -149,21 +151,21 @@ export default {
           }
           this.allOrders.push(order)
         }
-        this.allOrders.sort((a,b)=>{
-          return b.id-a.id
+        this.allOrders.sort((a, b) => {
+          return b.id - a.id
         })
         this.filter()
         this.currentPage = currentPage
       })
     },
     getChunks() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
+      this.$axios.get('/admin/get-chunks').then(res => {
         this.chunks.length = 0
         this.chunks = res.data.chunks.filter(chunk => chunk.status === 0)
       })
     },
     getStaffs() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
+      this.$axios.get('/admin/get-staffs').then(res => {
         this.staffs.length = 0
         this.staffs = res.data.staffs.filter(staff => staff.status === 0)
       })
@@ -177,7 +179,7 @@ export default {
       )
     },
     matching(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/match', {
+      this.$axios.post('/admin/match', {
         orderId: row.id,
         chunkId: row.chunk,
         staffId: row.staff
@@ -186,7 +188,7 @@ export default {
         this.getChunks()
         this.getStaffs()
         setTimeout(() => {
-          this.$axios.post("https://mc.rainspace.cn:4443/admin/arrival", {orderId: row.id}).then(() => {
+          this.$axios.post("/admin/arrival", {orderId: row.id}).then(() => {
             this.getOrders()
             this.getChunks()
             this.getStaffs()
@@ -195,7 +197,7 @@ export default {
       })
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(() => {
+      this.$axios.post('/admin/delete-order', {orderId: row.id}).then(() => {
         this.getOrders()
         this.getChunks()
         this.getStaffs()

@@ -10,11 +10,11 @@
         </div>
         <br/>
         <div style="height: 79%">
-          <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" id="table1" height="100%">
-            <el-table-column sortable label="Id" prop="id"/>
-            <el-table-column sortable label="姓名" prop="name"/>
-            <el-table-column sortable label="性别" prop="gender"/>
-            <el-table-column sortable label="状态" prop="statusName"/>
+          <el-table id="table1" :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%">
+            <el-table-column label="Id" prop="id" sortable/>
+            <el-table-column label="姓名" prop="name" sortable/>
+            <el-table-column label="性别" prop="gender" sortable/>
+            <el-table-column label="状态" prop="statusName" sortable/>
             <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
@@ -167,7 +167,7 @@ export default {
       this.currentPage = index
     },
     getStaffs() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-staffs').then(res => {
+      this.$axios.get('/admin/get-staffs').then(res => {
         const currentPage = this.currentPage
         this.allStaffs.length = 0
         for (const staff of res.data.staffs) {
@@ -197,17 +197,17 @@ export default {
       }
     },
     addStaff() {
-      if(!this.staff.gender||!this.staff.name){
+      if (!this.staff.gender || !this.staff.name) {
         this.$message.error('信息不可为空！')
         return
       }
       if (this.staff.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
+        this.$axios.post('/admin/add-staff', this.staff).then(() => {
           this.getStaffs()
         })
 
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
+        this.$axios.post('/admin/edit-staff', this.staff).then(() => {
           this.getStaffs()
         })
       }
@@ -221,7 +221,7 @@ export default {
       this.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id}).then(() => {
+      this.$axios.post('/admin/delete-staff', {id: row.id}).then(() => {
         this.getStaffs()
       })
     }

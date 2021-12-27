@@ -10,12 +10,12 @@
         </div>
         <br/>
         <div style="height: 79%">
-          <el-table :data="users.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                    height="100%" id="table1">
-            <el-table-column sortable prop="id" label="Id"/>
-            <el-table-column sortable prop="username" label="用户名"/>
-            <el-table-column sortable prop="email" label="Email"/>
-            <el-table-column sortable prop="groupName" label="用户组"/>
+          <el-table id="table1"
+                    :data="users.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%">
+            <el-table-column label="Id" prop="id" sortable/>
+            <el-table-column label="用户名" prop="username" sortable/>
+            <el-table-column label="Email" prop="email" sortable/>
+            <el-table-column label="用户组" prop="groupName" sortable/>
             <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="addUser">
@@ -113,11 +113,11 @@ export default {
       this.currentPage = index
     },
     getUsers() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-users').then(res => {
+      this.$axios.get('/admin/get-users').then(res => {
         const currentPage = this.currentPage
         this.allUsers.length = 0
         for (const user of res.data.users) {
-          user.visible=false
+          user.visible = false
           if (user.groupId === 0) {
             user.groupName = '用户'
           } else {
@@ -150,7 +150,7 @@ export default {
       this.$refs.d.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-user', {id: row.id}).then(() => {
+      this.$axios.post('/admin/delete-user', {id: row.id}).then(() => {
         this.getUsers()
       })
     }

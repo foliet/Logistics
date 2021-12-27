@@ -72,7 +72,7 @@
       </el-button>
     </div>
     <div class="space1">货物名称</div>
-    <el-input type="text" placeholder="货物名称" v-model="orderData.title" clearable/>
+    <el-input v-model="orderData.title" clearable placeholder="货物名称" type="text"/>
     <div class="space1">货物介绍</div>
     <el-input v-model="orderData.remark" :autosize="{minRows:4,maxRows:7}" clearable placeholder="货物介绍"
               type="textarea"/>
@@ -98,8 +98,8 @@
       </span>
     </template>
   </el-dialog>
-  <dia type="others" ref="d" @confirm="getOptions"></dia>
-  <dia type="mine" ref="g" @confirm="getOptions"></dia>
+  <dia ref="d" type="others" @confirm="getOptions"></dia>
+  <dia ref="g" type="mine" @confirm="getOptions"></dia>
 </template>
 
 <script>
@@ -137,7 +137,7 @@ export default {
   methods: {
     addOrder: function () {
       if (this.orderData.senderContactId != null && this.orderData.receiverContactId != null && this.orderData.title != null && this.orderData.title.length > 0 && Number(this.orderData.weight) > 0 && Number(this.orderData.volume) > 0 && Number(this.orderData.value > 0)) {
-        this.$axios.post('https://mc.rainspace.cn:4443/add-order', this.orderData).then(() => {
+        this.$axios.post('/add-order', this.orderData).then(() => {
           this.$emit("confirm")
         })
         this.dialogVisible = false;
@@ -151,10 +151,10 @@ export default {
       }
     },
     getOptions() {
-      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
+      this.$axios.get('/get-contacts?type=mine').then(res => {
         this.contacts = res.data.contacts;
       })
-      this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=others').then(res => {
+      this.$axios.get('/get-contacts?type=others').then(res => {
         this.contacts1 = res.data.contacts;
       })
     },

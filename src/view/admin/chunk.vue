@@ -10,11 +10,11 @@
         </div>
         <br/>
         <div style="height: 79%">
-          <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
-            <el-table-column sortable prop="id" label="Id"/>
-            <el-table-column sortable prop="number" label="车牌号"/>
-            <el-table-column sortable prop="model" label="型号"/>
-            <el-table-column sortable prop="statusName" label="状态"/>
+          <el-table id="table1" :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%">
+            <el-table-column label="Id" prop="id" sortable/>
+            <el-table-column label="车牌号" prop="number" sortable/>
+            <el-table-column label="型号" prop="model" sortable/>
+            <el-table-column label="状态" prop="statusName" sortable/>
             <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
@@ -57,9 +57,9 @@
       </div>
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="addChunk()"
-        >Confirm</el-button>
+        >确定</el-button>
       </span>
       </template>
     </el-dialog>
@@ -144,7 +144,7 @@ export default {
       else return 'able'
     },
     getChunks() {
-      this.$axios.get('https://mc.rainspace.cn:4443/admin/get-chunks').then(res => {
+      this.$axios.get('/admin/get-chunks').then(res => {
         const currentPage = this.currentPage
         this.allChunks.length = 0
         for (const chunk of res.data.chunks) {
@@ -160,7 +160,7 @@ export default {
         this.currentPage = currentPage
       })
     },
-    filter(){
+    filter() {
       this.chunks.length = 0;
       this.chunks = this.allChunks.filter(
           (data) =>
@@ -174,17 +174,17 @@ export default {
       }
     },
     addChunk: function () {
-      if(!this.chunk.model||!this.chunk.number){
+      if (!this.chunk.model || !this.chunk.number) {
         this.$message.error('信息不可为空！')
         return
       }
       if (this.chunk.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
+        this.$axios.post('/admin/add-chunk', this.chunk).then(() => {
           this.getChunks()
         })
 
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
+        this.$axios.post('/admin/edit-chunk', this.chunk).then(() => {
           this.getChunks()
         })
       }
@@ -198,7 +198,7 @@ export default {
       this.dialogVisible = true;
     },
     deleted(row) {
-      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(() => {
+      this.$axios.post('/admin/delete-chunk', {id: row.id}).then(() => {
         this.getChunks()
       })
     }

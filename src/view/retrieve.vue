@@ -4,23 +4,23 @@
       <span class="title">RainSpace 物流</span>
     </el-header>
     <el-main style="margin: 0 25em 0 25em">
-      <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="demo-ruleForm" label-width="100px">
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" type="e-mail"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="password" :rules="rules.password">
+        <el-form-item :rules="rules.password" label="新密码" prop="password">
           <el-input v-model="ruleForm.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="password1" :rules="rules.password">
+        <el-form-item :rules="rules.password" label="确认密码" prop="password1">
           <el-input v-model="ruleForm.password1" type="password"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="verifyCode">
           <el-input v-model="ruleForm.verifyCode" style="width: 50%"></el-input>
-          <el-button style="margin-left: 1em" @click="verify" type="warning" plain>发送验证码</el-button>
+          <el-button plain style="margin-left: 1em" type="warning" @click="verify">发送验证码</el-button>
         </el-form-item>
         <el-form-item style="text-align: center">
-          <el-button type="success" @click="submitForm" plain>提交</el-button>
-          <el-button @click="resetForm('ruleForm')" type="danger" plain>重置</el-button>
+          <el-button plain type="success" @click="submitForm">提交</el-button>
+          <el-button plain type="danger" @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -62,7 +62,7 @@ export default {
         this.$message.error('请先输入邮箱')
         return
       }
-      this.$axios.get('https://mc.rainspace.cn:4443/check-email', {
+      this.$axios.get('/check-email', {
         params: {
           email: this.ruleForm.email
         }
@@ -77,7 +77,7 @@ export default {
         this.$message.error('两次输入密码不一致!');
         return;
       }
-      this.$axios.post("https://mc.rainspace.cn:4443/retrieve", {password: this.password, verifyCode: this.verifyCode})
+      this.$axios.post("/retrieve", {password: this.password, verifyCode: this.verifyCode})
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

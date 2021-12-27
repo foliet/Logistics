@@ -1,31 +1,31 @@
 <template>
   <div class="page-body">
-    <div class="container" id="login-box">
+    <div id="login-box" class="container">
       <div class="form-container sign-up-container">
         <form @submit.prevent="register">
           <h1>注册</h1>
           <div class="txtb">
-            <input type="text" v-model="registerData.username" id="label1">
-            <label for="label1" data-placeholder="Username"></label>
+            <input id="label1" v-model="registerData.username" type="text">
+            <label data-placeholder="Username" for="label1"></label>
           </div>
           <div class="txtb">
-            <input type="email" v-model="registerData.email" id="label2">
-            <label for="label2" data-placeholder="Email"></label>
+            <input id="label2" v-model="registerData.email" type="email">
+            <label data-placeholder="Email" for="label2"></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="registerData.password" id="label3">
-            <label for="label3" data-placeholder="Password"></label>
+            <input id="label3" v-model="registerData.password" type="password">
+            <label data-placeholder="Password" for="label3"></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="registerData.password1" id="label4">
-            <label for="label4" data-placeholder="Confirm Password"></label>
+            <input id="label4" v-model="registerData.password1" type="password">
+            <label data-placeholder="Confirm Password" for="label4"></label>
           </div>
           <div>
             <div class="txtb" style="width:45%;display: inline-block">
-              <input type="text" v-model="registerData.verifyCode" id="label5"/>
-              <label for="label5" data-placeholder="验证码"></label>
+              <input id="label5" v-model="registerData.verifyCode" type="text"/>
+              <label data-placeholder="验证码" for="label5"></label>
             </div>
-            <button type="button" style="margin:0 auto" @click="checkEmail()">发送验证码</button>
+            <button style="margin:0 auto" type="button" @click="checkEmail()">发送验证码</button>
           </div>
           <button>注册</button>
         </form>
@@ -34,12 +34,12 @@
         <form @submit.prevent="login">
           <h1>登录</h1>
           <div class="txtb">
-            <input type="email" v-model="loginData.email" id="label6">
-            <label for="label6" data-placeholder="Email"></label>
+            <input id="label6" v-model="loginData.email" type="email">
+            <label data-placeholder="Email" for="label6"></label>
           </div>
           <div class="txtb">
-            <input type="password" v-model="loginData.password" id="label7">
-            <label for="label7" data-placeholder="Password"></label>
+            <input id="label7" v-model="loginData.password" type="password">
+            <label data-placeholder="Password" for="label7"></label>
           </div>
           <router-link to="/retrieve">忘记密码？</router-link>
           <button>登录</button>
@@ -51,12 +51,12 @@
           <div class="overlay-panel overlay-left">
             <h1>已有账号？</h1>
             <p>请使用您的账号进行登录</p>
-            <button class="ghost" id="signIn">登录</button>
+            <button id="signIn" class="ghost">登录</button>
           </div>
           <div class="overlay-panel overlay-right">
             <h1>没有账号?</h1>
             <p>立即注册加入我们，和我们一起开始旅程吧</p>
-            <button class="ghost" id="signUp">注册</button>
+            <button id="signUp" class="ghost">注册</button>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@ export default {
         this.$message.error('请先输入邮箱')
         return
       }
-      this.$axios.get('https://mc.rainspace.cn:4443/check-email', {
+      this.$axios.get('/check-email', {
         params: {
           email: this.registerData.email
         }
@@ -130,9 +130,9 @@ export default {
     },
 
     login: function () {
-      this.$axios.post('https://mc.rainspace.cn:4443/login', this.loginData).then(res => {
+      this.$axios.post('/login', this.loginData).then(res => {
         if (res.data.status === 0) {
-          window.location = '/home'
+          this.$router.push('/home')
         } else {
           this.$message.error(res.data.msg)
         }
@@ -144,9 +144,9 @@ export default {
         this.$message.error('两次密码不一致')
         return
       }
-      this.$axios.post('https://mc.rainspace.cn:4443/register', this.registerData).then(res => {
+      this.$axios.post('/register', this.registerData).then(res => {
         if (res.data.status === 0) {
-          window.location = '/home'
+          this.$router.push('/home')
         } else {
           this.$message.error(res.data.msg)
         }

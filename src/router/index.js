@@ -4,7 +4,7 @@ import admin from './admin'
 
 const logout = {
     created() {
-        this.$axios.get("https://mc.rainspace.cn:4443/logout")
+        this.$axios.get("/logout")
         this.$router.replace('/login')
     }
 }

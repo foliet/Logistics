@@ -71,14 +71,22 @@ export default {
       if (this.tableData.username != 0 && this.tableData.username != null
           && this.tableData.password != 0 && this.tableData.password != null
           && this.tableData.email != 0 && this.tableData.email != null
-          && this.tableData.groupId != 0 && this.tableData.groupId != null) {
+          && this.tableData.groupId != null) {
         if (this.tableData.id == null) {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData).then(() => {
-            this.$emit('confirm')
+          this.$axios.post('/admin/add-user', this.tableData).then(res => {
+            if (res.data.status < 10) {
+              this.$emit('confirm')
+            } else {
+              this.$message.error(res.data.msg)
+            }
           })
         } else {
-          this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-user', this.tableData).then(() => {
-            this.$emit('confirm')
+          this.$axios.post('/admin/edit-user', this.tableData).then(res => {
+            if (res.data.status < 10) {
+              this.$emit('confirm')
+            } else {
+              this.$message.error(res.data.msg)
+            }
           })
         }
         this.dialogVisible = false;
