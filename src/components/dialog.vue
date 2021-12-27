@@ -57,7 +57,7 @@
               trigger="hover"
           >
             <div>电话：{{ contact.telephone }}</div>
-            <div>省市区：{{ contact.PCD }}</div>
+            <div>省市区：{{ contact.province }},{{ contact.city }},{{ contact.district }}</div>
             <div>地址：{{ contact.address }}</div>
             <template #reference>
               <span style="float: right">...</span>
@@ -82,7 +82,7 @@
     <div>
       <el-input class="space2" type="tel" placeholder="体积" min="0" v-model="orderData.volume"
                 oninput="value=value.replace(/[^\d]/g,'')">
-        <template #append>m³</template>
+        <template #append>cm³</template>
       </el-input>
       <el-input class="space2" type="tel" placeholder="重量" min="0" v-model="orderData.weight"
                 oninput="value=value.replace(/[^\d]/g,'')">
@@ -96,27 +96,24 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button @click="reset()">重置</el-button>
         <el-button type="primary" @click="addOrder()"
         >确认</el-button>
       </span>
     </template>
   </el-dialog>
-  <dia ref="d"></dia>
-  <dia2 ref="g"></dia2>
+  <dia type="others" ref="d" @confirm="getOptions"></dia>
+  <dia type="mine" ref="g" @confirm="getOptions"></dia>
 </template>
 
 <script>
 import {Plus} from '@element-plus/icons'
 import dia from '../components/dia'
-import dia2 from '../components/dia2'
 
 export default {
   emits: ['confirm'],
   components: {
     Plus,
     dia,
-    dia2
   },
   data() {
     return {

@@ -41,7 +41,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <dia ref="c" @confirm="confirm"></dia>
+        <dia type='others' ref="c" @confirm="confirm"></dia>
       </el-main>
     </el-container>
     <el-footer>

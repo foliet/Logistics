@@ -14,7 +14,7 @@
                   <User/>
                 </el-icon>&nbsp;
                 <span>用户总数:</span>
-                <span style="margin-left: 60%">1人</span>
+                <span style="margin-left: 60%">{{userNumber}}</span>
               </template>
             </el-menu-item>
             <el-menu-item style="margin-top: 0.7em">
@@ -22,8 +22,8 @@
                 <el-icon style="color: #FF3D00;font-size: 20px">
                   <Document/>
                 </el-icon>&nbsp;
-                <span >订单总数:</span>
-                <span style="margin-left: 60%">1个</span>
+                <span>订单总数:</span>
+                <span style="margin-left: 60%">{{orderNumber}}</span>
               </template>
             </el-menu-item>
              <el-menu-item style="margin-top: 0.7em">
@@ -32,7 +32,7 @@
                   <UserFilled/>
                 </el-icon>&nbsp;
                 <span >今日新增用户:</span>
-                <span style="margin-left: 49%">1人</span>
+                <span style="margin-left: 49%">{{ userIncrease[6] }}</span>
               </template>
             </el-menu-item>
              <el-menu-item style="margin-top: 0.7em;margin-bottom: 1.8em">
@@ -41,7 +41,7 @@
                   <DocumentAdd />
                 </el-icon>&nbsp;
                 <span >今日新增订单:</span>
-                <span style="margin-left: 49%">1个</span>
+                <span style="margin-left: 49%">{{ orderIncrease[6] }}</span>
               </template>
             </el-menu-item>
           </el-menu>
@@ -59,9 +59,21 @@ export default {
     UserFilled,
     DocumentAdd
   },
+  data(){
+    return{
+      userNumber:0,
+      orderNumber:0,
+      userIncrease:[],
+      orderIncrease:[],
+    }
+  },
   mounted() {
     document.title = "站点统计"
     this.$axios.get("https://mc.rainspace.cn:4443/admin/count").then(res => {
+      this.orderNumber=res.data.orderNumber
+      this.orderIncrease=res.data.orderIncrease
+      this.userNumber=res.data.userNumber
+      this.userIncrease=res.data.userIncrease
       const chart = this.$echarts.init(document.getElementById("main"))
       const option = {
         title: {

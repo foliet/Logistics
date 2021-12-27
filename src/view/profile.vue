@@ -56,7 +56,7 @@
     </el-footer>
   </el-container>
 
-  <dia2 ref="f" @confirm="confirm"></dia2>
+  <dia type="mine" ref="f" @confirm="getInfo"></dia>
   <el-dialog v-model="visible2" title="修改密码">
     <div class="space1">旧密码：</div>
     <el-input v-model="oldpsd" :type="pwdtype"></el-input>
@@ -81,13 +81,13 @@
 </template>
 
 <script>
-import dia2 from '/src/components/dia2'
+import dia from '/src/components/dia'
 import {CirclePlus, View} from '@element-plus/icons'
 
 export default {
   components: {
     CirclePlus,
-    dia2,
+    dia,
     View,
   },
   data() {
@@ -120,13 +120,7 @@ export default {
   },
   watch: {
     search() {
-      this.contacts = this.allContacts.filter(
-          (data) =>
-              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
-              || data.address.toLowerCase().includes(this.search.toLowerCase())
-              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
-              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
-      )
+      this.filter()
     }
   },
   methods: {
@@ -139,23 +133,25 @@ export default {
       });
       this.$axios.get('https://mc.rainspace.cn:4443/get-contacts?type=mine').then(res => {
         if (res.data.status < 10) {
+          this.allContacts.length=0
+          const currentPage = this.currentPage
           for (const contact of res.data.contacts) {
             contact.PCD = contact.province + contact.city + contact.district
             this.allContacts.push(contact)
           }
-          this.search = null
-          this.search = ''
-        } else {
-          this.$message.error(res.data.msg)
+          this.filter()
+          this.currentPage=currentPage
         }
       })
     },
-    confirm() {
-      setTimeout(() => {
-        this.allContacts.length = 0
-        this.getInfo()
-      }, 500)
-      this.search = null;
+    filter(){
+      this.contacts = this.allContacts.filter(
+          (data) =>
+              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
+              || data.address.toLowerCase().includes(this.search.toLowerCase())
+              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     changeType() {
       this.pwdtype = (this.pwdtype === 'password' ? 'text' : 'password');
@@ -195,14 +191,8 @@ export default {
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/delete-contact', {id: row.id}).then(() => {
-        this.allContacts.length = 0
         this.getInfo()
       })
-      /*setTimeout(() => {
-        this.allContacts.length = 0
-        this.getContacts()
-      }, 500)*/
-      this.search = null;
     },
     add() {
       this.$refs.f.reset();

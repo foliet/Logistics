@@ -4,7 +4,7 @@
              top="5vh" width="40%">
     <div class="space1">收件人用户名</div>
     <div>
-      <el-input v-model="tableData.receiverName" clearable placeholder="姓名" type="text"/>
+      <el-input :disabled="type==='mine'" v-model="tableData.receiverName" clearable placeholder="姓名" type="text"/>
     </div>
     <div class="space1">省/市/区</div>
     <el-cascader
@@ -32,9 +32,11 @@
 <script>
 
 export default {
+  props:['type'],
   emits: ['confirm'],
   data() {
     return {
+      user:{},
       dialogVisible: "",
       handleClose: "",
       tableData:
@@ -92,6 +94,11 @@ export default {
   },
   created() {
     this.dialogVisible = false
+    if(this.type==='mine'){
+      this.$axios.get("https://mc.rainspace.cn:4443/get-user").then(res=>{
+        this.tableData.receiverName=res.data.user.username
+      })
+    }
   },
   methods: {
     addContact: function () {
@@ -99,7 +106,7 @@ export default {
       this.tableData.city = this.tableData.PCD[1]
       this.tableData.district = this.tableData.PCD[2]
       if (this.tableData.id == null) {
-        this.$axios.post('https://mc.rainspace.cn:4443/add-contact?type=others', this.tableData).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/add-contact', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           } else {
@@ -107,7 +114,7 @@ export default {
           }
         })
       } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact?type=others', this.tableData).then(res => {
+        this.$axios.post('https://mc.rainspace.cn:4443/edit-contact', this.tableData).then(res => {
           if (res.data.status >= 10) {
             this.$message.error(res.data.msg)
           } else {
