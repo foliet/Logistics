@@ -5,13 +5,13 @@
         <div style="height: 96%">
           <el-table :data="orders.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                     height="94%" style="width: 100%;" id="table1">
-            <el-table-column label="Id" prop="id"/>
-            <el-table-column label="寄件人名字" prop="senderName"/>
-            <el-table-column label="取件人名字" prop="receiverName"/>
-            <el-table-column label="状态" prop="statusName"/>
+            <el-table-column sortable label="Id" prop="id"/>
+            <el-table-column sortable label="寄件人名字" prop="senderName"/>
+            <el-table-column sortable label="取件人名字" prop="receiverName"/>
+            <el-table-column sortable label="状态" prop="statusName"/>
             <el-table-column label="操作">
               <template #default="scope">
-                <el-button @click="showTable=true;selectedOrder=scope.row">处理订单</el-button>
+                <el-button :disabled="scope.row.status!==0" @click="showTable=true;selectedOrder=scope.row">处理订单</el-button>
               </template>
             </el-table-column>
             <el-table-column>
@@ -19,7 +19,7 @@
                 <el-input v-model="search" placeholder="Type to search" size="mini"/>
               </template>
               <template #default="scope">
-                <el-button @click="scope.row.visible = true">删除</el-button>
+                <el-button :disabled="scope.row.status!==0&&scope.row.status!==3" @click="scope.row.visible = true">删除</el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
       <span class="dialog-footer">
@@ -82,7 +82,7 @@ export default {
     return {
       search: null,
       currentPage: 1,
-      pageSize: 7,
+      pageSize: 9,
       orders: [],
       chunks: [],
       staffs: [],
@@ -113,6 +113,7 @@ export default {
         const currentPage = this.currentPage
         this.allOrders.length = 0
         for (const order of res.data.orders) {
+          order.visible=false
           if (order.status === 0) {
             order.statusName = '待出仓'
           } else if (order.status === 1) {
@@ -124,6 +125,9 @@ export default {
           }
           this.allOrders.push(order)
         }
+        this.allOrders.sort((a,b)=>{
+          return b.id-a.id
+        })
         this.filter()
         this.currentPage = currentPage
       })
@@ -167,15 +171,11 @@ export default {
       })
     },
     deleted(row) {
-      if (row.status === 0 || row.status === 2) {
-        this.$message.error("活动中的订单不可删除")
-      } else {
-        this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(() => {
-          this.getOrders()
-          this.getChunks()
-          this.getStaffs()
-        })
-      }
+      this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-order', {orderId: row.id}).then(() => {
+        this.getOrders()
+        this.getChunks()
+        this.getStaffs()
+      })
     }
   }
 }

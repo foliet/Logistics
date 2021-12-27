@@ -11,11 +11,11 @@
         <br/>
         <div style="height: 79%">
           <el-table :data="chunks.slice((currentPage-1)*pageSize,currentPage*pageSize)" height="100%" id="table1">
-            <el-table-column prop="id" label="Id"/>
-            <el-table-column prop="number" label="车牌号"/>
-            <el-table-column prop="model" label="型号"/>
-            <el-table-column prop="statusName" label="状态"/>
-            <el-table-column prop="operations">
+            <el-table-column sortable prop="id" label="Id"/>
+            <el-table-column sortable prop="number" label="车牌号"/>
+            <el-table-column sortable prop="model" label="型号"/>
+            <el-table-column sortable prop="statusName" label="状态"/>
+            <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
                   新增
@@ -26,7 +26,7 @@
                   修改
                 </el-button>
                 |
-                <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible = true">删除
+                <el-button round :disabled="scope.row.status!==0" style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible = true">删除
                 </el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
@@ -98,12 +98,7 @@ export default {
   },
   watch: {
     search() {
-      this.chunks.length = 0;
-      this.chunks = this.allChunks.filter(
-          (data) =>
-              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
-              || data.number.toLowerCase().includes(this.search.toLowerCase())
-      )
+      this.filter()
     }
   },
   created() {
@@ -122,6 +117,7 @@ export default {
         const currentPage = this.currentPage
         this.allChunks.length = 0
         for (const chunk of res.data.chunks) {
+          chunk.visible=false
           if (chunk.status === 0) {
             chunk.statusName = '空闲中'
           } else {
@@ -129,9 +125,17 @@ export default {
           }
           this.allChunks.push(chunk)
         }
+        this.filter()
         this.currentPage = currentPage
-        this.search = '';
       })
+    },
+    filter(){
+      this.chunks.length = 0;
+      this.chunks = this.allChunks.filter(
+          (data) =>
+              !this.search || data.model.toLowerCase().includes(this.search.toLowerCase())
+              || data.number.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     reset: function () {
       for (const key in this.chunk) {
@@ -141,21 +145,18 @@ export default {
     addChunk: function () {
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm');
-      this.search = null;
     },
     edit(row) {
+      this.chunk.status = row.status
       this.chunk.model = row.model;
       this.chunk.number = row.number;
       this.chunk.id = row.id;
@@ -163,10 +164,8 @@ export default {
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-chunk', {id: row.id}).then(() => {
-        this.allChunks.length = 0
         this.getChunks()
       })
-      this.search = null;
     }
   },
 }

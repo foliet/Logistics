@@ -136,6 +136,7 @@ export default {
           this.allContacts.length=0
           const currentPage = this.currentPage
           for (const contact of res.data.contacts) {
+            contact.visible=false
             contact.PCD = contact.province + contact.city + contact.district
             this.allContacts.push(contact)
           }

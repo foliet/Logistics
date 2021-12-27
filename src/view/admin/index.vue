@@ -20,7 +20,7 @@
           {{ user.email }}
         </div>
         <div class="space1"></div>
-        <el-tag type="success">{{ user.groupId == 1 ? '管理员' : '普通用户' }}</el-tag>
+        <el-tag type="success">{{ user.groupId === 1 ? '管理员' : '普通用户' }}</el-tag>
         <div class="space1" style="border-bottom: solid 1px #8c939d "></div>
         <el-menu :default-active="this.$route.path" router style="border-right: 0">
           <el-menu-item index="/home" route="../home">
@@ -41,39 +41,6 @@
           </el-menu-item>
         </el-menu>
       </el-popover>
-
-      <!--      <a>
-              <el-icon id="home-icon" @click="showcard"><HomeFilled/></el-icon>
-            </a>
-            <div id="card">
-              <el-card shadow="always" style="margin-left: 58em;z-index: 5"
-                       :body-style="{ padding: '0' }" >
-                <template #header >
-                  <a style="float: right" @click.stop="nocard">
-                    <el-icon><Close /></el-icon>
-                  </a>
-                  <span style="font-size: 1rem;font-weight: 500;line-height: 2;">{{ user.username }}</span>
-                  <div style="font-size: 0.8rem; color: rgba(0, 0, 0, 0.54);line-height: 1.5;">
-                    {{ user.email }}
-                  </div>
-                  <el-tag type="success">{{ user.groupId==1?'管理员':'普通用户' }}</el-tag>
-                </template>
-                <el-menu router :default-active="this.$route.path">
-                  <el-menu-item index="/home" route="../home">
-                    <template #title >
-                      <el-icon style="color: #03A9F4"><Document /></el-icon>&nbsp;
-                      <span >物流面板</span>
-                    </template>
-                  </el-menu-item>
-                  <el-menu-item index="/logout" route="/logout" >
-                    <template #title >
-                      <el-icon style="color: #FF3D00"><SwitchButton/></el-icon>&nbsp;
-                      <span >退出登录</span>
-                    </template>
-                  </el-menu-item>
-                </el-menu>
-              </el-card>
-            </div>-->
     </el-header>
     <el-container>
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
@@ -134,16 +101,6 @@ export default {
       onActive: [],
       user: {},
     }
-  },
-  methods: {
-    /*showcard: function () {
-      var a = document.getElementById("card");
-      a.style.display = "inline";
-    },
-    nocard: function () {
-      var a = document.getElementById("card");
-      a.style.display = "none";
-    }*/
   },
   created() {
     this.$axios.get('https://mc.rainspace.cn:4443/get-user').then(res => {

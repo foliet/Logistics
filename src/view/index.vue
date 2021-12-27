@@ -7,7 +7,7 @@
           <HomeFilled/>
         </el-icon>
       </a>
-      <div id="card" :style="{display: showCard?'inline':'none'}">
+      <div :style="{display: showCard?'inline':'none'}">
         <el-card shadow="always" style="margin-left: 58em;"
                  :body-style="{ padding: '0' }">
           <template #header>
@@ -143,7 +143,4 @@ a {
   z-index: 1;
 }
 
-#card {
-  display: none;
-}
 </style>

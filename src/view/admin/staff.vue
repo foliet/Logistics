@@ -11,11 +11,11 @@
         <br/>
         <div style="height: 79%">
           <el-table :data="staffs.slice((currentPage-1)*pageSize,currentPage*pageSize)" id="table1" height="100%">
-            <el-table-column label="Id" prop="id"/>
-            <el-table-column label="姓名" prop="name"/>
-            <el-table-column label="性别" prop="gender"/>
-            <el-table-column label="状态" prop="statusName"/>
-            <el-table-column prop="operations">
+            <el-table-column sortable label="Id" prop="id"/>
+            <el-table-column sortable label="姓名" prop="name"/>
+            <el-table-column sortable label="性别" prop="gender"/>
+            <el-table-column sortable label="状态" prop="statusName"/>
+            <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="reset();this.dialogVisible=true">
                   新增
@@ -26,7 +26,7 @@
                   修改
                 </el-button>
                 |
-                <el-button round style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible=true">删除
+                <el-button round :disabled="scope.row.status!==0" style="color: #FF3D00;border: 1px #FF3D00 solid" @click="scope.row.visible=true">删除
                 </el-button>
                 <el-dialog v-model="scope.row.visible">确定要删除吗？
                   <template #footer>
@@ -69,9 +69,9 @@
       </el-select>
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="addStaff()"
-        >Confirm</el-button>
+        >确定</el-button>
       </span>
       </template>
     </el-dialog>
@@ -105,7 +105,7 @@ export default {
         name: '',
         status: null,
       },
-      dialogVisible: '',
+      dialogVisible: false,
       types: [{
         value: '男',
         label: '男',
@@ -121,12 +121,7 @@ export default {
   },
   watch: {
     search() {
-      this.staffs.length = 0;
-      this.staffs = this.allStaffs.filter(
-          (data) =>
-              !this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
-              || data.gender.toLowerCase().includes(this.search.toLowerCase())
-      )
+      this.filter()
     }
   },
   created() {
@@ -145,6 +140,7 @@ export default {
         const currentPage = this.currentPage
         this.allStaffs.length = 0
         for (const staff of res.data.staffs) {
+          staff.visible=false
           if (staff.status === 0) {
             staff.statusName = '空闲中'
           } else {
@@ -152,11 +148,17 @@ export default {
           }
           this.allStaffs.push(staff)
         }
+        this.filter()
         this.currentPage = currentPage
-        this.search = null
-        this.search = ''
       })
-
+    },
+    filter() {
+      this.staffs.length = 0;
+      this.staffs = this.allStaffs.filter(
+          (data) =>
+              !this.search || data.name.toLowerCase().includes(this.search.toLowerCase())
+              || data.gender.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     reset() {
       for (const key in this.staff) {
@@ -166,21 +168,18 @@ export default {
     addStaff() {
       if (this.staff.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
-          this.allStaffs.length = 0
           this.getStaffs()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-staff', this.staff).then(() => {
-          this.allStaffs.length = 0
           this.getStaffs()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm');
-      this.search = null;
     },
     edit(row) {
+      this.staff.status = row.status
       this.staff.gender = row.gender;
       this.staff.name = row.name;
       this.staff.id = row.id;
@@ -188,10 +187,8 @@ export default {
     },
     deleted(row) {
       this.$axios.post('https://mc.rainspace.cn:4443/admin/delete-staff', {id: row.id}).then(() => {
-        this.allStaffs.length = 0
         this.getStaffs()
       })
-      this.search = null;
     }
   }
 }

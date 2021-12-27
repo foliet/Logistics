@@ -12,11 +12,11 @@
         <div style="height: 79%">
           <el-table :data="users.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                     height="100%" id="table1">
-            <el-table-column prop="id" label="Id"/>
-            <el-table-column prop="username" label="用户名"/>
-            <el-table-column prop="email" label="Email"/>
-            <el-table-column prop="groupName" label="用户组"/>
-            <el-table-column prop="operations">
+            <el-table-column sortable prop="id" label="Id"/>
+            <el-table-column sortable prop="username" label="用户名"/>
+            <el-table-column sortable prop="email" label="Email"/>
+            <el-table-column sortable prop="groupName" label="用户组"/>
+            <el-table-column>
               <template #header>
                 <el-button style="width: 50%;float: right;margin-right: 25%" @click="addUser">
                   新增
@@ -39,7 +39,6 @@
                   </template>
                 </el-dialog>
               </template>
-              <!-- console.log(scope.$index,scope.row)    -->
             </el-table-column>
           </el-table>
         </div>
@@ -95,6 +94,7 @@ export default {
         const currentPage = this.currentPage
         this.allUsers.length = 0
         for (const user of res.data.users) {
+          user.visible=false
           if (user.groupId === 0) {
             user.groupName = '用户'
           } else {
@@ -105,9 +105,6 @@ export default {
         this.filter()
         this.currentPage = currentPage
       })
-      this.users.filter(
-          (data) => !this.search || data.email.toLowerCase().includes(this.search.toLowerCase())
-              || data.telephone.toLowerCase().includes(this.search.toLowerCase()))
     },
     filter() {
       this.users.length = 0;

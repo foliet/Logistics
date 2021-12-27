@@ -16,7 +16,7 @@
       <div v-for="order in currentOrders" :key="order.id">
         <el-card shadow="hover" :body-style="{padding: '0px' }">
           <el-container>
-            <el-header class="orderhead">
+            <el-header class="orderHead">
             <span style="font-weight: bolder;font-size: 13px;letter-spacing: 0.05em">
             {{ order.createAt.slice(0, 10) }}
           </span>&nbsp;
@@ -32,14 +32,14 @@
             </span>
             </el-header>
             <el-container>
-              <el-aside width="50%" class="orderbody">
+              <el-aside width="50%" class="orderBody">
                 <el-icon style="color: #00BF96">
                   <Goods/>
                 </el-icon>&nbsp;
                 <span style="font-size: 14px;margin-bottom: 0.5em">物品名称：</span>
                 <span style="font-size: 14px;margin-left: 10%">{{ order.title }}</span>
               </el-aside>
-              <div style="width: 100%" class="orderbody">
+              <div style="width: 100%" class="orderBody">
                 <el-icon style="color: #FF8200">
                   <Money/>
                 </el-icon>&nbsp;
@@ -50,7 +50,7 @@
               </div>
             </el-container>
             <el-container>
-              <div style="width: 100%" class="orderbody">
+              <div style="width: 100%" class="orderBody">
                 <el-icon style="color:#FF3D00">
                   <UserFilled/>
                 </el-icon>&nbsp;
@@ -59,7 +59,7 @@
                   {{ order.senderName }}
                 </span>
               </div>
-              <el-aside width="50%" class="orderbody">
+              <el-aside width="50%" class="orderBody">
                 <el-icon style="color: #FFB500">
                   <User/>
                 </el-icon>&nbsp;
@@ -74,9 +74,9 @@
               <span style="font-size: 13px;font-weight:500">备注：{{ order.remark }}</span>
             </el-footer>
           </el-container>
-          <el-button v-if="type==='receive'&&order.status===2" size="medium" round class="takegoods"
+          <el-button v-if="type==='receive'&&order.status===2" size="medium" round class="takeGoods"
                      @click="takeGoods(order.id)">
-          <span class="takegood">
+          <span class="takeGood">
             确认收货
           </span>
           </el-button>
@@ -309,37 +309,37 @@ export default {
   color: black;
 }
 
-.orderhead {
+.orderHead {
   background-color: #f5f5f5;
   color: black;
   line-height: 3em;
   height: 3em;
 }
 
-.orderbody {
+.orderBody {
   padding-left: 2%;
   border: 1px gainsboro solid;
   padding-top: 0.5em;
   padding-bottom: 0.5em
 }
 
-.takegoods {
+.takeGoods {
   margin: 0.5em 0 0.5em 89%;
   border: #FF8200 1px solid;
   background-color: white;
 }
 
-.takegood {
+.takeGood {
   color: #FF8200;
 }
 
-.takegoods:hover {
+.takeGoods:hover {
   margin: 0.5em 0 0.5em 89%;
   border: #FF8200 1px solid;
   background-color: #FF8200;
 }
 
-.takegoods:hover .takegood {
+.takeGoods:hover .takeGood {
   color: white;
 }
 </style>

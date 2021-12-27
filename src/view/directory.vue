@@ -72,13 +72,7 @@ export default {
   },
   watch: {
     search() {
-      this.contacts = this.allContacts.filter(
-          (data) =>
-              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
-              || data.address.toLowerCase().includes(this.search.toLowerCase())
-              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
-              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
-      )
+      this.filter()
     }
   },
   mounted() {
@@ -103,16 +97,25 @@ export default {
           const currentPage = this.currentPage
           this.allContacts.length = 0
           for (const contact of res.data.contacts) {
+            contact.visible=false
             contact.PCD = contact.province + contact.city + contact.district
             this.allContacts.push(contact)
           }
-          this.search = null
-          this.search = ''
+          this.filter()
           this.currentPage = currentPage
         } else {
           this.$message.error(res.data.msg)
         }
       })
+    },
+    filter(){
+      this.contacts = this.allContacts.filter(
+          (data) =>
+              !this.search || data.receiverName.toLowerCase().includes(this.search.toLowerCase())
+              || data.address.toLowerCase().includes(this.search.toLowerCase())
+              || data.PCD.toLowerCase().includes(this.search.toLowerCase())
+              || data.telephone.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     add() {
       this.$refs.c.reset()
