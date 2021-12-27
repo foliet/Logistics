@@ -70,7 +70,8 @@ export default {
     addUser: function () {
       if (this.tableData.username != 0 && this.tableData.username != null
           && this.tableData.password != 0 && this.tableData.password != null
-          && this.tableData.email != 0 && this.tableData.email != null) {
+          && this.tableData.email != 0 && this.tableData.email != null
+          && this.tableData.groupId != 0 && this.tableData.groupId != null) {
         if (this.tableData.id == null) {
           this.$axios.post('https://mc.rainspace.cn:4443/admin/add-user', this.tableData).then(() => {
             this.$emit('confirm')

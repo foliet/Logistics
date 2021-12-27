@@ -102,6 +102,10 @@ export default {
   },
   methods: {
     addContact: function () {
+      if(!this.tableData.province||!this.tableData.city||!this.tableData.district||!this.tableData.address||!this.tableData.telephone){
+        this.$message.error('信息不可为空！')
+        return
+      }
       this.tableData.province = this.tableData.PCD[0]
       this.tableData.city = this.tableData.PCD[1]
       this.tableData.district = this.tableData.PCD[2]

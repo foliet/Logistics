@@ -197,6 +197,10 @@ export default {
       }
     },
     addStaff() {
+      if(!this.staff.gender||!this.staff.name){
+        this.$message.error('信息不可为空！')
+        return
+      }
       if (this.staff.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-staff', this.staff).then(() => {
           this.getStaffs()

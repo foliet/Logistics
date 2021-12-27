@@ -174,21 +174,21 @@ export default {
       }
     },
     addChunk: function () {
+      if(!this.chunk.model||!this.chunk.number){
+        this.$message.error('信息不可为空！')
+        return
+      }
       if (this.chunk.id == null) {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/add-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
           this.getChunks()
         })
 
       } else {
         this.$axios.post('https://mc.rainspace.cn:4443/admin/edit-chunk', this.chunk).then(() => {
-          this.allChunks.length = 0
           this.getChunks()
         })
       }
       this.dialogVisible = false;
-      this.$emit('confirm');
-      this.search = null;
     },
     edit(row) {
       this.chunk.status = row.status
